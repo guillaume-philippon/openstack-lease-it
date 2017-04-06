@@ -1,0 +1,94 @@
+{% extends "logged.html" %}
+{% load i18n %}
+
+{% block title %} Home {% endblock %}
+
+{% block javascript %}
+$(document).ready(function() {
+    get_instances();
+});
+function get_instances() {
+    $("#table_id").DataTable( {
+        ajax: {
+            url: location.pathname,
+            data: { 'format': 'json'},
+            dataSrc: function (json) {
+                <!--$.each(json.list, function (index, value) {-->
+                    <!--console.log(value);-->
+                <!--});-->
+
+                return json.list;
+            }
+        },
+        columns: [
+            { data: 'owner'},
+            { data: 'name'},
+            { data: 'status'},
+            { data: 'project'},
+            { data: 'start'},
+        ],
+        order: [[ 0, 'desc' ]],
+        iDisplayLength: 10,
+        drawCallback: function (settings) {
+            colorLine();
+        },
+        lengthMenu: [ [5, 10, 25, 50, -1], [5, 10, 25, 50, "ALL"] ],
+    });
+}
+
+function colorLine () {
+    var numberOfRows;
+    var eachRow;
+    eachRow = document.getElementById('users_table').rows
+    numberOfRows = eachRow.length;
+    for (var i = 0; i < numberOfRows; i++) {
+        if (eachRow[i].className == 'odd') {
+            eachRow[i].setAttribute('style', 'background: #f3f3f3');
+        }
+        else {
+            eachRow[i].removeAttribute('style');
+        }
+    }
+}
+
+{% endblock %}
+
+{% block content %}
+<div class="col-sm-12 panel panel-default">
+    <div class="panel-heading">
+        <h1 class="panel-title" align="center"><b>INSTANCES</b><br/></h1>
+    </div>
+
+    <div class="panel-body">
+        <div class="col-sm-1">
+
+        </div>
+        <div class="row col-sm-10">
+            <table id="table_id" class="display" width="100%">
+                <thead>
+                    <tr>
+                        <th>
+                            Owner
+                        </th>
+                        <th>
+                            Instance
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>
+                            Project
+                        </th>
+                        <th>
+                            Start
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="users_table">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
