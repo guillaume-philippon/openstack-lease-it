@@ -1,0 +1,6 @@
+.idea
+MANIFEST
+*.iml
+*.sqlite3
+*.pyc
+venv
