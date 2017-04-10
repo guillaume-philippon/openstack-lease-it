@@ -12,13 +12,12 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import ldap
-from django_auth_ldap.config import LDAPSearch
 from config import read_configuration_file
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 GLOBAL_CONFIG = read_configuration_file()
+AUTH_USER_MODEL = 'openstack_auth.User'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -35,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    'openstack_auth',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -92,7 +92,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'Europe/Paris'
 
@@ -101,7 +101,24 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+DEFAULT_CHARSET = 'utf-8'
 
+#SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+SESSION_COOKIE_SECURE = False
+SESSION_TIMEOUT = 1800
+# A token can be near the end of validity when a page starts loading, and
+# invalid during the rendering which can cause errors when a page load.
+# TOKEN_TIMEOUT_MARGIN defines a time in seconds we retrieve from token
+# validity to avoid this issue. You can adjust this time depending on the
+# performance of the infrastructure.
+TOKEN_TIMEOUT_MARGIN = 100
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
@@ -112,14 +129,16 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = '/'
 
-AUTH_LDAP_SERVER_URI = GLOBAL_CONFIG['AUTH_SERVER']
-AUTH_LDAP_BIND_DN = GLOBAL_CONFIG['AUTH_USERNAME']
-AUTH_LDAP_BIND_PASSWORD = GLOBAL_CONFIG['AUTH_PASSWORD']
-AUTH_LDAP_USER_SEARCH = LDAPSearch(GLOBAL_CONFIG['AUTH_SEARCH'],
-                                   ldap.SCOPE_SUBTREE,
-                                   GLOBAL_CONFIG["AUTH_SEARCH_FILTER"])
+OPENSTACK_KEYSTONE_URL = GLOBAL_CONFIG['OS_AUTH_URL']
+OPENSTACK_API_VERSIONS = {
+     "identity": 3,
+}
+
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = True
 
 AUTHENTICATION_BACKENDS = (
-    'django_auth_ldap.backend.LDAPBackend',
+    'openstack_auth.backend.KeystoneBackend',
     'django.contrib.auth.backends.ModelBackend',
 )

@@ -1,4 +1,6 @@
 #!/usr/local/bin/python2.7
+# -*- encoding: utf-8 -*-
+
 import json.tool
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponseRedirect
@@ -6,9 +8,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from openstack_lease_it.settings import GLOBAL_CONFIG
 from lease_it.Backend import OpenstackConnection
+import openstack_auth
+import time
+import django.views.decorators.vary
 
 
-@login_required()
 def hypervisor_dispatcher(request):
     if 'format' in request.GET and request.GET['format'] == 'json':
         return hypervisor_get_json(request)
@@ -59,7 +63,6 @@ def hypervisor_get_json(request):
     return JsonResponse(data)
 
 
-@login_required()
 def home_dispatcher(request):
     if 'format' in request.GET and request.GET['format'] == 'json':
         return home_get_json(request)
@@ -110,36 +113,5 @@ def home(request):
         # print each._info
         # print json.dumps(each._info, sort_keys=True, indent=4, separators=(',', ': '))
         # print each._info['name']
-
     return render(request, 'home_get_html.html')
 
-
-def login(request):
-    """
-    Standard login page for SLAM. If connected, it will redirect user to the page he request
-
-    :param request: HTTP request
-    :return: HTTP
-    """
-    redirect_page = request.GET.get('next', '/home')
-    if request.method == "POST":
-        user = auth.authenticate(username=request.POST['username'],
-                                 password=request.POST['password'])
-        if user is not None:
-            auth.login(request, user)
-            return HttpResponseRedirect(redirect_page)
-        else:
-            return render(request, "login.html")
-    else:
-        return render(request, "login.html")
-
-
-def logout(request):
-    """
-    Logout user and redirect to login page
-
-    :param request: HTTP request
-    :return: HTTP
-    """
-    auth.logout(request)
-    return redirect('/')
