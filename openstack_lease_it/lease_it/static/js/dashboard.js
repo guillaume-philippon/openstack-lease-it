@@ -16,24 +16,29 @@ function hypervisorsDetails() {
 function buildCard(flavor, details) {
     html = '';
     // Size of card
+    flavor_underscore = flavor.replace(/\./g,"");
     if (details.free != 0 ) {
-        html += '<div class="col s12 m6 xl4">';
+        html += '<div class="col s12 m6 xl3">';
         html += '  <div class="card">';
+        html += '    <div class="card-image waves-effect waves-block waves-light">';
+        html += '      <div class="activator" id="' + flavor_underscore + '"></div>';
+        html += '    </div>';
         html += '    <div class="card-content">';
-        html += '      <span class="card-title">' + flavor + '</span>';
-        html += '      <p><input type="text"';
-        html += '                class="dial"';
-        html += '                data-angleArc="180"';
-        html += '                data-angleOffset="-90"';
-        html += '                data-readOnly="true"';
-        html += '                data-thickness="0.03"';
-        html += '                data-max="' + details.max + '"'
-        html += '                value="' + details.free + '"';
-        html += '          ><br/>';
+        html += '      <span class="card-title activator">'
+        html += flavor
+        html += '       <i class="material-icons right">more_vert</i>';
+        html += '      </span>';
+        html += '    </div>';
+        html += '    <div class="card-reveal">';
+        html += '      <span class="card-title">'
+        html += '      <i class="material-icons right">close</i>';
+        html += '      </span>';
+        html += '      <p>';
         html += '          CPU: ' + details.cpu + '<br/>';
         html += '          RAM: ' + details.ram / 1024 + ' GB<br/>';
         html += '          Disk: ' + details.disk + ' GB<br/>';
-        html += '      </p>'
+        html += '      </p>';
+        html += '      </div>';
         html += '    </div>';
         html += '  </div>';
         html += '</div>';

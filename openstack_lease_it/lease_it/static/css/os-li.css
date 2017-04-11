@@ -4,3 +4,13 @@
 .hidden {
     visibility: hidden;
 }
+
+.gauge {
+    position: relative;
+    box-sizing: border-box;
+    float:right;
+    margin: 40px;
+    width: 150px;
+    height: 150px;
+
+}

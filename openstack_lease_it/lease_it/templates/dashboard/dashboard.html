@@ -16,7 +16,48 @@ $(function() {
         })
 
         $('#flavors').html(div_flavors);
-        $(".dial").knob();
+
+        $.each(data, function(flavor, details){
+            if (details.free > 0) {
+                flavor_underscore = flavor.replace(/\./g,'');
+                var chart = new Highcharts.Chart({
+                    chart: {
+                        renderTo: flavor_underscore,
+                        type: 'solidgauge',
+                        height: 200,
+                        background: {
+                            shape: 'arc'
+                        },
+                    },
+
+                    title: null,
+
+                    pane: {
+                        size: '100%',
+                        startAngle: -90,
+                        endAngle: 90,
+                        background: null,
+                    },
+
+                    yAxis: [{
+                        stops: [
+                            [0.1, '#DF5353'],
+                            [0.3, '#DDDF0D'],
+                            [0.4, '#55BF3B']
+                        ],
+                        min: 0,
+                        max: details.max,
+                    }],
+                    series:[{
+                        data : [ details.free ],
+                        dataLabels: {
+                            format: '<div style="text-align:center"><span style="font-size:25px">{y}</span></div>',
+                            borderWidth: 0,
+                        },
+                    }],
+                })
+            };
+        })
     })
 });
 {% endblock %}
