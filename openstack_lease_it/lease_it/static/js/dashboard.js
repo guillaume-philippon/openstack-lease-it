@@ -18,7 +18,7 @@ function buildCard(flavor, details) {
     // Size of card
     flavor_underscore = flavor.replace(/\./g,"");
     if (details.free != 0 ) {
-        html += '<div class="col s12 m6 xl3">';
+        html += '<div class="col s12 m6 l4 xl3">';
         html += '  <div class="card">';
         html += '    <div class="card-image waves-effect waves-block waves-light">';
         html += '      <div class="activator" id="' + flavor_underscore + '"></div>';
