@@ -30,13 +30,15 @@ function buildCard(flavor, details) {
         html += '      </span>';
         html += '    </div>';
         html += '    <div class="card-reveal">';
-        html += '      <span class="card-title">'
+        html += '      <span class="card-title">' + flavor
         html += '      <i class="material-icons right">close</i>';
         html += '      </span>';
         html += '      <p>';
         html += '          CPU: ' + details.cpu + '<br/>';
         html += '          RAM: ' + details.ram / 1024 + ' GB<br/>';
         html += '          Disk: ' + details.disk + ' GB<br/>';
+        html += '          Free: ' + details.free + '<br/>';
+        html += '          Max: ' + details.max + '<br/>';
         html += '      </p>';
         html += '      </div>';
         html += '    </div>';
