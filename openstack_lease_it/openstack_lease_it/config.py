@@ -13,7 +13,78 @@ CONFIG_FILES = (
 )
 
 
-def read_configuration_file():
+OPTIONS = {
+    # [django] section
+    'SECRET_KEY': {
+        'section':'django',
+        'option': 'secret_key'
+    },
+    'DEBUG': {
+        'section':'django',
+        'option': 'debug'
+    },
+
+    # [openstack] section
+    'OS_USERNAME': {
+        'section':'openstack',
+        'option': 'OS_USERNAME'
+    },
+    'OS_PASSWORD': {
+        'section':'openstack',
+        'option': 'OS_PASSWORD'
+    },
+    'OS_TENANT_NAME': {
+        'section':'openstack',
+        'option': 'OS_TENANT_NAME'
+    },
+    'OS_PROJECT_NAME': {
+        'section':'openstack',
+        'option': 'OS_PROJECT_NAME'
+    },
+    'OS_AUTH_URL': {
+        'section':'openstack',
+        'option': 'OS_AUTH_URL'
+    },
+    'OS_CACERT': {
+        'section':'openstack',
+        'option': 'OS_CACERT'
+    },
+    'OS_IDENTITY_API_VERSION': {
+        'section':'openstack',
+        'option': 'OS_IDENTITY_API_VERSION'
+    },
+    'OS_PROJECT_DOMAIN_NAME': {
+        'section':'openstack',
+        'option': 'OS_PROJECT_DOMAIN_NAME'
+    },
+    'OS_USER_DOMAIN_NAME': {
+        'section':'openstack',
+        'option': 'OS_USER_DOMAIN_NAME'
+    },
+
+    # [memcached] section
+    'MEMCACHED_HOST': {
+        'section':'memcached',
+        'option': 'host'
+    },
+    'MEMCACHED_PORT': {
+        'section':'memcached',
+        'option': 'port'
+    }
+}
+
+
+def load_config_option(global_config, config, name, option):
+    try:
+        global_config[name] = config.get(option['section'],
+                                         option['option'])
+    except ConfigParser.NoSectionError:
+        pass
+    except ConfigParser.NoOptionError:
+        pass
+
+
+def load_config():
     # Define default configuration, *NOT* all value have a default
     global_configuration = {
         # Django parameters
@@ -35,63 +106,10 @@ def read_configuration_file():
 
     for config_file in CONFIG_FILES:
         config.read(config_file)
-
-        # [django] section
-        try:
-            global_configuration['SECRET_KEY'] = config.get('django', 'secret_key')
-        except ConfigParser.NoSectionError:
-            pass
-        try:
-            global_configuration['DEBUG'] = config.getboolean('django', 'debug')
-        except ConfigParser.NoSectionError:
-            pass
-
-        # [openstack] section
-        try:
-            global_configuration['OS_USERNAME'] = config.get('openstack', 'OS_USERNAME')
-        except ConfigParser.NoSectionError:
-            pass
-        try:
-            global_configuration['OS_PASSWORD'] = config.get('openstack', 'OS_PASSWORD')
-        except ConfigParser.NoSectionError:
-            pass
-        try:
-            global_configuration['OS_TENANT_NAME'] = config.get('openstack', 'OS_TENANT_NAME')
-        except ConfigParser.NoSectionError:
-            pass
-        try:
-            global_configuration['OS_PROJECT_NAME'] = config.get('openstack', 'OS_PROJECT_NAME')
-        except ConfigParser.NoSectionError:
-            pass
-        try:
-            global_configuration['OS_AUTH_URL'] = config.get('openstack', 'OS_AUTH_URL')
-        except ConfigParser.NoSectionError:
-            pass
-        try:
-            global_configuration['OS_IDENTITY_API_VERSION'] = config.get('openstack', 'OS_IDENTITY_API_VERSION')
-        except ConfigParser.NoSectionError:
-            pass
-        try:
-            global_configuration['OS_CACERT'] = config.get('openstack', 'OS_CACERT')
-        except ConfigParser.NoSectionError:
-            pass
-        try:
-            global_configuration['OS_USER_DOMAIN_NAME'] = config.get('openstack', 'OS_USER_DOMAIN_NAME')
-        except ConfigParser.NoSectionError:
-            pass
-        try:
-            global_configuration['OS_PROJECT_DOMAIN_NAME'] = config.get('openstack', 'OS_PROJECT_DOMAIN_NAME')
-        except ConfigParser.NoSectionError:
-            pass
-
-        # [memcached] section
-        try:
-            global_configuration['MEMCACHED_HOST'] = config.get('memcached', 'host')
-        except ConfigParser.NoSectionError:
-            pass
-        try:
-            global_configuration['MEMCACHED_PORT'] = config.get('memcached', 'port')
-        except ConfigParser.NoSectionError:
-            pass
+        for option in OPTIONS:
+            load_config_option(global_configuration,
+                               config,
+                               option,
+                               OPTIONS[option])
 
     return global_configuration

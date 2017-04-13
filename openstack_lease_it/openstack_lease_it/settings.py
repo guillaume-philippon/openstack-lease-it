@@ -12,11 +12,11 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from config import read_configuration_file
+from config import load_config
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-GLOBAL_CONFIG = read_configuration_file()
+GLOBAL_CONFIG = load_config()
 AUTH_USER_MODEL = 'openstack_auth.User'
 
 # Quick-start development settings - unsuitable for production
