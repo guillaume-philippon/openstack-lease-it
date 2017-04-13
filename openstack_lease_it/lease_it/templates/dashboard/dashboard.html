@@ -9,7 +9,7 @@ $(function() {
     console.log("Load javascript")
 
     // Retrieve all hypervisor data
-    hypervisorsDetails().then(function (data){
+    openstackStatus().then(function (data){
         div_flavors = '';
         $.each(data, function(flavor, details){
             div_flavors += buildCard(flavor,details);

@@ -1,4 +1,13 @@
-function hypervisorsDetails() {
+/*
+  Retrieve useful information about OpenStack
+  a dictionnary of flavor and for each flavor
+   * CPU allocated by flavor
+   * RAM allocated by flavor
+   * Disk allocated by flavor
+   * Total VM w/ this flavor that can be run on Cloud
+   * Maximum VM w/ this flavor that can be run on Cloud if it s empty
+*/
+function openstackStatus() {
     var total_cpus = 0
     var free_cpus = 0
     var flavors = {};
@@ -13,12 +22,24 @@ function hypervisorsDetails() {
     });
 }
 
+/*
+    Each flavor information is disabled by a materializeCSS card buildCard
+    build a div contain all information for a specific flavor w/ its specific
+    details (CPU / RAM / Disk / Free / Max)
+*/
 function buildCard(flavor, details) {
     html = '';
     // Size of card
     flavor_underscore = flavor.replace(/\./g,"");
     if (details.free != 0 ) {
-        html += '<div class="col s12 m6 l4 xl3">';
+        html += '<div class="col s12 m6 l4 xl3"';
+        html += '     data-name="' + flavor_underscore + '"';
+        html += '     data-cpu="' + details.cpu + '"';
+        html += '     data-ram="' + details.ram + '"';
+        html += '     data-disk="' + details.disk + '"';
+        html += '     data-free="' + details.free + '"';
+        html += '     data-max="' + details.max + '"';
+        html += '>';
         html += '  <div class="card">';
         html += '    <div class="card-image waves-effect waves-block waves-light">';
         html += '      <div class="activator" id="' + flavor_underscore + '"></div>';
@@ -50,7 +71,10 @@ function buildCard(flavor, details) {
     return html;
 }
 
-
+/*
+    Everyone say dictionary must not be ordered, everbody wants order dictionary until we found a answer,
+    we sortOnKey and sortOnParams our dict.
+*/
 function sortOnKeys(dict) {
     var sorted = [];
     for(var key in dict) {
