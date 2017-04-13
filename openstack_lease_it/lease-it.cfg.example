@@ -4,18 +4,11 @@
 secret_key = "secret"
 debug = True
 
-# django-ldap
-[auth]
-server = ldaps://active-directory.example.com
-bind_dn = CN=admin,OU=System Accounts,DC=example,DC=com
-password = secret
-search = OU=Users,DC=example,DC=com
-
 [openstack]
 OS_USERNAME=admin
 OS_PASSWORD=secret
 OS_TENANT_NAME=admin
-#OS_PROJECT_NAME=admin
+OS_PROJECT_NAME=admin
 OS_AUTH_URL=https://keystone.example.com:5000/v3
 OS_IDENTITY_API_VERSION=3
 OS_CACERT=/etc/tls/cacert.pem

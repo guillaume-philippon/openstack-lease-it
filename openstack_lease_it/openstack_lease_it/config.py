@@ -37,7 +37,7 @@ def read_configuration_file():
         except:
             pass
         try:
-            global_configuration['DEBUG'] = config.get('django', 'debug')
+            global_configuration['DEBUG'] = config.getboolean('django', 'debug')
         except:
             pass
 
@@ -75,26 +75,6 @@ def read_configuration_file():
             pass
         try:
             global_configuration['OS_PROJECT_DOMAIN_NAME'] = config.get('openstack', 'OS_PROJECT_DOMAIN_NAME')
-        except:
-            pass
-        try:
-            global_configuration['AUTH_SERVER'] = config.get('auth','server')
-        except:
-            pass
-        try:
-            global_configuration['AUTH_USERNAME'] = config.get('auth','bind_dn')
-        except:
-            pass
-        try:
-            global_configuration['AUTH_PASSWORD'] = config.get('auth','password')
-        except:
-            pass
-        try:
-            global_configuration['AUTH_SEARCH'] = config.get('auth', 'search')
-        except:
-            pass
-        try:
-            global_configuration['AUTH_SEARCH_FILTER'] = config.get('auth', 'search_filter')
         except:
             pass
 
