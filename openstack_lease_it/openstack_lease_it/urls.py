@@ -18,13 +18,12 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+
     # openstack_auth.urls provide login & logout view plus some more usefull stuff
     # templates should be placed into templates/auth/ (login.html / logout.html)
     url(r'^', include('openstack_auth.urls')),
 
-    #
-    url(r'^home$', 'openstack_lease_it.views.home_dispatcher', name='home_dispatcher'),
-    url(r'^$', 'openstack_lease_it.views.home_dispatcher', name='home_dispatcher'),
-    url(r'^test$', 'openstack_lease_it.views.hypervisor_dispatcher', name='hypervisor_dispatcher'),
-    # url(r'^', include('lease_it.urls')),
+    # import all lease_it urls
+    # TODO: Perhaps 2 specific app for lease-it and flavors listing
+    url(r'^', include('lease_it.urls')),
 ]

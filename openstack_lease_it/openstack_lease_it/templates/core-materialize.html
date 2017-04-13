@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %} {% endblock %}</title>
+        <link type="text/css" rel="stylesheet"
+              href="/static/materialize-0.98.1/css/materialize.min.css" media="screen, projection" />
+        <link type="text/css" rel="stylesheet"
+              href="/static/css/os-li.css" media="screen, projection" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <meta charset="UTF-8">
+        {% block link %}{% endblock %}
+    </head>
+    <body class="grey lighten-2">
+        <!-- We include all Javascript needed for a minimal configuration
+             * JQuery : 2.1.1
+             * MaterializeCSS js: 0.98.1
+        -->
+        <script src="/static/js/jquery-2.1.1.min.js" type="text/javascript"></script>
+        <script src="/static/materialize-0.98.1/js/materialize.min.js"></script>
+        <!-- <script src="/static/js/jQuery-Knob-1.2.11/js/jquery.knob.js" type="text/javascript"></script> -->
+        <script src="/static/js/highcharts/highcharts.js" type="text/javascript"></script>
+        <script src="/static/js/highcharts/highcharts-more.js" type="text/javascript"></script>
+        <script src="/static/js/highcharts/solid-gauge.js" type="text/javascript"></script>
+        {% block script %} {% endblock %}
+        <script>{% block javascript %} {% endblock %}</script>
+
+        <div class="container">
+            <div class="row">
+                <nav class="nav-wrapper col s12">
+                    <a href="#" class="brand-logo">OpenStack Lease It!</a>
+                    <ul id="nav-mobile" class="right hide-on-med-and-down">
+                        <li><a href="/logout">Logout</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="row">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </body>
+</html>
