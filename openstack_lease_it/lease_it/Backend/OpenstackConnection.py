@@ -13,9 +13,6 @@ NOVA_VERSION = 2
 
 
 class OpenstackConnection(object):
-    """
-
-    """
     def __init__(self):
         super(OpenstackConnection, self).__init__()
         # We need to be admin to have access to hypervisor list
@@ -39,7 +36,8 @@ class OpenstackConnection(object):
 
         try:
             self.auth = v3.Password(**creds)
-            self.session = session.Session(auth=self.auth,verify=self.cacert)
+            self.session = session.Session(auth=self.auth,
+                                           verify=self.cacert)
         except:
             pass
 
@@ -61,7 +59,7 @@ class OpenstackConnection(object):
     def keystone_get_user(self):
         keystone = ksclient.Client(session=self.session)
         token = keystone.tokens
-        print type(token)
+        print(type(token))
         return token
 
     def usage(self):
@@ -93,10 +91,10 @@ class OpenstackConnection(object):
                     max_disk = math.floor(hypervisor.local_gb / flavor.disk)
 
                     # We keep the lowest value of ram / cpu / disk as it s the weak link of the hypervisor
-                    if min(free_cpu,free_ram,free_disk) > 0:
-                        free_flavor += min(free_cpu,free_ram,free_disk)
-                    if min(max_cpu, max_ram,max_disk) > 0:
-                        max_flavor += min(max_cpu,max_ram,max_disk)
+                    if min(free_cpu, free_ram, free_disk) > 0:
+                        free_flavor += min(free_cpu, free_ram, free_disk)
+                    if min(max_cpu, max_ram, max_disk) > 0:
+                        max_flavor += min(max_cpu, max_ram, max_disk)
             response[flavor.name] = {
                 'disk': flavor.disk,
                 'ram': flavor.ram,

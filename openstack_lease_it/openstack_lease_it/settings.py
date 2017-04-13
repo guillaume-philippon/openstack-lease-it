@@ -103,7 +103,6 @@ USE_L10N = True
 USE_TZ = True
 DEFAULT_CHARSET = 'utf-8'
 
-#SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 CACHES = {
     'default': {
