@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>404 | OpenStack Open Source Cloud Computing Software</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/errors_pages/ui/404/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/errors_pages/ui/404/css/combined.css" rel="stylesheet">
+
+    <!-- New CSS -->
+    <link href="/errors_pages/ui/404/css/404.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Page-specific CSS -->
+
+
+</head>
+
+<body>
+
+
+<!-- Begin Page Content -->
+<div class="container">
+    <div class="row">
+        <div class="wrapper">
+            <div class="content">
+                <h6 >Not this cat, Ocata is fine. YOU are lost.</h6>
+                <h6>You’ve found our 404 page.</h6>
+                <h6>Find another page or just go <a href="https://www.openstack.org">home</a>.</h6>
+            </div>
+            <ul>
+                <li><a href="/software/">Software</a></li>
+                <li><a href="/user-stories/">Users</a></li>
+                <li><a href="/community/">Community</a></li>
+                <li><a href="/marketplace/">Marketplace</a></li>
+                <li><a href="/community/events/">Events</a></li>
+                <li><a href="/learn/">Learn</a></li>
+                <li><a href="https://docs.openstack.org/">Docs</a></li>
+                <li><a href="https://www.openstack.org">Home</a></li>
+                <li><a href="https://www.youtube.com/results?search_query=cat+videos">Cat<span></span>videos</a></li>
+            </ul>
+
+        </div>
+    </div>
+    <!-- End Page Content -->
+
+
+    <!-- jQuery Version 1.11.0 -->
+    <script src="/themes/openstack/javascript/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/themes/openstack/javascript/bootstrap.min.js"></script>
+
+    <!-- The rest of the JS -->
+    <script src="/themes/openstack/javascript/navigation.js"></script>
+    <script src="/themes/openstack/javascript/openstack-home.js"></script>
+    <!-- Javascript for page -->
+</body>
+</html>
