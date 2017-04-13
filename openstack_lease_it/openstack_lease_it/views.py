@@ -1,16 +1,10 @@
 #!/usr/local/bin/python2.7
 # -*- encoding: utf-8 -*-
 
-import json.tool
-from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import render
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib import auth
-from openstack_lease_it.settings import GLOBAL_CONFIG
 from lease_it.Backend import OpenstackConnection
-import openstack_auth
-import time
-import django.views.decorators.vary
 
 
 def hypervisor_dispatcher(request):
@@ -22,45 +16,29 @@ def hypervisor_dispatcher(request):
 
 @login_required()
 def hypervisor_get_html(request):
-    """
-
-    :param request:
-    :return:
-    """
     return render(request, 'hypervisor_get_html.html')
 
 
 @login_required()
 def hypervisor_get_json(request):
-    """
+    response = dict()
+    response['list'] = list()
+    openstack = OpenstackConnection()
+    os_hypervisors = openstack.hypervisors()
 
-    :param request:
-    :return:
-    """
-    data = {}
-    list = []
-    con = OpenstackConnection(GLOBAL_CONFIG)
-    hypervisors = con.nova_get_hypervisors()
-
-    for each in hypervisors:
-        # print json.dumps(each._info, sort_keys=True, indent=4, separators=(',', ': '))
-        list.append({
-            'host': each._info['hypervisor_hostname'],
-            'id': each._info['id'],
-            'state': each._info['state'],
-            'status': each._info['status'],
-            'free_ram_mb': each._info['free_ram_mb'],
-            'free_disk_gb': each._info['free_disk_gb'],
-            'vcpus': each._info['vcpus'],
-            'vcpus_used': each._info['vcpus_used'],
-            'instances': each._info['running_vms'],
+    for hypervisor in os_hypervisors:
+        response['list'].append({
+            'host': hypervisor._info['hypervisor_hostname'],
+            'id': hypervisor._info['id'],
+            'state': hypervisor._info['state'],
+            'status': hypervisor._info['status'],
+            'free_ram_mb': hypervisor._info['free_ram_mb'],
+            'free_disk_gb': hypervisor._info['free_disk_gb'],
+            'vcpus': hypervisor._info['vcpus'],
+            'vcpus_used': hypervisor._info['vcpus_used'],
+            'instances': hypervisor._info['running_vms'],
         })
-
-    # flavors = con.nova_get_flavors()
-    # for each in flavors:
-    #     print json.dumps(each._info, sort_keys=True, indent=4, separators=(',', ': '))
-    data['list'] = list
-    return JsonResponse(data)
+    return JsonResponse(response)
 
 
 def home_dispatcher(request):
@@ -72,46 +50,23 @@ def home_dispatcher(request):
 
 @login_required()
 def home_get_json(request):
-    """
+    response = dict()
+    instances = list()
+    openstack = OpenstackConnection()
+    os_instances = openstack.instances()
 
-    :param request:
-    :return:
-    """
-    data = {}
-    list = []
-    con = OpenstackConnection(GLOBAL_CONFIG)
-    # if 'test' in request.GET:
-    #     test = con.keystone_get_user()
-    #     print test
-
-    instances = con.nova_get_instances()
-
-    for each in instances:
-        # print json.dumps(each._info, sort_keys=True, indent=4, separators=(',', ': '))
-        list.append({
-            'name': each._info['name'],
-            'owner': each._info['user_id'],
-            'status': each._info['status'],
-            'project': each._info['tenant_id'],
-            'start': each._info['OS-SRV-USG:launched_at']
+    for instance in os_instances:
+        instances.append({
+            'name': instance._info['name'],
+            'owner': instance._info['user_id'],
+            'status': instance._info['status'],
+            'project': instance._info['tenant_id'],
+            'start': instance._info['OS-SRV-USG:launched_at']
         })
-    data['list'] = list
-    return JsonResponse(data)
+    response['list'] = instances
+    return JsonResponse(response)
 
 
 @login_required()
 def home(request):
-    """
-    :param request: HTTP request
-    :return: JSONResponse or HTTP
-    """
-    # con = OpenstackConnection(GLOBAL_CONFIG)
-    # print con.sess
-
-    # instances = con.nova_get_instances()
-    # for each in instances:
-        # print each._info
-        # print json.dumps(each._info, sort_keys=True, indent=4, separators=(',', ': '))
-        # print each._info['name']
     return render(request, 'home_get_html.html')
-

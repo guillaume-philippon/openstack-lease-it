@@ -1,6 +1,6 @@
 #!/usr/local/bin/python2.7
-from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponseRedirect, QueryDict
+from django.shortcuts import render
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from lease_it.Backend import OpenstackConnection
 
@@ -12,6 +12,6 @@ def dashboard(request):
 
 @login_required
 def flavors(request):
-    os_connection = OpenstackConnection()
-    response = os_connection.usage()
+    openstack = OpenstackConnection()
+    response = openstack.usage()
     return JsonResponse(response)
