@@ -5,18 +5,22 @@
 
 {% block content %}
 <div class="col s10 offset-s1">
-    <form class="form-signin" role="form" method="POST" action="/login/?next=/">
-      {% csrf_token %}
-      <label for="username" class="sr-only">Username</label>
-      <input type="text" id="username" class="form-control" placeholder="Username" required autofocus name="username">
+  <div class="card z-depth-5">
+    <div class="card-content">
+      <form class="form-signin" role="form" method="POST" action="/login/?next=/">
+        {% csrf_token %}
+        <label for="username" class="sr-only">Username</label>
+        <input type="text" id="username" class="form-control" placeholder="Username" required autofocus name="username">
 
-      <label for="password" class="sr-only">Password</label>
-      <input type="password" id="password" class="form-control" placeholder="Password" required name="password">
+        <label for="password" class="sr-only">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Password" required name="password">
 
-      <label for="domain" class="sr-only">Domain</label>
-      <input type="text" id="domain" class="form-control" placeholder="Domain" required name="domain">
+        <label for="domain" class="sr-only">Domain</label>
+        <input type="text" id="domain" class="form-control" placeholder="Domain" required name="domain">
 
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign on</button>
-    </form>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign on</button>
+      </form>
+    </div>
   </div>
+</div>
 {% endblock %}
