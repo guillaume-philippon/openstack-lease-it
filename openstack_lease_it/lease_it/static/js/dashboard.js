@@ -59,10 +59,10 @@ function buildCard(flavor, details) {
         html += '          <li class="collection-item"><div><span class="badge">' + details.ram + ' MB</span>RAM</div></li>';
         html += '          <li class="collection-item"><div><span class="badge">' + details.disk + ' GB</span>Disk</div></li>';
         html += '      </ul>';
-        html += '      <ul class="collection">';
-        html += '          <li class="collection-item"><div><span class="badge">' + details.free + '</span>Flavor Available</div></li>';
-        html += '          <li class="collection-item"><div><span class="badge">' + details.max + '</span>Maximum Flavor</div></li>';
-        html += '      </ul>';
+//        html += '      <ul class="collection">';
+//        html += '          <li class="collection-item"><div><span class="badge">' + details.free + '</span>Flavor Available</div></li>';
+//        html += '          <li class="collection-item"><div><span class="badge">' + details.max + '</span>Maximum Flavor</div></li>';
+//        html += '      </ul>';
         html += '      </div>';
         html += '    </div>';
         html += '  </div>';
@@ -99,11 +99,57 @@ function sortOnParams(params, dict, isReverse) {
     }
     sorted.sort(function (a, b) {
         if (isReverse) {
-            return b[params].toLowerCase().localeCompare(a[params].toLowerCase());
+            console.log(b[params])
+            return b[params].toString().toLowerCase().localeCompare(a[params].toString().toLowerCase());
         }
         else {
-            return a[params].toLowerCase().localeCompare(b[params].toLowerCase());
+            console.log(a[params])
+            return a[params].toString().toLowerCase().localeCompare(b[params].toString().toLowerCase());
         }
     });
+
     return sorted;
+}
+
+/*
+  Create highcharts for Flavor dashboard
+*/
+function buildHighCharts(flavor, details) {
+    return new Highcharts.Chart({
+        chart: {
+            renderTo: flavor_underscore,
+            type: 'solidgauge',
+            height: 150,
+            background: {
+                shape: 'arc'
+            },
+        },
+
+        title: null,
+
+        pane: {
+            size: '200%',
+            startAngle: -90,
+            endAngle: 90,
+            center: [ '50%', '100%' ],
+            background: null,
+        },
+
+        yAxis: [{
+            stops: [
+                [0.1, '#DF5353'],
+                [0.3, '#DDDF0D'],
+                [0.4, '#55BF3B']
+            ],
+            min: 0,
+            max: details.max,
+        }],
+        series:[{
+            data : [ details.free ],
+            dataLabels: {
+                format: '<div style="text-align:center"><span style="font-size:25px">{y}</span></div>',
+                borderWidth: 0,
+            },
+        }],
+    });
 }
