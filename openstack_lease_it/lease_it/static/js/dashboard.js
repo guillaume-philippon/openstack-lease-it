@@ -40,8 +40,8 @@ function buildCard(flavor, details) {
         html += '     data-free="' + details.free + '"';
         html += '     data-max="' + details.max + '"';
         html += '>';
-        html += '  <div class="card">';
-        html += '    <div class="card-image waves-effect waves-block waves-light">';
+        html += '  <div class="card hoverable">';
+        html += '    <div class="card-image activator">';
         html += '      <div class="activator" id="' + flavor_underscore + '"></div>';
         html += '    </div>';
         html += '    <div class="card-content">';
