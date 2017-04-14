@@ -43,9 +43,11 @@ class OpenstackConnection(object):
 
     def instances(self,request):
         response = dict()
-        test = v3.Token(token=request.user.token.id, auth_url=self.auth_url, domain_name=request.user.user_domain_name)
+        test = v3.Token(token=request.user.token.id,
+                        auth_url=self.auth_url,
+                        project_name='admin',
+                        project_domain_name='default')
         test_session = session.Session(auth=test, verify=self.cacert)
-        test_session.auth.domain_name=request.user.user_domain_name
         print test_session.auth.__dict__
         print self.session.auth.__dict__
         keystone = ksclient.Client(session=test_session)
