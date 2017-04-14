@@ -45,8 +45,8 @@ class OpenstackConnection(object):
         response = dict()
         test = v3.Token(token=request.user.token.id,
                         auth_url=self.auth_url,
-                        project_name='admin',
-                        project_domain_name='default')
+                        project_name='admin',  # TODO: Should be compute
+                        project_domain_name='default')  # TODO: Should be compute
         test_session = session.Session(auth=test, verify=self.cacert)
         print test_session.auth.__dict__
         print self.session.auth.__dict__
