@@ -15,3 +15,10 @@ def flavors(request):
     openstack = OpenstackConnection()
     response = openstack.usage()
     return JsonResponse(response)
+
+
+@login_required
+def instances(request):
+    openstack = OpenstackConnection()
+    response = openstack.instances(request)
+    return JsonResponse(response)

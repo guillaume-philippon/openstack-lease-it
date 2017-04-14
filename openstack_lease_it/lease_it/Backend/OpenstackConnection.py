@@ -41,10 +41,26 @@ class OpenstackConnection(object):
         except:
             pass
 
-    def instances(self):
-        nova = nvclient.Client(NOVA_VERSION, session=self.session)
+    def instances(self,request):
+        response = dict()
+        test = v3.Token(token=request.user.token.id, auth_url=self.auth_url, domain_name=request.user.user_domain_name)
+        test_session = session.Session(auth=test, verify=self.cacert)
+        test_session.auth.domain_name=request.user.user_domain_name
+        print test_session.auth.__dict__
+        print self.session.auth.__dict__
+        keystone = ksclient.Client(session=test_session)
+        nova = nvclient.Client(NOVA_VERSION, session=test_session)
+        #nova = nvclient.Client(NOVA_VERSION, session=self.session)
         instances = nova.servers.list(search_opts={'all_tenants': 'true'})
-        return instances
+        for instance in instances:
+            response[instance.id] = {
+                'status': instance.status,
+                'created': instance.created,
+                'name': instance.name,
+                'project_id': instance.tenant_id,
+                'user': instance.user_id
+            }
+        return response
 
     def hypervisors(self):
         nova = nvclient.Client(NOVA_VERSION, session=self.session)
