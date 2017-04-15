@@ -7,7 +7,7 @@
    * Total VM w/ this flavor that can be run on Cloud
    * Maximum VM w/ this flavor that can be run on Cloud if it s empty
 */
-function openstackStatus() {
+function openstackStatus() { // TODO: openstackStatus is not a good name
     var total_cpus = 0
     var free_cpus = 0
     var flavors = {};
