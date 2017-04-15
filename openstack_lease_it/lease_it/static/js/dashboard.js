@@ -7,7 +7,7 @@
    * Total VM w/ this flavor that can be run on Cloud
    * Maximum VM w/ this flavor that can be run on Cloud if it s empty
 */
-function openstackStatus() {
+function openstackStatus() { // TODO: openstackStatus is not a good name
     var total_cpus = 0
     var free_cpus = 0
     var flavors = {};
@@ -115,7 +115,15 @@ function sortOnParams(params, dict, isReverse) {
   Create highcharts for Flavor dashboard
 */
 function buildHighCharts(flavor, details) {
+    /*
+        flavor can have . in name that is not a valid name for
+        HTML id or class. We remove it.
+    */
+    flavor_underscore = flavor.replace(/\./g,"");
     return new Highcharts.Chart({
+        /*
+            solidgauge is easiest to read
+        */
         chart: {
             renderTo: flavor_underscore,
             type: 'solidgauge',
@@ -125,28 +133,28 @@ function buildHighCharts(flavor, details) {
             },
         },
 
-        title: null,
+        title: null, // No title needed
 
         pane: {
-            size: '200%',
-            startAngle: -90,
-            endAngle: 90,
-            center: [ '50%', '100%' ],
+            size: '200%', // As the image will be splited by 2, we double up the size to can all spaces
+            startAngle: -90, // Only half circle
+            endAngle: 90, // Only half circle
+            center: [ '50%', '100%' ], // Fix the center point as by default it s defined for circle
             background: null,
         },
 
         yAxis: [{
             stops: [
-                [0.1, '#DF5353'],
-                [0.3, '#DDDF0D'],
-                [0.4, '#55BF3B']
+                [0.1, '#DF5353'], // Red if less than 10% available
+                [0.3, '#DDDF0D'], // Orange if less than 30% avaible
+                [0.4, '#55BF3B'] // Green for another cases
             ],
             min: 0,
-            max: details.max,
+            max: details.max, // Scale is based on the maximum flavor we can launch
         }],
         series:[{
             data : [ details.free ],
-            dataLabels: {
+            dataLabels: { // Just a custom format
                 format: '<div style="text-align:center"><span style="font-size:25px">{y}</span></div>',
                 borderWidth: 0,
             },

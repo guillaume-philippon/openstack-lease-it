@@ -20,7 +20,6 @@ $(function() {
                 buildHighCharts(flavor, details);
             };
         });
-        $('#progress-bar').hide();
     })
 });
 {% endblock %}
@@ -36,35 +35,41 @@ $(function() {
 
 {% block content %}
 <div class="row">
+    <!-- Flavor per flavor usage -->
+    <div id="flavors">
     <div id="progress-bar">
         <h5 class="center-align">Please wait while retrieving data</h5>
         <div class="progress valign-wrapper">
           <div class="indeterminate valign"></div>
         </div>
     </div>
-    <!-- Flavor per flavor usage -->
-    <div id="flavors"></div>
+
+    </div>
     <div id="instances-dash">
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Project</th>
-                    <th>Age</th>
-                    <th>End Of Life</th>
-                </tr>
-            </thead>
-            <tbody id="instances">
-            <tr>
-                <td>My Instance</td>
-                <td>My Project</td>
-                <td>300 days</td>
-                <td>14/02/2017 <span class="waves-effect waves-light new badge hoverable"
-                                     data-badge-caption="new lease"></span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="card">
+            <div class="card-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Project</th>
+                            <th>Age</th>
+                            <th>End Of Life</th>
+                        </tr>
+                    </thead>
+                    <tbody id="instances">
+                    <tr>
+                        <td>My Instance</td>
+                        <td>My Project</td>
+                        <td>300 days</td>
+                        <td>14/02/2017 <span class="waves-effect waves-light new badge hoverable"
+                                             data-badge-caption="new lease"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
