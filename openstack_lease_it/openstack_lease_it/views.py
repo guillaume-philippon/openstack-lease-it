@@ -53,7 +53,7 @@ def home_get_json(request):
     response = dict()
     instances = list()
     openstack = OpenstackConnection()
-    os_instances = openstack.instances()
+    os_instances = openstack.instances(request)
 
     for instance in os_instances:
         instances.append({

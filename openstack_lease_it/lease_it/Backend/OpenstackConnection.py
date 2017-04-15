@@ -41,7 +41,7 @@ class OpenstackConnection(object):
         except:
             pass
 
-    def instances(self,request):
+    def instances(self, request):
         response = dict()
         test = v3.Token(token=request.user.token.id,
                         auth_url=self.auth_url,
@@ -52,7 +52,7 @@ class OpenstackConnection(object):
         print self.session.auth.__dict__
         keystone = ksclient.Client(session=test_session)
         nova = nvclient.Client(NOVA_VERSION, session=test_session)
-        #nova = nvclient.Client(NOVA_VERSION, session=self.session)
+        # nova = nvclient.Client(NOVA_VERSION, session=self.session)
         instances = nova.servers.list(search_opts={'all_tenants': 'true'})
         for instance in instances:
             response[instance.id] = {
