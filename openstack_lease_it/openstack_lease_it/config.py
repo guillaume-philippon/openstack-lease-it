@@ -16,59 +16,59 @@ CONFIG_FILES = (
 OPTIONS = {
     # [django] section
     'SECRET_KEY': {
-        'section':'django',
+        'section': 'django',
         'option': 'secret_key'
     },
     'DEBUG': {
-        'section':'django',
+        'section': 'django',
         'option': 'debug'
     },
 
     # [openstack] section
     'OS_USERNAME': {
-        'section':'openstack',
+        'section': 'openstack',
         'option': 'OS_USERNAME'
     },
     'OS_PASSWORD': {
-        'section':'openstack',
+        'section': 'openstack',
         'option': 'OS_PASSWORD'
     },
     'OS_TENANT_NAME': {
-        'section':'openstack',
+        'section': 'openstack',
         'option': 'OS_TENANT_NAME'
     },
     'OS_PROJECT_NAME': {
-        'section':'openstack',
+        'section': 'openstack',
         'option': 'OS_PROJECT_NAME'
     },
     'OS_AUTH_URL': {
-        'section':'openstack',
+        'section': 'openstack',
         'option': 'OS_AUTH_URL'
     },
     'OS_CACERT': {
-        'section':'openstack',
+        'section': 'openstack',
         'option': 'OS_CACERT'
     },
     'OS_IDENTITY_API_VERSION': {
-        'section':'openstack',
+        'section': 'openstack',
         'option': 'OS_IDENTITY_API_VERSION'
     },
     'OS_PROJECT_DOMAIN_NAME': {
-        'section':'openstack',
+        'section': 'openstack',
         'option': 'OS_PROJECT_DOMAIN_NAME'
     },
     'OS_USER_DOMAIN_NAME': {
-        'section':'openstack',
+        'section': 'openstack',
         'option': 'OS_USER_DOMAIN_NAME'
     },
 
     # [memcached] section
     'MEMCACHED_HOST': {
-        'section':'memcached',
+        'section': 'memcached',
         'option': 'host'
     },
     'MEMCACHED_PORT': {
-        'section':'memcached',
+        'section': 'memcached',
         'option': 'port'
     }
 }
@@ -99,7 +99,7 @@ def load_config():
         'OS_PROJECT_DOMAIN_NAME': 'default',
 
         # memcached parameter
-        'MEMCACHED_HOST': '127.0.0.1',  #nosonar
+        'MEMCACHED_HOST': '127.0.0.1',
         'MEMCACHED_PORT': '11211'
     }
     config = ConfigParser.RawConfigParser()
