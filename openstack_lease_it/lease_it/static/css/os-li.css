@@ -1,3 +1,15 @@
 .hidden {
     visibility: hidden;
 }
+
+.side-nav li.active {
+    background-color: #ee6e73;
+}
+
+.bottom-up {
+    -webkit-transform: rotate(-180deg);
+    -moz-transform: rotate(-180deg);
+    -ms-transform: rotate(-180deg);
+    -o-transform: rotate(-180deg);
+
+}

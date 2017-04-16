@@ -1,7 +1,3 @@
-/*
-  Default sort params
-*/
-var SORT_PARAMS = 'free';
 
 /*
   Retrieve useful information about OpenStack
@@ -141,4 +137,17 @@ function buildHighCharts(flavor, details) {
             },
         }],
     });
+}
+
+/*
+    buildFlavorView create a full display of Flavor on div_name
+*/
+function buildFlavorsView(flavors, flavor_min, div_name){
+    $(div_name).html('');
+    $.each(flavors, function(flavor, details){
+        if (details.free > flavor_min) {
+            $(buildCard(flavor, details)).appendTo(div_name);
+            buildHighCharts(flavor, details);
+        };
+    })
 }
