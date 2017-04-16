@@ -96,6 +96,7 @@ class OpenstackConnection(object):
                     if min(max_cpu, max_ram, max_disk) > 0:
                         max_flavor += min(max_cpu, max_ram, max_disk)
             response[flavor.name] = {
+                'name': flavor.name,
                 'disk': flavor.disk,
                 'ram': flavor.ram,
                 'cpu': flavor.vcpus,
