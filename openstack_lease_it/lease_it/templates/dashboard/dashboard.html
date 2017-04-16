@@ -7,16 +7,17 @@
 {% block javascript%}
 $(function() {
     openstackStatus().then(function (data){
-        div_flavors = '';
-        $.each(data, function(flavor, details){
+        var div_flavors = '';
+        var data_sorted = sortOnParams(SORT_PARAMS, data);
+
+        $.each(data_sorted, function(flavor, details){
             div_flavors += buildCard(flavor,details);
         })
 
         $('#flavors').html(div_flavors);
 
-        $.each(data, function(flavor, details){
+        $.each(data_sorted, function(flavor, details){
             if (details.free > 0) {
-                flavor_underscore = flavor.replace(/\./g,'');
                 buildHighCharts(flavor, details);
             };
         });
