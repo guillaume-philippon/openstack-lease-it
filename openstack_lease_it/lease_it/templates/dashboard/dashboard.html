@@ -5,22 +5,20 @@
         <script src="/static/js/dashboard.js" type="text/javascript"></script>
 {% endblock %}
 {% block javascript%}
+var FLAVOR_MIN = 0;
 $(function() {
     flavorsStatus().then(function (data){
-        var div_flavors = '';
+        /* We sort all data by SORT_PARAMS */
         var data_sorted = sortOnParams(SORT_PARAMS, data);
 
+        /* We created HTML view */
         $.each(data_sorted, function(flavor, details){
-            div_flavors += buildCard(flavor,details);
-        })
-
-        $('#flavors').html(div_flavors);
-
-        $.each(data_sorted, function(flavor, details){
-            if (details.free > 0) {
+            if (details.free > FLAVOR_MIN) {
+                $(buildCard(flavor, details)).appendTo('#flavors');
                 buildHighCharts(flavor, details);
             };
-        });
+        })
+        $( "#progress-bar" ).hide();
     })
 });
 {% endblock %}
