@@ -12,7 +12,7 @@ var SORT_PARAMS = 'free';
    * Total VM w/ this flavor that can be run on Cloud
    * Maximum VM w/ this flavor that can be run on Cloud if it s empty
 */
-function openstackStatus() { // TODO: openstackStatus is not a good name
+function flavorsStatus() {
     return $.getJSON("/flavors", function(data) {
         return data
     })
@@ -58,7 +58,7 @@ function buildCard(flavor, details) {
         html += '    </div>';
         html += '  </div>';
         html += '</div>';
-    };
+    }
     return html;
 }
 
