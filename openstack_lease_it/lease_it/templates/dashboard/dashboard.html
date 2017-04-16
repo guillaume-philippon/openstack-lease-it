@@ -6,7 +6,7 @@
 {% endblock %}
 {% block javascript%}
 $(function() {
-    openstackStatus().then(function (data){
+    flavorsStatus().then(function (data){
         var div_flavors = '';
         var data_sorted = sortOnParams(SORT_PARAMS, data);
 
