@@ -148,6 +148,6 @@ function buildFlavorsView(flavors, flavor_min, div_name){
         if (details.free > flavor_min) {
             $(buildCard(flavor, details)).appendTo(div_name);
             buildHighCharts(flavor, details);
-        };
+        }
     })
 }
