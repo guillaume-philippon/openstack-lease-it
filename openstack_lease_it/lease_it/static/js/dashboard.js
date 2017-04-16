@@ -25,8 +25,7 @@ function openstackStatus() { // TODO: openstackStatus is not a good name
 */
 function buildCard(flavor, details) {
     var html = '';
-    // Size of card
-    flavor_underscore = details.name.replace(/\./g,"");
+    var flavor_underscore = details.name.replace(/\./g,"");
     if (details.free != 0 ) {
         html += '<div class="col s12 m6 l4 xl3"';
         html += '     data-name="' + flavor_underscore + '"';
@@ -41,7 +40,7 @@ function buildCard(flavor, details) {
         html += '      <div class="activator" id="' + flavor_underscore + '"></div>';
         html += '    </div>';
         html += '    <div class="card-content">';
-        html += '      <span class="card-title activator">'
+        html += '      <span class="card-title activator">';
         html += flavor
         html += '       <i class="material-icons right">more_vert</i>';
         html += '      </span>';
@@ -59,7 +58,7 @@ function buildCard(flavor, details) {
         html += '    </div>';
         html += '  </div>';
         html += '</div>';
-    }
+    };
     return html;
 }
 
@@ -85,12 +84,11 @@ function sortOnParams(params, dict, isReverse) {
             } else {
                 return a[params].toLowerCase().localeCompare(b[params].toLowerCase());
             }
-        };
+        }
     });
 
     var tempDict = {};
     for(var i = 0; i < sorted.length; i++) {
-        console.log(sorted[i].free)
         tempDict[sorted[i].name] = dict[sorted[i].name];
     }
     return tempDict;
@@ -105,7 +103,7 @@ function buildHighCharts(flavor, details) {
         HTML id or class. We remove it.
     */
     var flavor_underscore = details.name.replace(/\./g,"");
-    var chart = new Highcharts.Chart({
+    return new Highcharts.Chart({ //nosonar
         /*
             solidgauge is easiest to read
         */
@@ -145,5 +143,4 @@ function buildHighCharts(flavor, details) {
             },
         }],
     });
-    return chart;
 }
