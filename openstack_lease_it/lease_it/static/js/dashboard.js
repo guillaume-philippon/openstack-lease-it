@@ -20,40 +20,37 @@ function flavorsStatus() {
     details (CPU / RAM / Disk / Free / Max)
 */
 function buildCard(flavor, details) {
-    var html = '';
     var flavor_underscore = details.name.replace(/\./g,"");
-    html += '<div class="col s12 m6 l4 xl3"';
-    html += '     data-name="' + flavor_underscore + '"';
-    html += '     data-cpu="' + details.cpu + '"';
-    html += '     data-ram="' + details.ram + '"';
-    html += '     data-disk="' + details.disk + '"';
-    html += '     data-free="' + details.free + '"';
-    html += '     data-max="' + details.max + '"';
-    html += '>';
-    html += '  <div class="card hoverable">';
-    html += '    <div class="card-image activator">';
-    html += '      <div class="activator" id="' + flavor_underscore + '"></div>';
-    html += '    </div>';
-    html += '    <div class="card-content">';
-    html += '      <span class="card-title activator">';
-    html += flavor
-    html += '       <i class="material-icons right">more_vert</i>';
-    html += '      </span>';
-    html += '    </div>';
-    html += '    <div class="card-reveal">';
-    html += '      <span class="card-title">' + flavor
-    html += '      <i class="material-icons right">close</i>';
-    html += '      </span>';
-    html += '      <ul class="collection">';
-    html += '          <li class="collection-item"><div><span class="badge">' + details.cpu + '</span>CPU</div></li>';
-    html += '          <li class="collection-item"><div><span class="badge">' + details.ram + ' MB</span>RAM</div></li>';
-    html += '          <li class="collection-item"><div><span class="badge">' + details.disk + ' GB</span>Disk</div></li>';
-    html += '      </ul>';
-    html += '      </div>';
-    html += '    </div>';
-    html += '  </div>';
-    html += '</div>';
-    return html;
+    return  '<div class="col s12 m6 l4 xl3"' +
+            '     data-name="' + flavor_underscore + '"' +
+            '     data-cpu="' + details.cpu + '"' +
+            '     data-ram="' + details.ram + '"' +
+            '     data-disk="' + details.disk + '"' +
+            '     data-free="' + details.free + '"' +
+            '     data-max="' + details.max + '"' +
+            '>' +
+            '  <div class="card hoverable">' +
+            '    <div class="card-image activator">' +
+            '      <div class="activator" id="' + flavor_underscore + '"></div>' +
+            '    </div>' +
+            '    <div class="card-content">' +
+            '      <span class="card-title activator">' + flavor +
+            '       <i class="material-icons right">more_vert</i>' +
+            '      </span>' +
+            '    </div>' +
+            '    <div class="card-reveal">' +
+            '      <span class="card-title">' + flavor +
+            '      <i class="material-icons right">close</i>' +
+            '      </span>' +
+            '      <ul class="collection">' +
+            '          <li class="collection-item"><div><span class="badge">' + details.cpu + '</span>CPU</div></li>' +
+            '          <li class="collection-item"><div><span class="badge">' + details.ram + ' MB</span>RAM</div></li>' +
+            '          <li class="collection-item"><div><span class="badge">' + details.disk + ' GB</span>Disk</div></li>' +
+            '      </ul>' +
+            '      </div>' +
+            '    </div>' +
+            '  </div>' +
+            '</div>';
 }
 
 /*
