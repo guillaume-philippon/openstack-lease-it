@@ -70,7 +70,14 @@ OPTIONS = {
     'MEMCACHED_PORT': {
         'section': 'memcached',
         'option': 'port'
-    }
+    },
+
+    # [plugins] section
+    'BACKEND_PLUGIN': {
+        'section': 'plugins',
+        'option': 'backend'
+    },
+
 }
 
 
@@ -100,7 +107,10 @@ def load_config():
 
         # memcached parameter
         'MEMCACHED_HOST': '127.0.0.1',
-        'MEMCACHED_PORT': '11211'
+        'MEMCACHED_PORT': '11211',
+
+        # plugins parameter
+        'BACKEND_PLUGIN': 'Openstack'
     }
     config = ConfigParser.RawConfigParser()
 
