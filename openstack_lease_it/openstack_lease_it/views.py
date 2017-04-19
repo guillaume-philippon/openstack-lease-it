@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.contrib import auth
 
 
@@ -18,4 +18,3 @@ def login(request):
             return render(request, "auth/login.html")
     else:
         return render(request, 'auth/login.html')
-    
