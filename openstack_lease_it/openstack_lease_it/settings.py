@@ -17,7 +17,6 @@ from config import load_config
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 GLOBAL_CONFIG = load_config()
-AUTH_USER_MODEL = 'openstack_auth.User'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -128,16 +127,28 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = '/'
 
-OPENSTACK_KEYSTONE_URL = GLOBAL_CONFIG['OS_AUTH_URL']
-OPENSTACK_API_VERSIONS = {
-     "identity": 3,
-}
-
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
-OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = True
+if GLOBAL_CONFIG['BACKEND_PLUGIN'] == 'Openstack':
+    # UserId on django-openstack_auth need specific User model
+    AUTH_USER_MODEL = 'openstack_auth.User'
 
-AUTHENTICATION_BACKENDS = (
-    'openstack_auth.backend.KeystoneBackend',
-    'django.contrib.auth.backends.ModelBackend',
-)
+    # Define keystone URL for authentification
+    OPENSTACK_KEYSTONE_URL = GLOBAL_CONFIG['OS_AUTH_URL']
+
+    # We use keystone v3 API
+    OPENSTACK_API_VERSIONS = {
+        "identity": GLOBAL_CONFIG['OS_IDENTITY_API_VERSION'],
+    }
+    # We use multidomain
+    OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = True
+
+    # We load Openstack_auth backend
+    AUTHENTICATION_BACKENDS = (
+        'openstack_auth.backend.KeystoneBackend',
+        'django.contrib.auth.backends.ModelBackend',
+    )
+else:
+    AUTHENTICATION_BACKENDS = (
+        'django.contrib.auth.backends.ModelBackend',
+    )
