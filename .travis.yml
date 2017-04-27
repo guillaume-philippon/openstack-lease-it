@@ -21,4 +21,4 @@ install:
 
 script:
   - sonar-scanner
-  - pylint openstack_lease_it/openstack_lease_it openstack_lease_it/lease_it
+  - pylint --disable=fixme openstack_lease_it/openstack_lease_it openstack_lease_it/lease_it
