@@ -1,18 +1,21 @@
+"""
+TestConnection is a module of Fake backend used to help developpement
+of API
+"""
 #!/usr/local/bin/python2.7
 # -*- coding: utf-8 -*-
 
 
 class TestConnection(object):
     """
-       This class is only used for developement. This will return false value formated as expected by views.
+    This class is only used for developement. This will
+    return false value formated as expected by views.
     """
-    def __init__(self):
-        super(TestConnection, self).__init__()
-
     @staticmethod
     def users():
         """
-           Return a list of fake user with there id, fullname and 
+        Return a list of fake user with there id, fullname and
+        other useful details
         :return: dict()
         """
         return {
@@ -33,8 +36,10 @@ class TestConnection(object):
     @staticmethod
     def instances():
         """
-           Return a list of fake value for some instances. Each instances is must contain owner id, project id, instance
-           id, name of the instance, starting date of instance, last time a lease as been put, the leasing duration
+        Return a list of fake value for some instances. Each instances
+        is must contain owner id, project id, instance id, name of the
+        instance, starting date of instance, last time a lease as been put,
+        the leasing duration
         :return: dict()
         """
         return {
@@ -79,8 +84,10 @@ class TestConnection(object):
     @staticmethod
     def usage(): # TODO: usage is not a good name, flavors is more accurate
         """
-           Return a list of flavors available with a summary description (Name, Disk, CPU, RAM) and number of instances
-           start-able in current Cloud state, maximum instances start-able when Cloud is empty
+        Return a list of flavors available with a summary description
+        (Name, Disk, CPU, RAM) and number of instances start-able with
+        current Cloud state, maximum instances start-able when Cloud is
+        empty
         :return: dict()
         """
         return {
