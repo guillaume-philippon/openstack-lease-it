@@ -1,4 +1,8 @@
-language: java
+language:
+  - java
+  - javascript
+  - python
+
 jdk: oraclejdk8
 
 addons:
@@ -9,5 +13,9 @@ addons:
     github_token:
       secure: "HB4YI6xDTyjDFYOFk91e0kEZs0teg5EB4rjAuSV/uWcdyXUG1JYAGfZhLzl9hM4I7m6xmSA9764BoHu3Kw0muvzJBAvX4xBWGorMb22RYSDf6+tFhF5vcuDQumyK34pNR4VbGRukPQA+DZneSxXS+7Oj1+X1ECAkVtoxOXWNK8kIatT5fSdQClK0r/9Z6mQRA0N6nlCzi9wLrZfMS4WD8M8vrwC/3Nq5kidbDwxMBiPGlz6gZQyPftJCYOwqRYYYpAjVuYmclfbqwZ59AJK6NFOiwPYPGMCFVBIAU9HTYW4Bkes7JzOam+XePfmIkwqnTXKaNhSfYftZIoi6KdCX943SDdNrGJXlpOToU03SeayRdjpDWdMHnGGd+kUjbYdHaNos4BRvrNOf8AtctrpMP1IBtALtGZrECCLDkC6jEfQ7Cb9LWkG97s1NERivP9LMzTCv9XXJkyP4oQG1hTW9xhItimdjstcmNZGO8N/qCdxNYOjbrhbkbaIWaBqDsWnKSjnrrlUajjNq1vHiIZn502U3UxgNIdkOZ5lifojhPqrPaD+Qpo0g/jIVRBJm5qgAOGt6iIFDpJrh56MztRulqMvtFe2DkHdhpFiftQgXKa4Hzs1p4Et+6xSqpOUYn1oNhJu0Y209glpDv8MmDt+wH1oY1u0GuLvFZeizn7nhCnY="
 
+install:
+  - pip install pylint
+
 script:
   - sonar-scanner
+  - pylint openstack_lease_it/openstack_lease_it openstack_lease_it/lease_it
