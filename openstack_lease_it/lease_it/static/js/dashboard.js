@@ -10,8 +10,8 @@
 */
 function flavorsStatus() {
     return $.getJSON("/flavors", function(data) {
-        return data
-    })
+        return data;
+    });
 }
 
 /*
@@ -146,5 +146,5 @@ function buildFlavorsView(flavors, flavor_min, div_name){
             $(buildCard(flavor, details)).appendTo(div_name);
             buildHighCharts(flavor, details);
         }
-    })
+    });
 }
