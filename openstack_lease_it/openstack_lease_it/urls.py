@@ -14,13 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
-from django.contrib import admin
 from openstack_lease_it.settings import GLOBAL_CONFIG
 
 if GLOBAL_CONFIG['BACKEND_PLUGIN'] == 'Openstack':
-    urlpatterns = [
-        # url(r'^admin/', include(admin.site.urls)),
-
+    urlpatterns = [  # pylint: disable=invalid-name
         # openstack_auth.urls provide login & logout view plus some more usefull stuff
         # templates should be placed into templates/auth/ (login.html / logout.html)
         url(r'^', include('openstack_auth.urls')),
@@ -30,8 +27,7 @@ if GLOBAL_CONFIG['BACKEND_PLUGIN'] == 'Openstack':
         url(r'^', include('lease_it.urls'))
     ]
 else:
-    urlpatterns = [
-        # url(r'^admin/', include(admin.site.urls)),
+    urlpatterns = [  # pylint: disable=invalid-name
         url(r'^login', 'openstack_lease_it.views.login', name='login'),
         url(r'^', include('lease_it.urls'))
     ]
