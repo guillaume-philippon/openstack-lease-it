@@ -33,5 +33,5 @@ def flavors(request):  # pylint: disable=unused-argument
     backend = backend_plugin()  # pylint: disable=not-callable
 
     # We call our method
-    response = backend.usage()
+    response = backend.flavors()
     return JsonResponse(response)

@@ -2,7 +2,6 @@
 TestConnection is a module of Fake backend used to help developpement
 of API
 """
-#!/usr/local/bin/python2.7
 # -*- coding: utf-8 -*-
 
 
@@ -82,7 +81,7 @@ class TestConnection(object):
         }
 
     @staticmethod
-    def usage(): # TODO: usage is not a good name, flavors is more accurate
+    def flavors():  # TODO: usage is not a good name, flavors is more accurate
         """
         Return a list of flavors available with a summary description
         (Name, Disk, CPU, RAM) and number of instances start-able with
