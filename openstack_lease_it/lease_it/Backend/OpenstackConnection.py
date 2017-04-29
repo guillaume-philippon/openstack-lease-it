@@ -14,6 +14,9 @@ from openstack_lease_it.settings import GLOBAL_CONFIG
 # Define nova client version as a constant
 NOVA_VERSION = 2
 
+# Default cache timeout for flavor (in sec)
+FLAVOR_CACHE_TIMEOUT = 86400
+
 
 class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
     """
@@ -90,7 +93,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
             # If cache is empty we retrieve information from Openstack
             # and we set it in cached
             flavors = self._flavors()
-            cache.set('flavors', flavors)
+            cache.set('flavors', flavors, FLAVOR_CACHE_TIMEOUT)
 
         # Retrieve hypervisor status to populate response
         hypervisors = self._hypervisors()
