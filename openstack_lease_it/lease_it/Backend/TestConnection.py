@@ -81,7 +81,7 @@ class TestConnection(object):
         }
 
     @staticmethod
-    def flavors():  # TODO: usage is not a good name, flavors is more accurate
+    def flavors():
         """
         Return a list of flavors available with a summary description
         (Name, Disk, CPU, RAM) and number of instances start-able with
