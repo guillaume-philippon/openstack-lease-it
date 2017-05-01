@@ -147,3 +147,20 @@ class TestConnection(object):
                 'max': 100,
             }
         }
+
+    @staticmethod
+    def projects():
+        """
+        Return a list of project w/ any useful information
+        :return: dict()
+        """
+        return {
+            '1' : {
+                'id': '1',
+                'name': 'Project 1'
+            },
+            '2': {
+                'id': '2',
+                'name': 'Project 2'
+            }
+        }
