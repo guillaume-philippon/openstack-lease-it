@@ -8,6 +8,9 @@ from django.contrib.auth.decorators import login_required
 from lease_it import Backend
 from openstack_lease_it.settings import GLOBAL_CONFIG
 
+BACKEND_PLUGIN = getattr(Backend, "{0}Connection".format(GLOBAL_CONFIG['BACKEND_PLUGIN']))
+BACKEND = BACKEND_PLUGIN()  # pylint: disable=not-callable
+
 
 @login_required
 def dashboard(request):
@@ -26,12 +29,41 @@ def flavors(request):  # pylint: disable=unused-argument
     :param request: Web request
     :return: JsonResponse w/ list of flavor and details values
     """
-    # We load BackendConnection from GLOBAL_CONFIG['BACKEND_PLUGIN']
-    backend_plugin = getattr(Backend, "{0}Connection".format(GLOBAL_CONFIG['BACKEND_PLUGIN']))
-
-    # We create the object from backend. Be sure that all backend have same methods
-    backend = backend_plugin()  # pylint: disable=not-callable
-
     # We call our method
-    response = backend.usage()
+    response = BACKEND.flavors()
+    return JsonResponse(response)
+
+
+@login_required
+def instances(request):  #pylint: disable=unused-argument
+    """
+    View for instances list
+    :param request: Web request
+    :return: JsonResponse w/ list of instances and details
+    """
+    response = dict()
+    data_instances = BACKEND.instances()
+    data_users = BACKEND.users()
+    data_projects = BACKEND.projects()
+    for instance in data_instances:
+        response[instance] = {
+            'id': data_instances[instance]['id'],
+            'name': data_instances[instance]['name'],
+            'created_at': data_instances[instance]['created_at'],
+            'lease_end': data_instances[instance]['lease_end'],
+            'project': "{name}".format(**data_projects[data_instances[instance]['project_id']]),
+            'user': "{first_name} {last_name}".format(
+                **data_users[data_instances[instance]['user_id']])
+        }
+    return JsonResponse(response)
+
+
+@login_required
+def users(request):  # pylint: disable=unused-argument
+    """
+    View for users
+    :param request: Web request
+    :return: JsonResponse w/ list of users and details
+    """
+    response = BACKEND.users()
     return JsonResponse(response)

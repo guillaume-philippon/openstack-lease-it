@@ -1,2 +1,5 @@
 [MESSAGES CONTROL]
 disable=fixme
+
+[MASTER]
+ignore=migrations

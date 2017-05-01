@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 """
 TestConnection is a module of Fake backend used to help developpement
 of API
 """
-#!/usr/local/bin/python2.7
-# -*- coding: utf-8 -*-
+from django.utils.dateparse import parse_datetime
+from lease_it.datastore.ModelAccess import InstancesAccess
 
 
 class TestConnection(object):
@@ -18,20 +19,21 @@ class TestConnection(object):
         other useful details
         :return: dict()
         """
-        return {
+        response = {
             '1': {
                 'id': '1',
-                'firstname': 'John',
-                'lastname': 'Smith',
-                'mail': 'john.smith@example.com'
+                'first_name': 'John',
+                'last_name': 'Smith',
+                'email': 'john.smith@example.com'
             },
             '2': {
                 'id': '2',
-                'firstname': 'Jane',
-                'lastname': 'Doe',
-                'mail': 'jane.doe@fake.com'
+                'first_name': 'Jane',
+                'last_name': 'Doe',
+                'email': 'jane.doe@fake.com'
             },
         }
+        return response
 
     @staticmethod
     def instances():
@@ -40,49 +42,54 @@ class TestConnection(object):
         is must contain owner id, project id, instance id, name of the
         instance, starting date of instance, last time a lease as been put,
         the leasing duration
+        :param from_cache: If true, the date will be read from database, if false
+                           we retrieve information from backend and update cache database
+
         :return: dict()
         """
-        return {
+        # Response is a fake dict that provide Backend information. OpenStack backend return
+        # should be process to format a dict like it.
+        response = {
             '1': {
                 'user_id': '1',
                 'project_id': '1',
                 'id': '1',
                 'name': 'user1_project1_expire',
-                'created_at': '01/20/2014',
-                'last_lease_at': '01/10/2016',
-                'lease_time': 3
+                'created_at': parse_datetime('2017-04-29T17:40:26Z'),
             },
             '2': {
                 'user_id': '1',
                 'project_id': '1',
                 'id': '2',
                 'name': 'user1_project1_expire',
-                'created_at': '01/20/2014',
-                'last_lease_at': '01/10/2016',
-                'lease_time': 3
+                'created_at': parse_datetime('2017-04-29T17:40:26Z'),
             },
             '3': {
                 'user_id': '1',
                 'project_id': '1',
                 'id': '3',
                 'name': 'user1_project1_close_to',
-                'created_at': '01/20/2014',
-                'last_lease_at': '01/01/2017',
-                'lease_time': 3
+                'created_at': parse_datetime('2017-04-29T17:40:26Z'),
             },
             '4': {
                 'user_id': '1',
                 'project_id': '1',
                 'id': '4',
                 'name': 'user1_project1_renew',
-                'created_at': '01/04/2014',
-                'last_lease_at': '01/10/2016',
-                'lease_time': 3
+                'created_at': parse_datetime('2017-04-29T17:40:26Z'),
             },
+            '5': {
+                'user_id': '1',
+                'project_id': '1',
+                'id': '5',
+                'name': 'user1_project1_long_lease',
+                'created_at': parse_datetime('2017-05-01T01:00:00Z'),
+            }
         }
+        return InstancesAccess.show(response)
 
     @staticmethod
-    def usage(): # TODO: usage is not a good name, flavors is more accurate
+    def flavors():
         """
         Return a list of flavors available with a summary description
         (Name, Disk, CPU, RAM) and number of instances start-able with
@@ -138,5 +145,22 @@ class TestConnection(object):
                 'cpu': 3,
                 'free': 90,
                 'max': 100,
+            }
+        }
+
+    @staticmethod
+    def projects():
+        """
+        Return a list of project w/ any useful information
+        :return: dict()
+        """
+        return {
+            '1' : {
+                'id': '1',
+                'name': 'Project 1'
+            },
+            '2': {
+                'id': '2',
+                'name': 'Project 2'
             }
         }
