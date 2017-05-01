@@ -52,7 +52,8 @@ def instances(request):  #pylint: disable=unused-argument
             'created_at': data_instances[instance]['created_at'],
             'lease_end': data_instances[instance]['lease_end'],
             'project': "{name}".format(**data_projects[data_instances[instance]['project_id']]),
-            'user': "{first_name} {last_name}".format(**data_users[data_instances[instance]['user_id']])
+            'user': "{first_name} {last_name}".format(
+                **data_users[data_instances[instance]['user_id']])
         }
     return JsonResponse(response)
 
