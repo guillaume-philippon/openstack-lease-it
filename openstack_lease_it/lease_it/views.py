@@ -44,14 +44,14 @@ def instances(request):  #pylint: disable=unused-argument
     response = dict()
     data_instances = BACKEND.instances()
     data_users = BACKEND.users()
-    # projects = BACKEND.projects()
+    data_projects = BACKEND.projects()
     for instance in data_instances:
         response[instance] = {
             'id': data_instances[instance]['id'],
             'name': data_instances[instance]['name'],
             'created_at': data_instances[instance]['created_at'],
             'lease_end': data_instances[instance]['lease_end'],
-            'project': 'My Project Name',  # TODO: Fix it
+            'project': "{name}".format(**data_projects[data_instances[instance]['project_id']]),
             'user': "{first_name} {last_name}".format(**data_users[data_instances[instance]['user_id']])
         }
     return JsonResponse(response)
