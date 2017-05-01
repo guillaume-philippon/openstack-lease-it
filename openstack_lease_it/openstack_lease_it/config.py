@@ -82,6 +82,15 @@ OPTIONS = {
 
 
 def load_config_option(global_config, config, name, option):
+    """
+    This function overwrite the current global_config[name] value
+    with option
+    :param global_config: The actual configuration
+    :param config: The new configuration
+    :param name: Name of value we will overwrite
+    :param option: Option section and value on config
+    :return: void
+    """
     try:
         global_config[name] = config.get(option['section'],
                                          option['option'])
@@ -92,7 +101,10 @@ def load_config_option(global_config, config, name, option):
 
 
 def load_config():
-    # Define default configuration, *NOT* all value have a default
+    """
+    Define default configuration, *NOT* all value have a default
+    :return: dict of configuration
+    """
     global_configuration = {
         # Django parameters
         'DEBUG': False,
