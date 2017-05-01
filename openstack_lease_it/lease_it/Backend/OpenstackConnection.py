@@ -46,7 +46,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         except:  # pylint: disable=bare-except
             pass
 
-    def _instances(self, request):
+    def _instances(self, request):  # pylint: disable=unused-argument
         """
         List of instances actually launched
         :return: dict()
@@ -138,6 +138,11 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         return flavors
 
     def instances(self, request):
+        """
+        List all instances started on cluster and owned by user
+        :param request: Web request, used to retrieve user id
+        :return: dict()
+        """
         response = dict()
         data_instances = self._instances(request)
         for instance in data_instances:
@@ -149,11 +154,10 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
                     'name': instance.name,
                     'created_at': instance.created
                 }
-        print response
         return InstancesAccess.show(response)
 
-    def users(self):
+    def users(self):  # pylint: disable=missing-docstring, no-self-use
         return dict()
 
-    def projects(self):
+    def projects(self):  # pylint: disable=missing-docstring, no-self-use
         return dict()

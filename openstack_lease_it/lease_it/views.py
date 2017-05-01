@@ -47,12 +47,14 @@ def instances(request):  #pylint: disable=unused-argument
     data_projects = BACKEND.projects()
     for instance in data_instances:
         try:
-            project = "{name}".format(**data_projects[data_instances[instance]['project_id']])
+            project = "{name}".format(
+                **data_projects[data_instances[instance]['project_id']])
         except KeyError:
             project = data_instances[instance]['project_id']
 
         try:
-            user = "{first_name} {last_name}".format(**data_users[data_instances[instance]['user_id']])
+            user = "{first_name} {last_name}".format(
+                **data_users[data_instances[instance]['user_id']])
         except KeyError:
             user = data_instances[instance]['user_id']
         print instance
