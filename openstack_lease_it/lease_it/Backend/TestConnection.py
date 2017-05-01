@@ -19,35 +19,36 @@ class TestConnection(object):
         other useful details
         :return: dict()
         """
-        return {
+        response = {
             '1': {
                 'id': '1',
-                'firstname': 'John',
-                'lastname': 'Smith',
-                'mail': 'john.smith@example.com'
+                'first_name': 'John',
+                'last_name': 'Smith',
+                'email': 'john.smith@example.com'
             },
             '2': {
                 'id': '2',
-                'firstname': 'Jane',
-                'lastname': 'Doe',
-                'mail': 'jane.doe@fake.com'
+                'first_name': 'Jane',
+                'last_name': 'Doe',
+                'email': 'jane.doe@fake.com'
             },
         }
+        return response
 
     @staticmethod
-    def instances(from_cache=False):
+    def instances():
         """
         Return a list of fake value for some instances. Each instances
         is must contain owner id, project id, instance id, name of the
         instance, starting date of instance, last time a lease as been put,
         the leasing duration
-
-        :param from_cache: Load data from database instead off retrieve it from backend
+        :param from_cache: If true, the date will be read from database, if false
+                           we retrieve information from backend and update cache database
 
         :return: dict()
         """
-        if from_cache:
-            return InstancesAccess.instances()
+        # Response is a fake dict that provide Backend information. OpenStack backend return
+        # should be process to format a dict like it.
         response = {
             '1': {
                 'user_id': '1',
@@ -85,8 +86,7 @@ class TestConnection(object):
                 'created_at': parse_datetime('2017-05-01T01:00:00Z'),
             }
         }
-        InstancesAccess.save(response)
-        return response
+        return InstancesAccess.show(response)
 
     @staticmethod
     def flavors():
