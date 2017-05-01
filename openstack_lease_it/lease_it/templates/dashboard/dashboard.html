@@ -2,6 +2,7 @@
 {% load i18n %}
 {% block title %}Lease It{% endblock %}
 {% block script %}
+        <script src="/static/js/utils.js" type="text/javascript"></script>
         <script src="/static/js/flavors.js" type="text/javascript"></script>
         <script src="/static/js/instances.js" type="text/javascript"></script>
         <script src="/static/js/dashboard.js" type="text/javascript"></script>
@@ -18,8 +19,12 @@ $(function() {
         refreshFlavorDiv(FLAVOR_SORT_PARAMS, FLAVOR_MIN, FLAVOR_ORDER);
         $( "#progress-bar" ).hide();
     })
+
+    /* Load instance part */
     instancesStatus().then(function (data_instances){
-        buildInstancesView(data_instances, '#instances')
+        <!--INSTANCES = sortOnParams('name', data_instances, 1);-->
+        INSTANCES = data_instances;
+        buildInstancesView(INSTANCES, '#instances');
     })
 
     $(".button-collapse").sideNav();
@@ -71,7 +76,7 @@ $(function() {
                         <tr>
                             <th>Name</th>
                             <th>Project</th>
-                            <th>Age</th>
+                            <th>Started at</th>
                             <th>End Of Life</th>
                         </tr>
                     </thead>

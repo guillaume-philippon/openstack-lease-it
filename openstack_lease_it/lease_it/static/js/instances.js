@@ -18,7 +18,7 @@ function instancesStatus() {
 function buildInstanceView(instance, details) {
     return '<tr>' +
            '<td>' + details.name + '</td>' +
-           '<td>' + 'details.project_id' + '</td>' +
+           '<td>' + details.project_id + '</td>' +
            '<td>' + details.created_at + '</td>' +
            '<td>' + details.lease_end + '<span class="waves-effect waves-light new badge hoverable"' +
                                  '      data-badge-caption="new lease"></span>' +
