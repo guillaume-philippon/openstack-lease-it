@@ -42,17 +42,27 @@ def instances(request):  #pylint: disable=unused-argument
     :return: JsonResponse w/ list of instances and details
     """
     response = dict()
-    data_instances = BACKEND.instances()
+    data_instances = BACKEND.instances(request)
     data_users = BACKEND.users()
     data_projects = BACKEND.projects()
     for instance in data_instances:
+        try:
+            project = "{name}".format(**data_projects[data_instances[instance]['project_id']])
+        except KeyError:
+            project = data_instances[instance]['project_id']
+
+        try:
+            user = "{first_name} {last_name}".format(**data_users[data_instances[instance]['user_id']])
+        except KeyError:
+            user = data_instances[instance]['user_id']
+        print instance
         response[instance] = {
             'id': data_instances[instance]['id'],
             'name': data_instances[instance]['name'],
             'created_at': data_instances[instance]['created_at'],
             'lease_end': data_instances[instance]['lease_end'],
-            'project': "{name}".format(**data_projects[data_instances[instance]['project_id']]),
-            'user': "{first_name} {last_name}".format(**data_users[data_instances[instance]['user_id']])
+            'project': project,
+            'user': user
         }
     return JsonResponse(response)
 
@@ -65,11 +75,4 @@ def users(request):  # pylint: disable=unused-argument
     :return: JsonResponse w/ list of users and details
     """
     response = BACKEND.users()
-    return JsonResponse(response)
-
-
-@login_required
-def instances(request):
-    openstack = OpenstackConnection()
-    response = openstack.instances(request)
     return JsonResponse(response)
