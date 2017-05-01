@@ -41,5 +41,28 @@ def instances(request):  #pylint: disable=unused-argument
     :param request: Web request
     :return: JsonResponse w/ list of instances and details
     """
-    response = BACKEND.instances(from_cache=True)
+    response = dict()
+    data_instances = BACKEND.instances()
+    data_users = BACKEND.users()
+    # projects = BACKEND.projects()
+    for instance in data_instances:
+        response[instance] = {
+            'id': data_instances[instance]['id'],
+            'name': data_instances[instance]['name'],
+            'created_at': data_instances[instance]['created_at'],
+            'lease_end': data_instances[instance]['lease_end'],
+            'project': 'My Project Name',  # TODO: Fix it
+            'user': "{first_name} {last_name}".format(**data_users[data_instances[instance]['user_id']])
+        }
+    return JsonResponse(response)
+
+
+@login_required
+def users(request):  # pylint: disable=unused-argument
+    """
+    View for users
+    :param request: Web request
+    :return: JsonResponse w/ list of users and details
+    """
+    response = BACKEND.users()
     return JsonResponse(response)
