@@ -156,8 +156,10 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
                 }
         return InstancesAccess.show(response)
 
-    def users(self):  # pylint: disable=missing-docstring, no-self-use
+    @staticmethod
+    def users():  # pylint: disable=missing-docstring, no-self-use
         return dict()
 
-    def projects(self):  # pylint: disable=missing-docstring, no-self-use
+    @staticmethod
+    def projects():  # pylint: disable=missing-docstring, no-self-use
         return dict()
