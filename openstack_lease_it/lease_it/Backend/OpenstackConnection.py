@@ -10,6 +10,7 @@ from keystoneauth1.identity import v3
 from keystoneauth1 import session
 from novaclient import client as nvclient
 from openstack_lease_it.settings import GLOBAL_CONFIG
+from lease_it.datastore import InstancesAccess
 
 # Define nova client version as a constant
 NOVA_VERSION = 2
@@ -45,14 +46,20 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         except:  # pylint: disable=bare-except
             pass
 
-    def _instances(self):
+    def _instances(self, request):
         """
         List of instances actually launched
         :return: dict()
         """
+        # user_token = v3.Token(token=request.user.token.id,
+        #                 auth_url=GLOBAL_CONFIG['OS_AUTH_URL'],
+        #                 project_name='admin',  # TODO: Should be compute
+        #                 project_domain_name='default')  # TODO: Should be compute
+        # user_session = session.Session(auth=user_token,
+        #                                verify=GLOBAL_CONFIG['OS_CACERT'])
         nova = nvclient.Client(NOVA_VERSION, session=self.session)
-        instances = nova.servers.list(search_opts={'all_tenants': 'true'})
-        return instances
+        data_instances = nova.servers.list(search_opts={'all_tenants': 'true'})
+        return data_instances
 
     def _hypervisors(self):
         """
@@ -129,3 +136,24 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
             flavors[flavor]['free'] = free_flavor
             flavors[flavor]['max'] = max_flavor
         return flavors
+
+    def instances(self, request):
+        response = dict()
+        data_instances = self._instances(request)
+        for instance in data_instances:
+            if instance.user_id == request.user.id:
+                response[instance.id] = {
+                    'user_id': instance.user_id,
+                    'project_id': instance.tenant_id,
+                    'id': instance.id,
+                    'name': instance.name,
+                    'created_at': instance.created
+                }
+        print response
+        return InstancesAccess.show(response)
+
+    def users(self):
+        return dict()
+
+    def projects(self):
+        return dict()
