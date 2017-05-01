@@ -36,7 +36,7 @@ class TestConnection(object):
         return response
 
     @staticmethod
-    def instances(request):
+    def instances(request):  # pylint: disable=unused-argument
         """
         Return a list of fake value for some instances. Each instances
         is must contain owner id, project id, instance id, name of the
