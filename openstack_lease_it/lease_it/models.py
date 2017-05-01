@@ -20,6 +20,7 @@ class Instances(models.Model):
     id = models.CharField(primary_key=True, max_length=50)
     name = models.CharField(max_length=50)
     user_id = models.CharField(max_length=50)
+    project_id = models.CharField(max_length=50)
     created_at = models.DateField()  # Date when VM as been started
     heartbeat_at = models.DateField()  # Last time we've see this instances
     leased_at = models.DateField()  # Date for last lease

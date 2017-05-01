@@ -32,7 +32,9 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
                 'created_at': instance.created_at,
                 'leased_at': instance.leased_at,
                 'heartbeat_at': instance.heartbeat_at,
-                'lease_end': instance.leased_at + relativedelta(months=+instance.lease_duration)
+                'lease_end': instance.leased_at + relativedelta(months=+instance.lease_duration),
+                'user_id': instance.user_id,
+                'project_id': instance.project_id
             }
         return response
 

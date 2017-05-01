@@ -41,5 +41,5 @@ def instances(request):  #pylint: disable=unused-argument
     :param request: Web request
     :return: JsonResponse w/ list of instances and details
     """
-    response = BACKEND.instances(from_cache=False)
+    response = BACKEND.instances(from_cache=True)
     return JsonResponse(response)
