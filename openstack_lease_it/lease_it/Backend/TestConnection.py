@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 """
 TestConnection is a module of Fake backend used to help developpement
 of API
 """
-# -*- coding: utf-8 -*-
+from django.utils.dateparse import parse_datetime
+from lease_it.datastore.ModelAccess import InstancesAccess
 
 
 class TestConnection(object):
@@ -33,52 +35,58 @@ class TestConnection(object):
         }
 
     @staticmethod
-    def instances():
+    def instances(from_cache=False):
         """
         Return a list of fake value for some instances. Each instances
         is must contain owner id, project id, instance id, name of the
         instance, starting date of instance, last time a lease as been put,
         the leasing duration
+
+        :param from_cache: Load data from database instead off retrieve it from backend
+
         :return: dict()
         """
-        return {
+        if from_cache:
+            return InstancesAccess.instances()
+        response = {
             '1': {
                 'user_id': '1',
                 'project_id': '1',
                 'id': '1',
                 'name': 'user1_project1_expire',
-                'created_at': '01/20/2014',
-                'last_lease_at': '01/10/2016',
-                'lease_time': 3
+                'created_at': parse_datetime('2017-04-29T17:40:26Z'),
             },
             '2': {
                 'user_id': '1',
                 'project_id': '1',
                 'id': '2',
                 'name': 'user1_project1_expire',
-                'created_at': '01/20/2014',
-                'last_lease_at': '01/10/2016',
-                'lease_time': 3
+                'created_at': parse_datetime('2017-04-29T17:40:26Z'),
             },
             '3': {
                 'user_id': '1',
                 'project_id': '1',
                 'id': '3',
                 'name': 'user1_project1_close_to',
-                'created_at': '01/20/2014',
-                'last_lease_at': '01/01/2017',
-                'lease_time': 3
+                'created_at': parse_datetime('2017-04-29T17:40:26Z'),
             },
             '4': {
                 'user_id': '1',
                 'project_id': '1',
                 'id': '4',
                 'name': 'user1_project1_renew',
-                'created_at': '01/04/2014',
-                'last_lease_at': '01/10/2016',
-                'lease_time': 3
+                'created_at': parse_datetime('2017-04-29T17:40:26Z'),
             },
+            '5': {
+                'user_id': '1',
+                'project_id': '1',
+                'id': '5',
+                'name': 'user1_project1_long_lease',
+                'created_at': parse_datetime('2017-05-01T01:00:00Z'),
+            }
         }
+        InstancesAccess.save(response)
+        return response
 
     @staticmethod
     def flavors():

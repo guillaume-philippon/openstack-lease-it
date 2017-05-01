@@ -8,6 +8,9 @@ from django.contrib.auth.decorators import login_required
 from lease_it import Backend
 from openstack_lease_it.settings import GLOBAL_CONFIG
 
+BACKEND_PLUGIN = getattr(Backend, "{0}Connection".format(GLOBAL_CONFIG['BACKEND_PLUGIN']))
+BACKEND = BACKEND_PLUGIN()  # pylint: disable=not-callable
+
 
 @login_required
 def dashboard(request):
@@ -26,12 +29,17 @@ def flavors(request):  # pylint: disable=unused-argument
     :param request: Web request
     :return: JsonResponse w/ list of flavor and details values
     """
-    # We load BackendConnection from GLOBAL_CONFIG['BACKEND_PLUGIN']
-    backend_plugin = getattr(Backend, "{0}Connection".format(GLOBAL_CONFIG['BACKEND_PLUGIN']))
-
-    # We create the object from backend. Be sure that all backend have same methods
-    backend = backend_plugin()  # pylint: disable=not-callable
-
     # We call our method
-    response = backend.flavors()
+    response = BACKEND.flavors()
+    return JsonResponse(response)
+
+
+@login_required
+def instances(request):  #pylint: disable=unused-argument
+    """
+    View for instances list
+    :param request: Web request
+    :return: JsonResponse w/ list of instances and details
+    """
+    response = BACKEND.instances(from_cache=False)
     return JsonResponse(response)

@@ -20,8 +20,9 @@ class Instances(models.Model):
     id = models.CharField(primary_key=True, max_length=50)
     name = models.CharField(max_length=50)
     user_id = models.CharField(max_length=50)
-    created_date = models.DateField()  # Date when VM as been started
-    lease_date = models.DateField()  # Date for last lease
+    created_at = models.DateField()  # Date when VM as been started
+    heartbeat_at = models.DateField()  # Last time we've see this instances
+    leased_at = models.DateField()  # Date for last lease
     lease_duration = models.IntegerField()  # Lease duration (month)
 
 
