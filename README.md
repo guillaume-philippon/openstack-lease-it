@@ -31,6 +31,14 @@ You must modify ```/opt/openstack-lease-it/openstack_lease_it/openstack_lease_it
 ALLOWED_HOSTS = [ '*' ]
 ```
 
+#### Configure database
+By default, we use sqlite3 database. to populate it
+```
+box# cd /opt/openstack-lease-it/openstack_lease_it
+box# python manage.py makemigrations
+box# python manage.py migrate
+```
+
 #### Configure Apache
 ```
 box# cat /etc/httpd/conf.d/lease-it.conf

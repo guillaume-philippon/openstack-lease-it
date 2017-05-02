@@ -57,7 +57,6 @@ def instances(request):  #pylint: disable=unused-argument
                 **data_users[data_instances[instance]['user_id']])
         except KeyError:
             user = data_instances[instance]['user_id']
-        print instance
         response[instance] = {
             'id': data_instances[instance]['id'],
             'name': data_instances[instance]['name'],
