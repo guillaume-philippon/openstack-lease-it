@@ -5,6 +5,7 @@ of API
 """
 from django.utils.dateparse import parse_datetime
 from lease_it.datastore.ModelAccess import InstancesAccess
+from lease_it.Backend.Exceptions import PermissionDenied
 
 
 class TestConnection(object):
@@ -164,3 +165,21 @@ class TestConnection(object):
                 'name': 'Project 2'
             }
         }
+
+    @staticmethod
+    def lease_instance(request, instance_id):
+        """
+        If instance_id is owned by user_id, then update lease information, if not, raise
+        PermissionDenied exception
+        :param instance_id: id of instance
+        :param request: Web request
+        :return: void
+        """
+        data_instances = TestConnection.instances(None)
+        # To avoid int vs string comparaison, we force user_id and request.user.id to be
+        # a string
+        if str(data_instances[instance_id]['user_id']) != str(request.user.id):
+            raise PermissionDenied(request.user.id, instance_id)
+        InstancesAccess.save({
+            instance_id: data_instances[instance_id]
+        })

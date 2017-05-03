@@ -15,8 +15,17 @@ Including another URLconf
 from django.conf.urls import url
 
 urlpatterns = [  # pylint: disable=invalid-name
+    # Default dashboard view
     url(r'^$', 'lease_it.views.dashboard', name='dashboard'),
+
+    # Flavors view
     url(r'^flavors', 'lease_it.views.flavors', name='flavors'),
-    url(r'^instances', 'lease_it.views.instances', name='instances'),
+
+    # Instances view
+    url(r'^instances$', 'lease_it.views.instances', name='instances'),
+    url(r'^instances/(?P<instance_id>[\w-]+)$', 'lease_it.views.instance', name='instance'),
+
+
+    # Users view
     url(r'^users', 'lease_it.views.users', name='users')
 ]

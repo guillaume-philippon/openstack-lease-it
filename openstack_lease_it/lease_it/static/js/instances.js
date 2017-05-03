@@ -21,7 +21,7 @@ function buildInstanceView(instance, details) {
            '<td>' + details.project + '</td>' +
            '<td>' + details.created_at + '</td>' +
            '<td>' + details.lease_end + '<span class="waves-effect waves-light new badge hoverable"' +
-                                 '      data-badge-caption="new lease"></span>' +
+                                 '      data-badge-caption="new lease" onClick="updateLease(\''+ details.id + '\')"></span>' +
            '</td>' +
            '</tr>';
 }
@@ -33,5 +33,17 @@ function buildInstancesView(instances, div_name){
     $(div_name).html('');
     $.each(instances, function(instance, details){
         $(buildInstanceView(instance, details)).appendTo(div_name);
+    });
+}
+
+/*
+    Update lease status on click
+*/
+function updateLease(instance) {
+    return $.getJSON("/instances/" + instance, function(data){
+        instancesStatus().then(function (data_instances){
+            INSTANCES = data_instances;
+            buildInstancesView(INSTANCES, '#instances');
+        });
     });
 }

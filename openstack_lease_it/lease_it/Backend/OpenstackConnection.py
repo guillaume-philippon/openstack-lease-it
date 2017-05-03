@@ -1,22 +1,26 @@
+#  -*- coding: utf-8 -*-
 """
 This module manage interaction between application and
 OpenStack cloud infrastructure
 """
-#  -*- coding: utf-8 -*-
-
 import math
 from django.core.cache import cache
 from keystoneauth1.identity import v3
-from keystoneauth1 import session
+from keystoneauth1 import session, exceptions as ksexceptions
+from keystoneclient.v3 import client as ksclient
 from novaclient import client as nvclient
 from openstack_lease_it.settings import GLOBAL_CONFIG
 from lease_it.datastore import InstancesAccess
+from lease_it.Backend.Exceptions import PermissionDenied
 
 # Define nova client version as a constant
 NOVA_VERSION = 2
 
-# Default cache timeout for flavor (in sec)
+# Default cache timeout (in sec)
 FLAVOR_CACHE_TIMEOUT = 86400
+USERS_CACHE_TIMEOUT = 86400
+PROJECTS_CACHE_TIMEOUT = 86400
+INSTANCES_CACHE_TIMEOUT = 86400
 
 
 class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
@@ -86,6 +90,31 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
             }
         return response
 
+    def _users(self):
+        """
+        List of users. If not on admin network, we can't retrieve information,
+        so we return a None object
+        :return: dict()
+        """
+        keystone = ksclient.Client(session=self.session)
+        try:
+            users = keystone.users.list()
+        except ksexceptions.ConnectFailure:
+            users = None
+        return users
+
+    def _projects(self):
+        """
+        List of projects on OpenStack.
+        :return: dict()
+        """
+        keystone = ksclient.Client(session=self.session)
+        try:
+            projects = keystone.projects.list()
+        except ksexceptions.ConnectFailure:
+            projects = None
+        return projects
+
     def flavors(self):
         """
         Return a list of flavor and a detail about
@@ -143,23 +172,71 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         :param request: Web request, used to retrieve user id
         :return: dict()
         """
-        response = dict()
-        data_instances = self._instances(request)
-        for instance in data_instances:
-            if instance.user_id == request.user.id:
-                response[instance.id] = {
-                    'user_id': instance.user_id,
-                    'project_id': instance.tenant_id,
-                    'id': instance.id,
-                    'name': instance.name,
-                    'created_at': instance.created
-                }
+        response = cache.get('instances')
+        if not response:
+            response = dict()
+            data_instances = self._instances(request)
+            for instance in data_instances:
+                if instance.user_id == request.user.id:
+                    response[instance.id] = {
+                        'user_id': instance.user_id,
+                        'project_id': instance.tenant_id,
+                        'id': instance.id,
+                        'name': instance.name,
+                        'created_at': instance.created
+                    }
+            cache.set('instances', response, INSTANCES_CACHE_TIMEOUT)
         return InstancesAccess.show(response)
 
-    @staticmethod
-    def users():  # pylint: disable=missing-docstring, no-self-use
-        return dict()
+    def users(self):
+        """
+        Return a list of users w/ attributes
+        id, first_name, last_name and email
+        :return: dict of users
+        """
+        # We retrieve information from memcached
+        response = cache.get('users')
+        if not response:  # If not on memcached, we ask OpenStack
+            response = dict()
+            data_users = self._users()
+            if data_users is not None:
+                for user in data_users:
+                    response[user.id] = {
+                        'id': user.id,
+                        'first_name': user.firstname,
+                        'last_name': user.lastname,
+                        'email': user.email,
+                    }
+            cache.set('users', response, USERS_CACHE_TIMEOUT)
+        return response
+
+    def projects(self):  # pylint: disable=missing-docstring, no-self-use
+        # We retrieve information from memcached
+        response = cache.get('projects')
+        if not response:  # If not on memcached, we ask OpenStack
+            response = dict()
+            data_projects = self._projects()
+            if data_projects is not None:
+                for project in data_projects:
+                    response[project.id] = {
+                        'id': project.id,
+                        'name': project.name
+                    }
+            cache.set('projects', response, PROJECTS_CACHE_TIMEOUT)
+        return response
 
     @staticmethod
-    def projects():  # pylint: disable=missing-docstring, no-self-use
-        return dict()
+    def lease_instance(request, instance_id):
+        """
+        If instance_id is owned by user_id, then update lease information, if not, raise
+        PermissionDenied exception
+        :param instance_id: id of instance
+        :param request: Web request
+        :return: void
+        """
+        data_instances = cache.get('instances')
+        if data_instances[instance_id]['user_id'] != request.user.id:
+            raise PermissionDenied(request.user.id, instance_id)
+        InstancesAccess.save({
+            instance_id: data_instances[instance_id]
+        })

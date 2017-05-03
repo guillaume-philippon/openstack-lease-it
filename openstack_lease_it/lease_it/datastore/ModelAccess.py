@@ -29,7 +29,7 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
                 models = Instances.objects.get(id=instances[instance]['id'])  # pylint: disable=no-member
                 leased_at = models.leased_at
                 heartbeat_at = models.heartbeat_at
-                lease_end = instance.leased_at + relativedelta(months=+instance.lease_duration)
+                lease_end = leased_at + relativedelta(months=+models.lease_duration)
             except ObjectDoesNotExist:
                 leased_at = None
                 heartbeat_at = None
@@ -62,26 +62,7 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
                 # If not, then we create a new entry with information from instances
                 model = Instances()
                 model.id = instances[instance]['id']
-                model.leased_at = timezone.now()
-                model.lease_duration = LEASE_DURATION
-            # Last update for this object
+            model.leased_at = timezone.now()
+            model.lease_duration = LEASE_DURATION
             model.heartbeat_at = timezone.now()
-
-            # If instances there are leased_at information on instance, then we must update the
-            # model information. Else, we put leased_at information on instance
-            try:
-                model.leased_at = instances[instance]['leased_at']
-            except KeyError:
-                pass
-
-            # If we send a lease_duration with instance, we update lease duration
-            try:
-                model.lease_duration = instances[instance]['lease_duration']
-            except KeyError:
-                pass
-
-            # We save the model
             model.save()
-
-        # Return the up-to-date instances
-        return InstancesAccess.show(instances)
