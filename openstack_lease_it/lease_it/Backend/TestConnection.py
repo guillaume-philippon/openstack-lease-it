@@ -43,9 +43,6 @@ class TestConnection(object):
         is must contain owner id, project id, instance id, name of the
         instance, starting date of instance, last time a lease as been put,
         the leasing duration
-        :param from_cache: If true, the date will be read from database, if false
-                           we retrieve information from backend and update cache database
-
         :return: dict()
         """
         # Response is a fake dict that provide Backend information. OpenStack backend return
@@ -156,7 +153,7 @@ class TestConnection(object):
         :return: dict()
         """
         return {
-            '1' : {
+            '1': {
                 'id': '1',
                 'name': 'Project 1'
             },
