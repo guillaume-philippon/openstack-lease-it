@@ -27,7 +27,7 @@ function activeFlavorMenu() {
         sort_css = 'bottom-up';
     }
     /* build refreshFlavorDiv call for active li */
-    onClick = 'refreshFlavorDiv(\'' + FLAVOR_SORT_PARAMS + '\', FLAVOR_MIN, ' + !(FLAVOR_ORDER) + ')';
+    var onClick = 'refreshFlavorDiv(\'' + FLAVOR_SORT_PARAMS + '\', FLAVOR_MIN, ' + !(FLAVOR_ORDER) + ')';
 
     $('#'+FLAVOR_SORT_PARAMS).attr('onClick',onClick);
     return '<i class="material-icons sort-icon ' + sort_css + '">sort</i>';
@@ -49,7 +49,7 @@ function refreshFlavorDiv(sort_params, min_value, sort_order) {
     $("#"+FLAVOR_SORT_PARAMS).addClass("active");
     $('#'+FLAVOR_SORT_PARAMS+'_desc').html(FLAVOR_PARAMS_DESC[FLAVOR_SORT_PARAMS] + activeFlavorMenu());
     FLAVOR_MIN = min_value;
-    sorted_data = sortOnParams(FLAVOR_SORT_PARAMS, FLAVORS, FLAVOR_ORDER);
+    var sorted_data = sortOnParams(FLAVOR_SORT_PARAMS, FLAVORS, FLAVOR_ORDER);
 
     buildFlavorsView(sorted_data, FLAVOR_MIN, FLAVOR_DIV_NAME);
 }
