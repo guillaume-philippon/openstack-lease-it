@@ -5,6 +5,7 @@ OpenStack cloud infrastructure
 """
 import math
 from django.core.cache import cache
+from django.utils.dateparse import parse_datetime
 from keystoneauth1.identity import v3
 from keystoneauth1 import session, exceptions as ksexceptions
 from keystoneclient.v3 import client as ksclient
@@ -66,7 +67,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
                     'project_id': instance.tenant_id,
                     'id': instance.id,
                     'name': instance.name,
-                    'created_at': instance.created
+                    'created_at': parse_datetime(instance.created).date()
                 }
             cache.set('instances', response, INSTANCES_CACHE_TIMEOUT)
         return response
