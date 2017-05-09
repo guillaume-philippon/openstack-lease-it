@@ -7,7 +7,9 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from lease_it import Backend
 from openstack_lease_it.settings import GLOBAL_CONFIG
+from lease_it.Backend import Exceptions as bckExceptions  # pylint: disable=ungrouped-imports
 
+# We load backend specify by configuration file
 BACKEND_PLUGIN = getattr(Backend, "{0}Connection".format(GLOBAL_CONFIG['BACKEND_PLUGIN']))
 BACKEND = BACKEND_PLUGIN()  # pylint: disable=not-callable
 
@@ -45,25 +47,49 @@ def instances(request):  #pylint: disable=unused-argument
     data_instances = BACKEND.instances(request)
     data_users = BACKEND.users()
     data_projects = BACKEND.projects()
-    for instance in data_instances:
+    for data_instance in data_instances:
         try:
             project = "{name}".format(
-                **data_projects[data_instances[instance]['project_id']])
+                **data_projects[data_instances[data_instance]['project_id']])
         except KeyError:
-            project = data_instances[instance]['project_id']
+            project = data_instances[data_instance]['project_id']
 
         try:
             user = "{first_name} {last_name}".format(
-                **data_users[data_instances[instance]['user_id']])
+                **data_users[data_instances[data_instance]['user_id']])
         except KeyError:
-            user = data_instances[instance]['user_id']
-        response[instance] = {
-            'id': data_instances[instance]['id'],
-            'name': data_instances[instance]['name'],
-            'created_at': data_instances[instance]['created_at'],
-            'lease_end': data_instances[instance]['lease_end'],
+            user = data_instances[data_instance]['user_id']
+        response[data_instance] = {
+            'id': data_instances[data_instance]['id'],
+            'name': data_instances[data_instance]['name'],
+            'created_at': data_instances[data_instance]['created_at'],
+            'lease_end': data_instances[data_instance]['lease_end'],
             'project': project,
             'user': user
+        }
+    return JsonResponse(response)
+
+
+@login_required
+def instance(request, instance_id):
+    """
+    This is view used to for a new lease on a specific instance (http://url/instances/instance_id)
+    a PermissionDenied exception is raised decided by backend. Mainly if instance is not owned by
+    user but see Backend comment.
+    :param request: Web request
+    :param instance_id: retrieve from url
+    :return: JsonResponse
+    """
+    # By default we concidere a success
+    response = {
+        'status': 'success'
+    }
+    try:
+        BACKEND.lease_instance(request, instance_id)
+    except bckExceptions.PermissionDenied as error:
+        response = {
+            'status': 'error',
+            'message': error.message
         }
     return JsonResponse(response)
 
