@@ -42,7 +42,7 @@ function buildInstancesView(instances, div_name){
 function updateLease(instance) {
     return $.getJSON("/instances/" + instance, function(data){
         instancesStatus().then(function (data_instances){
-            INSTANCES = data_instances;
+            var INSTANCES = data_instances;
             buildInstancesView(INSTANCES, '#instances');
         });
     });

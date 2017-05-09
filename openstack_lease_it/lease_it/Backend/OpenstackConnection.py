@@ -55,15 +55,21 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         List of instances actually launched
         :return: dict()
         """
-        # user_token = v3.Token(token=request.user.token.id,
-        #                 auth_url=GLOBAL_CONFIG['OS_AUTH_URL'],
-        #                 project_name='admin',  # TODO: Should be compute
-        #                 project_domain_name='default')  # TODO: Should be compute
-        # user_session = session.Session(auth=user_token,
-        #                                verify=GLOBAL_CONFIG['OS_CACERT'])
-        nova = nvclient.Client(NOVA_VERSION, session=self.session)
-        data_instances = nova.servers.list(search_opts={'all_tenants': 'true'})
-        return data_instances
+        response = cache.get('instances')
+        if not response:
+            response = dict()
+            nova = nvclient.Client(NOVA_VERSION, session=self.session)
+            data_instances = nova.servers.list(search_opts={'all_tenants': 'true'})
+            for instance in data_instances:
+                response[instance.id] = {
+                    'user_id': instance.user_id,
+                    'project_id': instance.tenant_id,
+                    'id': instance.id,
+                    'name': instance.name,
+                    'created_at': instance.created
+                }
+            cache.set('instances', response, INSTANCES_CACHE_TIMEOUT)
+        return response
 
     def _hypervisors(self):
         """
@@ -78,16 +84,20 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         """
         List of flavors and their details
         """
-        response = dict()
-        nova = nvclient.Client(NOVA_VERSION, session=self.session)
-        flavors = nova.flavors.list()
-        for flavor in flavors:
-            response[flavor.name] = {
-                'name': flavor.name,
-                'disk': int(flavor.disk),
-                'ram': int(flavor.ram),
-                'cpu': int(flavor.vcpus)
-            }
+        # We retrieve information from memcached
+        response = cache.get('flavors')
+        if not response:
+            response = dict()
+            nova = nvclient.Client(NOVA_VERSION, session=self.session)
+            flavors = nova.flavors.list()
+            for flavor in flavors:
+                response[flavor.name] = {
+                    'name': flavor.name,
+                    'disk': int(flavor.disk),
+                    'ram': int(flavor.ram),
+                    'cpu': int(flavor.vcpus)
+                }
+            cache.set('flavors', response, FLAVOR_CACHE_TIMEOUT)
         return response
 
     def _users(self):
@@ -123,14 +133,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         VM we can start if empty)
         :return: dict()
         """
-        # We retrieve information from memcached
-        flavors = cache.get('flavors')
-        if not flavors:
-            # If cache is empty we retrieve information from Openstack
-            # and we set it in cached
-            flavors = self._flavors()
-            cache.set('flavors', flavors, FLAVOR_CACHE_TIMEOUT)
-
+        flavors = self._flavors()
         # Retrieve hypervisor status to populate response
         hypervisors = self._hypervisors()
 
@@ -172,20 +175,11 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         :param request: Web request, used to retrieve user id
         :return: dict()
         """
-        response = cache.get('instances')
-        if not response:
-            response = dict()
-            data_instances = self._instances(request)
-            for instance in data_instances:
-                if instance.user_id == request.user.id:
-                    response[instance.id] = {
-                        'user_id': instance.user_id,
-                        'project_id': instance.tenant_id,
-                        'id': instance.id,
-                        'name': instance.name,
-                        'created_at': instance.created
-                    }
-            cache.set('instances', response, INSTANCES_CACHE_TIMEOUT)
+        response = dict()
+        data_instances = self._instances(request)
+        for instance in data_instances:
+            if data_instances[instance]['user_id'] == request.user.id:
+                response[data_instances[instance]['id']] = data_instances[instance]
         return InstancesAccess.show(response)
 
     def users(self):
