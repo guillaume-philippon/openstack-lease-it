@@ -27,7 +27,7 @@ $(function() {
         buildInstancesView(INSTANCES, '#instances');
     })
 
-    $(".button-collapse").sideNav();
+    $(".btn-slide").sideNav();
 });
 {% endblock %}
 
@@ -51,15 +51,9 @@ $(function() {
     <li id="free" onClick="refreshFlavorDiv('free', FLAVOR_MIN, FLAVOR_ORDER)"><a href="#!" id="free_desc">Free</a></li>
     <li id="max" onClick="refreshFlavorDiv('max', FLAVOR_MIN, FLAVOR_ORDER)"><a href="#!" id="max_desc">Max</a></li>
 </ul>
-
 <div class="row">
     <!-- Flavor per flavor usage -->
-    <div id="flavors" class="row">
-        <div class="right-align">
-            <a href="#" data-activates="slide-out" class="button-collapse btn-floating btn-large waves-effect waves-light">
-                <i class="material-icons">menu</i>
-            </a>
-        </div>
+    <div id="flavors" class="">
         <div id="progress-bar">
             <h5 class="center-align">Please wait while retrieving data</h5>
             <div class="progress valign-wrapper">
