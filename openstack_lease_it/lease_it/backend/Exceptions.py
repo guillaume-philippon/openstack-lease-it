@@ -1,5 +1,5 @@
 """
-This module contains all exception trigged by Backend
+This module contains all exception triggered by Backend
 """
 
 

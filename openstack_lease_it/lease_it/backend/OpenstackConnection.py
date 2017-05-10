@@ -6,6 +6,7 @@ OpenStack cloud infrastructure
 import math
 
 from django.core.cache import cache
+from django.utils.dateparse import parse_datetime
 
 from keystoneauth1.identity import v3
 from keystoneauth1 import session, exceptions as ksexceptions
@@ -69,7 +70,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
                     'project_id': instance.tenant_id,
                     'id': instance.id,
                     'name': instance.name,
-                    'created_at': instance.created
+                    'created_at': parse_datetime(instance.created).date()
                 }
             cache.set('instances', response, INSTANCES_CACHE_TIMEOUT)
         return response
@@ -109,12 +110,23 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         so we return a None object
         :return: dict()
         """
-        keystone = ksclient.Client(session=self.session)
-        try:
-            users = keystone.users.list()
-        except ksexceptions.ConnectFailure:
-            users = None
-        return users
+        response = cache.get('users')
+        if not response:
+            response = dict()
+            keystone = ksclient.Client(session=self.session)
+            try:
+                data_users = keystone.users.list()
+            except ksexceptions.ConnectFailure:
+                data_users = list()
+            for user in data_users:
+                response[user.id] = {
+                    'id': user.id,
+                    'first_name': user.firstname,
+                    'last_name': user.lastname,
+                    'email': user.email
+                }
+            cache.set(response, 'users', USERS_CACHE_TIMEOUT)
+        return response
 
     def _projects(self):
         """
@@ -180,6 +192,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         """
         response = dict()
         data_instances = self._instances()
+        # We only display instances that are owned by logged user
         for instance in data_instances:
             if data_instances[instance]['user_id'] == request.user.id:
                 response[data_instances[instance]['id']] = data_instances[instance]
@@ -191,21 +204,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         id, first_name, last_name and email
         :return: dict of users
         """
-        # We retrieve information from memcached
-        response = cache.get('users')
-        if not response:  # If not on memcached, we ask OpenStack
-            response = dict()
-            data_users = self._users()
-            if data_users is not None:
-                for user in data_users:
-                    response[user.id] = {
-                        'id': user.id,
-                        'first_name': user.firstname,
-                        'last_name': user.lastname,
-                        'email': user.email,
-                    }
-            cache.set('users', response, USERS_CACHE_TIMEOUT)
-        return response
+        return self._users()
 
     def projects(self):  # pylint: disable=missing-docstring, no-self-use
         # We retrieve information from memcached
