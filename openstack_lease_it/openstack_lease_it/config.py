@@ -107,7 +107,7 @@ def load_config():
     """
     global_configuration = {
         # Django parameters
-        'DEBUG': False,
+        'DEBUG': 'False',
 
         # OpenStack parameters
         'OS_USERNAME': 'admin',

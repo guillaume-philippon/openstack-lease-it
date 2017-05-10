@@ -3,9 +3,13 @@
 TestConnection is a module of Fake backend used to help developpement
 of API
 """
+from datetime import date
+from dateutil.relativedelta import relativedelta
+
 from django.utils.dateparse import parse_datetime
-from lease_it.datastore.ModelAccess import InstancesAccess
-from lease_it.Backend.Exceptions import PermissionDenied
+
+from lease_it.datastore.ModelAccess import InstancesAccess, LEASE_DURATION
+from lease_it.backend.Exceptions import PermissionDenied
 
 
 class TestConnection(object):
@@ -53,35 +57,35 @@ class TestConnection(object):
                 'project_id': '1',
                 'id': '1',
                 'name': 'user1_project1_expire',
-                'created_at': parse_datetime('2017-04-29T17:40:26Z'),
+                'created_at': parse_datetime('2017-04-29T17:40:26Z').date(),
             },
             '2': {
                 'user_id': '1',
                 'project_id': '1',
                 'id': '2',
                 'name': 'user1_project1_expire',
-                'created_at': parse_datetime('2017-04-29T17:40:26Z'),
+                'created_at': parse_datetime('2017-04-29T17:40:26Z').date(),
             },
             '3': {
                 'user_id': '1',
                 'project_id': '1',
                 'id': '3',
                 'name': 'user1_project1_close_to',
-                'created_at': parse_datetime('2017-04-29T17:40:26Z'),
+                'created_at': parse_datetime('2017-04-29T17:40:26Z').date(),
             },
             '4': {
                 'user_id': '1',
                 'project_id': '1',
                 'id': '4',
                 'name': 'user1_project1_renew',
-                'created_at': parse_datetime('2017-04-29T17:40:26Z'),
+                'created_at': parse_datetime('2017-04-29T17:40:26Z').date(),
             },
             '5': {
                 'user_id': '1',
                 'project_id': '1',
                 'id': '5',
                 'name': 'user1_project1_long_lease',
-                'created_at': parse_datetime('2017-05-01T01:00:00Z'),
+                'created_at': parse_datetime('2017-05-01T01:00:00Z').date(),
             }
         }
         return InstancesAccess.show(response)
@@ -180,3 +184,25 @@ class TestConnection(object):
         InstancesAccess.save({
             instance_id: data_instances[instance_id]
         })
+
+    @staticmethod
+    def spy_instances():
+        """
+        spy_instances is started by instance_spy module and check all running VM + notify user
+        if a VM is close to its lease time
+        :return: dict()
+        """
+        data_instances = TestConnection.instances(None)
+        now = date.today()
+        response = {
+            'delete': list(),
+            'notify': list()
+        }
+        for instance in data_instances:
+            first_notification_date = data_instances[instance]['leased_at'] + \
+                                      relativedelta(days=+LEASE_DURATION/2)
+            if data_instances[instance]['lease_end'] < now:
+                response['delete'].append(data_instances[instance])
+            elif first_notification_date == now:
+                response['notify'].append(data_instances[instance])
+        return response

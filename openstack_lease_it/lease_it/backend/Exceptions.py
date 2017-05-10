@@ -2,9 +2,11 @@
 This module contains all exception trigged by Backend
 """
 
+
 class PermissionDenied(Exception):
     """
-    PermissionDenied exception is trigged when a user (logged or not) try to make an invalid command
+    PermissionDenied exception is triggered when a user (logged or not) try to make an invalid
+    command
     """
     def __init__(self, user_id, instance_id):
         super(PermissionDenied, self).__init__()

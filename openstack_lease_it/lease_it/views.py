@@ -5,12 +5,12 @@ View for app specific url
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from lease_it import Backend
+from lease_it import backend
 from openstack_lease_it.settings import GLOBAL_CONFIG
-from lease_it.Backend import Exceptions as bckExceptions  # pylint: disable=ungrouped-imports
+from lease_it.backend import Exceptions as bckExceptions  # pylint: disable=ungrouped-imports
 
 # We load backend specify by configuration file
-BACKEND_PLUGIN = getattr(Backend, "{0}Connection".format(GLOBAL_CONFIG['BACKEND_PLUGIN']))
+BACKEND_PLUGIN = getattr(backend, "{0}Connection".format(GLOBAL_CONFIG['BACKEND_PLUGIN']))
 BACKEND = BACKEND_PLUGIN()  # pylint: disable=not-callable
 
 

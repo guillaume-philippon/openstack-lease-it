@@ -4,14 +4,17 @@ This module manage interaction between application and
 OpenStack cloud infrastructure
 """
 import math
+
 from django.core.cache import cache
+
 from keystoneauth1.identity import v3
 from keystoneauth1 import session, exceptions as ksexceptions
 from keystoneclient.v3 import client as ksclient
 from novaclient import client as nvclient
+
 from openstack_lease_it.settings import GLOBAL_CONFIG
 from lease_it.datastore import InstancesAccess
-from lease_it.Backend.Exceptions import PermissionDenied
+from lease_it.backend.Exceptions import PermissionDenied
 
 # Define nova client version as a constant
 NOVA_VERSION = 2
@@ -50,7 +53,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         except:  # pylint: disable=bare-except
             pass
 
-    def _instances(self, request):  # pylint: disable=unused-argument
+    def _instances(self):
         """
         List of instances actually launched
         :return: dict()
@@ -176,7 +179,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         :return: dict()
         """
         response = dict()
-        data_instances = self._instances(request)
+        data_instances = self._instances()
         for instance in data_instances:
             if data_instances[instance]['user_id'] == request.user.id:
                 response[data_instances[instance]['id']] = data_instances[instance]
@@ -234,3 +237,12 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         InstancesAccess.save({
             instance_id: data_instances[instance_id]
         })
+
+    def spy_instances(self):
+        """
+        spy_instances is started by instance_spy module and check all running VM + notify user
+        if a VM is close to its lease time
+        :return: dict()
+        """
+        data_instances = self._instances()
+        return data_instances
