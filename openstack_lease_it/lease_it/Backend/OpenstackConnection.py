@@ -101,6 +101,27 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
             cache.set('flavors', response, FLAVOR_CACHE_TIMEOUT)
         return response
 
+    def _domains(self):
+        """
+        List all domains available
+        :return: dict()
+        """
+        response = cache.get('domains')
+        if not response:
+            response = dict()
+            keystone = ksclient.Client(session=self.session)
+            try:
+                data_domains = keystone.domains.list()
+            except ksexceptions.ConnectFailure:
+                data_domains = list()
+            for domain in data_domains:
+                response[domain.id] = {
+                    'id': domain.id,
+                    'name': domain.name
+                }
+            cache.set('domain', response, USERS_CACHE_TIMEOUT)
+        return response
+
     def _users(self):
         """
         List of users. If not on admin network, we can't retrieve information,
@@ -111,18 +132,20 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         if not response:
             response = dict()
             keystone = ksclient.Client(session=self.session)
-            try:
-                data_users = keystone.users.list()
-            except ksexceptions.ConnectFailure:
-                data_users = list()
-            for user in data_users:
-                response[user.id] = {
-                    'id': user.id,
-                    'first_name': user.firstname,
-                    'last_name': user.lastname,
-                    'email': user.email
-                }
-            cache.set(response, 'users', USERS_CACHE_TIMEOUT)
+            data_domain = self._domains()
+            for domain in data_domain():
+                try:
+                    data_users = keystone.users.list()
+                except ksexceptions.ConnectFailure:
+                    data_users = list(domain)
+                for user in data_users:
+                    response[user.id] = {
+                        'id': user.id,
+                        'first_name': user.firstname,
+                        'last_name': user.lastname,
+                        'email': user.email
+                    }
+            cache.set('users', response, USERS_CACHE_TIMEOUT)
         return response
 
     def _projects(self):
