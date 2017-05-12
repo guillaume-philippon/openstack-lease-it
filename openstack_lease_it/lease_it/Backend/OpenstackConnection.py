@@ -140,9 +140,9 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
                     data_users = list(domain)
                 for user in data_users:
                     try:
-                       user_email = user.email
+                        user_email = user.email
                     except AttributeError:
-                       user_email = ""
+                        user_email = ""
                     response[user.id] = {
                         'id': user.id,
                         'domain_id': domain,
