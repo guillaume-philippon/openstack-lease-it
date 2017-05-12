@@ -133,17 +133,21 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
             response = dict()
             keystone = ksclient.Client(session=self.session)
             data_domain = self._domains()
-            for domain in data_domain():
+            for domain in data_domain:
                 try:
-                    data_users = keystone.users.list()
+                    data_users = keystone.users.list(domain=domain)
                 except ksexceptions.ConnectFailure:
                     data_users = list(domain)
                 for user in data_users:
+                    try:
+                       user_email = user.email
+                    except AttributeError:
+                       user_email = ""
                     response[user.id] = {
                         'id': user.id,
-                        'first_name': user.firstname,
-                        'last_name': user.lastname,
-                        'email': user.email
+                        'domain_id': domain,
+                        'name': user.name,
+                        'email': user_email
                     }
             cache.set('users', response, USERS_CACHE_TIMEOUT)
         return response
