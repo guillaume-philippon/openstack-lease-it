@@ -274,7 +274,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         :return: dict()
         """
         now = date.today()
-        data_instances = self._instances()
+        data_instances = InstancesAccess.show(self._instances())
         response = {
             'delete': list(),  # List of instance we must delete
             'notify': list()  # List of instance we must notify user to renew the lease
@@ -282,6 +282,13 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         for instance in data_instances:
             leased_at = data_instances[instance]['leased_at']
             lease_end = data_instances[instance]['lease_end']
+            # If it's a new instance, we put lease value as today
+            if leased_at is None:
+                InstancesAccess.save({
+                    instance: data_instances[instance]
+                })
+                leased_at = now
+                lease_end = now + relativedelta(days=+LEASE_DURATION)
             first_notification_date = leased_at + relativedelta(days=+LEASE_DURATION/3)
             second_notification_date = leased_at + relativedelta(days=+LEASE_DURATION/6)
             # If lease as expire we tag it as delete
