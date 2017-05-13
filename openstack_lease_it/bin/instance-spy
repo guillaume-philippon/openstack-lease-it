@@ -5,8 +5,8 @@
 instance-spy should be put on a crontab to check running instance, notify user if lease is close
 to expire and destroy instance when lease is over
 """
-from instance_spy.run import run
+from lease_it.client.run import instance_spy
 
 # If we run the script, we run main, ether we assume it s a python module
 if __name__ == "__main__":
-    run()
+    instance_spy()

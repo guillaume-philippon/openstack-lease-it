@@ -15,7 +15,7 @@ BACKEND_PLUGIN = getattr(backend, "{0}Connection".format(GLOBAL_CONFIG['BACKEND_
 BACKEND = BACKEND_PLUGIN()  # pylint: disable=not-callable
 
 
-def run():
+def instance_spy():
     """
     Function used to run the script
     :return: void
@@ -24,3 +24,11 @@ def run():
     users = BACKEND.users()
     for instance in instances['delete']:
         print(users[instance['user_id']]['email'])  # pylint: disable=superfluous-parens
+
+
+def admin_cli():
+    """
+    Admin Command Line Interface
+    :return: void
+    """
+    return True
