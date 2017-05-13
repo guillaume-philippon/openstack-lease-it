@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# pylint: skip-file
 """
 TestConnection is a module of Fake backend used to help developpement
 of API

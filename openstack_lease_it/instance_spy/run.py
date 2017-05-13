@@ -23,4 +23,4 @@ def run():
     instances = BACKEND.spy_instances()
     users = BACKEND.users()
     for instance in instances['delete']:
-        print(users[instance['user_id']]['email'])
+        print(users[instance['user_id']]['email'])  # pylint: disable=superfluous-parens

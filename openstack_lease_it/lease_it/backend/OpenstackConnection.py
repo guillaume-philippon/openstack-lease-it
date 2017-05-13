@@ -5,6 +5,9 @@ OpenStack cloud infrastructure
 """
 import math
 
+from datetime import date
+from dateutil.relativedelta import relativedelta
+
 from django.core.cache import cache
 from django.utils.dateparse import parse_datetime
 
@@ -14,7 +17,7 @@ from keystoneclient.v3 import client as ksclient
 from novaclient import client as nvclient
 
 from openstack_lease_it.settings import GLOBAL_CONFIG
-from lease_it.datastore import InstancesAccess
+from lease_it.datastore import InstancesAccess, LEASE_DURATION
 from lease_it.backend.Exceptions import PermissionDenied
 
 # Define nova client version as a constant
@@ -270,5 +273,22 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         if a VM is close to its lease time
         :return: dict()
         """
+        now = date.today()
         data_instances = self._instances()
-        return data_instances
+        response = {
+            'delete': list(),  # List of instance we must delete
+            'notify': list()  # List of instance we must notify user to renew the lease
+        }
+        for instance in data_instances:
+            leased_at = data_instances[instance]['leased_at']
+            lease_end = data_instances[instance]['lease_end']
+            first_notification_date = leased_at + relativedelta(days=+LEASE_DURATION/3)
+            second_notification_date = leased_at + relativedelta(days=+LEASE_DURATION/6)
+            # If lease as expire we tag it as delete
+            if lease_end < now:
+                response['delete'].append(data_instances[instance])
+            elif first_notification_date == now or \
+                    second_notification_date == now or \
+                    lease_end < now - relativedelta(days=-6):
+                response['notify'].append(data_instances[instance])
+        return response
