@@ -5,12 +5,6 @@
 instance-spy should be put on a crontab to check running instance, notify user if lease is close
 to expire and destroy instance when lease is over
 """
-
-import sys
-
-# We force parent directory as a valid PATH for python module
-sys.path.insert(0, '..')
-
 from instance_spy.run import run
 
 # If we run the script, we run main, ether we assume it s a python module
