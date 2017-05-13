@@ -9,7 +9,7 @@ OpenStack lease-it add some useful feature to monitor a OpenStack instances
 #### Installation dependencies (CentOS 7.x)
 ```shell
 box# easy_install pip
-box# yum install gcc python-devel openldap-devel memcached httpd mod_wsgi mod_ssl git
+box# yum install -y gcc python-devel openldap-devel memcached httpd mod_wsgi mod_ssl git
 box# systemctl enable memcached httpd
 box# systemctl start memcached httpd
 ```
