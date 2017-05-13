@@ -33,7 +33,7 @@ ALLOWED_HOSTS = [ '*' ]
 
 #### Configure database
 By default, we use sqlite3 database. to populate it
-```
+```shell
 box# cd /opt/openstack-lease-it/openstack_lease_it
 box# python manage.py makemigrations
 box# python manage.py migrate
@@ -66,6 +66,6 @@ Alias /media/ /opt/openstack-lease-it/openstack_lease_it/lease_it/media/
 ```
 
 After apache configuration you must restart httpd service with the following command
-```
+```shell
 box# systemctl restart httpd
 ```
