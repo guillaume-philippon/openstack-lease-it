@@ -78,6 +78,27 @@ OPTIONS = {
         'option': 'backend'
     },
 
+    # [notification] section
+    'NOTIFICATION_SSL': {
+        'section': 'notification',
+        'option': 'ssl'
+    },
+    'NOTIFICATION_SMTP': {
+        'section': 'notification',
+        'option': 'smtp'
+    },
+    'NOTIFICATION_USERNAME': {
+        'section': 'notification',
+        'option': 'username'
+    },
+    'NOTIFICATION_PASSWORD': {
+        'section': 'notification',
+        'option': 'password'
+    },
+    'NOTIFICATION_EMAIL_HEADER': {
+        'section': 'notification',
+        'option': 'email_header'
+    }
 }
 
 
