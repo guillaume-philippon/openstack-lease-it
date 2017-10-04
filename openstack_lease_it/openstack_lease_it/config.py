@@ -78,6 +78,39 @@ OPTIONS = {
         'option': 'backend'
     },
 
+    # [notification] section
+    'NOTIFICATION_SSL': {
+        'section': 'notification',
+        'option': 'ssl'
+    },
+    'NOTIFICATION_SMTP': {
+        'section': 'notification',
+        'option': 'smtp'
+    },
+    'NOTIFICATION_USERNAME': {
+        'section': 'notification',
+        'option': 'username'
+    },
+    'NOTIFICATION_PASSWORD': {
+        'section': 'notification',
+        'option': 'password'
+    },
+    'NOTIFICATION_EMAIL_HEADER': {
+        'section': 'notification',
+        'option': 'email_header'
+    },
+    'NOTIFICATION_SUBJECT': {
+        'section': 'notification',
+        'option': 'subject'
+    },
+    'NOTIFICATION_LINK': {
+        'section': 'notification',
+        'option': 'link'
+    },
+    'NOTIFICATION_DEBUG': {
+        'section': 'notification',
+        'option': 'debug'
+    }
 }
 
 
@@ -107,7 +140,7 @@ def load_config():
     """
     global_configuration = {
         # Django parameters
-        'DEBUG': False,
+        'DEBUG': 'False',
 
         # OpenStack parameters
         'OS_USERNAME': 'admin',
@@ -122,7 +155,11 @@ def load_config():
         'MEMCACHED_PORT': '11211',
 
         # plugins parameter
-        'BACKEND_PLUGIN': 'Openstack'
+        'BACKEND_PLUGIN': 'Openstack',
+
+        # notification parameter
+        'NOTIFICATION_DEBUG': 'False'
+
     }
     config = ConfigParser.RawConfigParser()
 

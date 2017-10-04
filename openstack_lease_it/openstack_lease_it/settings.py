@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import ast
+
 from openstack_lease_it.config import load_config
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +27,7 @@ GLOBAL_CONFIG = load_config()
 SECRET_KEY = GLOBAL_CONFIG['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = GLOBAL_CONFIG['DEBUG']
+DEBUG = ast.literal_eval(GLOBAL_CONFIG['DEBUG'])
 
 ALLOWED_HOSTS = []
 

@@ -8,8 +8,8 @@ from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from lease_it.models import Instances
 
-# Default lease duration
-LEASE_DURATION = 3
+# Default lease duration in day
+LEASE_DURATION = 90
 
 
 class InstancesAccess(object):  # pylint: disable=too-few-public-methods
@@ -29,7 +29,7 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
                 models = Instances.objects.get(id=instances[instance]['id'])  # pylint: disable=no-member
                 leased_at = models.leased_at
                 heartbeat_at = models.heartbeat_at
-                lease_end = leased_at + relativedelta(months=+models.lease_duration)
+                lease_end = leased_at + relativedelta(days=+models.lease_duration)
             except ObjectDoesNotExist:
                 leased_at = None
                 heartbeat_at = None
