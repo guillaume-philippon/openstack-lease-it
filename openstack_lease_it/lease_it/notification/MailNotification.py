@@ -3,6 +3,7 @@ Mail notification system
 """
 
 import smtplib
+import ast
 from email.mime.text import MIMEText
 from openstack_lease_it.settings import GLOBAL_CONFIG
 
@@ -66,8 +67,14 @@ class MailNotification(object):  # pylint: disable=too-few-public-methods
                 mail['From'] = GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER']
                 try:
                     mail['To'] = self.users[user]['email']
+                    if ast.literal_eval(GLOBAL_CONFIG['NOTIFICATION_DEBUG']):
+                        recipient = [GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER']]
+                    else:
+                        recipient = [GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER'],
+                                     self.users[user]['email']]
                 except KeyError:
                     mail['To'] = GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER']
+                    recipient = [GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER']]
                 self.smtp.sendmail(GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER'],
-                                   [GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER']],
+                                   recipient,
                                    mail.as_string())

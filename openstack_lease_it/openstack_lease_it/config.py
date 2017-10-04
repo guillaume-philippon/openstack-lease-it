@@ -107,6 +107,10 @@ OPTIONS = {
         'section': 'notification',
         'option': 'link'
     },
+    'NOTIFICATION_DEBUG': {
+        'section': 'notification',
+        'option': 'debug'
+    }
 }
 
 
@@ -151,7 +155,11 @@ def load_config():
         'MEMCACHED_PORT': '11211',
 
         # plugins parameter
-        'BACKEND_PLUGIN': 'Openstack'
+        'BACKEND_PLUGIN': 'Openstack',
+
+        # notification parameter
+        'NOTIFICATION_DEBUG': 'False'
+
     }
     config = ConfigParser.RawConfigParser()
 
