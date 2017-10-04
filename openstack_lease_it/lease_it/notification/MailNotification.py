@@ -42,12 +42,24 @@ class MailNotification(object):  # pylint: disable=too-few-public-methods
 
     @staticmethod
     def format_user_instances(user):
+        """
+        Create a string w/ the list of instance formatted to be mailed
+        :param user: user we currently notify
+        :return: string
+        """
         text = ""
         for instance in user:
             text += "  - {name} started {created_at} and expire {lease_end} \n".format(**instance)
         return text
 
     def format_mail(self, user, notification_type, instances):
+        """
+        Format the mail content
+        :param user: user we currently notify
+        :param notification_type: notification type (delete or notify)
+        :param instances: list of instance for the user
+        :return: string
+        """
         try:
             user_name = self.users[user]['name']
         except KeyError:
@@ -59,6 +71,12 @@ class MailNotification(object):  # pylint: disable=too-few-public-methods
                                 instances_text)
 
     def send(self, notifications):
+        """
+        The all notifications give in parameter, each notifications type (delete or notify) are
+        a dictionnary of users with a list of instance to notify per user
+        :param notifications: dict of users and instances
+        :return: void
+        """
         for notification in notifications:
             for user in notifications[notification]:
                 mail_text = self.format_mail(user, notification, notifications[notification][user])
