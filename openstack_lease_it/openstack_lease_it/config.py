@@ -98,7 +98,15 @@ OPTIONS = {
     'NOTIFICATION_EMAIL_HEADER': {
         'section': 'notification',
         'option': 'email_header'
-    }
+    },
+    'NOTIFICATION_SUBJECT': {
+        'section': 'notification',
+        'option': 'subject'
+    },
+    'NOTIFICATION_LINK': {
+        'section': 'notification',
+        'option': 'link'
+    },
 }
 
 

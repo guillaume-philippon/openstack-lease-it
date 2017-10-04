@@ -28,12 +28,14 @@ class TestConnection(object):
         response = {
             '1': {
                 'id': '1',
+                'name': "Joe",
                 'first_name': 'John',
                 'last_name': 'Smith',
                 'email': 'john.smith@example.com'
             },
             '2': {
                 'id': '2',
+                'name': 'Jane',
                 'first_name': 'Jane',
                 'last_name': 'Doe',
                 'email': 'jane.doe@fake.com'

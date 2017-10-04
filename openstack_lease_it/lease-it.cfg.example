@@ -25,3 +25,5 @@ smtp = smtp.example.com
 username = user
 password = secret
 email_header = admin@example.com
+subject="Cloud@VD notification"
+link='https://lease-it.lal.in2p3.fr'
