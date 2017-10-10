@@ -28,3 +28,4 @@ password = secret
 email_header = admin@example.com
 subject=Cloud@VD notification
 link=https://lease-it.lal.in2p3.fr
+default_domain=default.example.com
