@@ -7,6 +7,7 @@ from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from lease_it.models import Instances
+from openstack_lease_it.settings import LOGGER
 
 # Default lease duration in day
 LEASE_DURATION = 90
@@ -31,6 +32,7 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
                 heartbeat_at = models.heartbeat_at
                 lease_end = leased_at + relativedelta(days=+models.lease_duration)
             except ObjectDoesNotExist:
+                LOGGER.info("Instance %s not exists", instance)
                 leased_at = None
                 heartbeat_at = None
                 lease_end = None
@@ -66,3 +68,5 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
             model.lease_duration = LEASE_DURATION
             model.heartbeat_at = timezone.now()
             model.save()
+            LOGGER.info("instance %s as been updated (leased_at %s, heartbeat_at %s)",
+                        instance, model.leased_at, model.heartbeat_at)

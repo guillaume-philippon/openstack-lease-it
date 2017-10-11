@@ -185,5 +185,4 @@ def load_config():
                                config,
                                option,
                                OPTIONS[option])
-
     return global_configuration

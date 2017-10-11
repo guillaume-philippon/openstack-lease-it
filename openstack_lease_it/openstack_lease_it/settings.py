@@ -149,6 +149,29 @@ else:
         'django.contrib.auth.backends.ModelBackend',
     )
 
-# Create a logger to log all messages
-logging.basicConfig(filename=GLOBAL_CONFIG['LOGDIR'] + '/main.log', level=logging.INFO)
-LOGGER = logging.getLogger("openstack-lease-it")
+# Configure logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'class': 'logging.FileHandler',
+            'filename': GLOBAL_CONFIG['LOGDIR'] + '/main.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'propagate': True,
+        },
+        'main': {
+            'handlers': ['file'],
+            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'propagate': True,
+        },
+    },
+}
+LOGGER = logging.getLogger('main')
+
