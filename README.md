@@ -27,8 +27,9 @@ box# pip install -r requirements.txt
 box# mkdir -p /etc/openstack-lease-it
 box# cp openstack_lease_it/lease-it.cfg.example /etc/openstack-lease-it/config.ini
 ```
-Modify `/etc/openstack-lease-it/config.ini to match your configuration. You must also need to disabled selinux to
-allow apache to read /etc/openstack-lease-it/config.ini or configure it to allow that.
+Modify `/etc/openstack-lease-it/config.ini to match your configuration. You must also need to 
+disabled selinux to allow apache to read /etc/openstack-lease-it/config.ini or configure it to allow
+ that.
 
 You must modify `/opt/openstack-lease-it/openstack_lease_it/openstack_lease_it/settings.py` to change
 ```ini
@@ -73,3 +74,14 @@ After apache configuration you must restart httpd service with the following com
 ```shell
 box# systemctl restart httpd
 ```
+
+#### Instance-spy crontab
+To monitor instances and notify user when a instance is close to expire, we use a crontab. To do
+so, put the cron script to cron directory
+```shell
+box# cp openstack_lease_it/instance-spy.cron /etc/cron.weekly/
+box# chmod +x /etc/cron.weekly/instance-spy.cron
+```
+
+Make sure that the PYTHONPATH on script is in the right place. This script should also be modified 
+if you use virtualenv

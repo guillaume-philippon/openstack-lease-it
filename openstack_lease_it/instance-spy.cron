@@ -1,0 +1,4 @@
+#!/bin/sh
+
+export PYTHONPATH=/opt/openstack-lease-it/openstack_lease_it
+$PYTHONPATH/bin/instance-spy
