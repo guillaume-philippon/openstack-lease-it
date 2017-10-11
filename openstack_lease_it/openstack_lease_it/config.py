@@ -23,6 +23,14 @@ OPTIONS = {
         'section': 'django',
         'option': 'debug'
     },
+    'LOGDIR': {
+        'section': 'django',
+        'option': 'log_dir'
+    },
+    'LOGLEVEL': {
+        'section': 'django',
+        'option': 'log_level'
+    },
 
     # [openstack] section
     'OS_USERNAME': {
@@ -145,6 +153,8 @@ def load_config():
     global_configuration = {
         # Django parameters
         'DEBUG': 'False',
+        'LOGDIR': '/var/log/openstack-lease-it/',
+        'LOGLEVEL': 'INFO',
 
         # OpenStack parameters
         'OS_USERNAME': 'admin',

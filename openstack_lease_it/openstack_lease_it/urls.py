@@ -29,5 +29,6 @@ if GLOBAL_CONFIG['BACKEND_PLUGIN'] == 'Openstack':
 else:
     urlpatterns = [  # pylint: disable=invalid-name
         url(r'^login', 'openstack_lease_it.views.login', name='login'),
+        url(r'^logout', 'openstack_lease_it.views.logout', name='logout'),
         url(r'^', include('lease_it.urls'))
     ]

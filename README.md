@@ -75,6 +75,12 @@ After apache configuration you must restart httpd service with the following com
 box# systemctl restart httpd
 ```
 
+#### Configure log directory
+```shell
+box# mkdir -p /var/log/openstack-lease-it
+box# chown -R apache:apache /var/log/openstack-lease-it
+```
+
 #### Instance-spy crontab
 To monitor instances and notify user when a instance is close to expire, we use a crontab. To do
 so, put the cron script to cron directory

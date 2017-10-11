@@ -13,15 +13,14 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import ast
+import logging
 
 from openstack_lease_it.config import load_config
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Load configuration from configuration file
 GLOBAL_CONFIG = load_config()
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = GLOBAL_CONFIG['SECRET_KEY']
@@ -29,6 +28,7 @@ SECRET_KEY = GLOBAL_CONFIG['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = ast.literal_eval(GLOBAL_CONFIG['DEBUG'])
 
+# ALLOWED_HOSTS secure django app access
 ALLOWED_HOSTS = []
 
 # A email as format must match this regular expression
@@ -36,7 +36,6 @@ ALLOWED_HOSTS = []
 EMAIL_REGEXP = r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\.-]+\.[A-Za-z]*$"
 
 # Application definition
-
 INSTALLED_APPS = (
     'openstack_auth',
     'django.contrib.admin',
@@ -81,10 +80,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'openstack_lease_it.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -92,21 +89,16 @@ DATABASES = {
     }
 }
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
-
 LANGUAGE_CODE = 'en'
-
 TIME_ZONE = 'Europe/Paris'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 DEFAULT_CHARSET = 'utf-8'
 
+# We use memcached as cache backend
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 CACHES = {
     'default': {
@@ -125,7 +117,6 @@ TOKEN_TIMEOUT_MARGIN = 100
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-
 STATIC_URL = '/static/'
 
 LOGIN_URL = 'login'
@@ -157,3 +148,7 @@ else:
     AUTHENTICATION_BACKENDS = (
         'django.contrib.auth.backends.ModelBackend',
     )
+
+# Create a logger to log all messages
+logging.basicConfig(filename=GLOBAL_CONFIG['LOGDIR'] + '/main.log', level=logging.INFO)
+LOGGER = logging.getLogger("openstack-lease-it")

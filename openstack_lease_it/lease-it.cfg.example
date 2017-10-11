@@ -3,6 +3,7 @@
 [django]
 secret_key = "secret"
 debug = True
+log_dir = /var/log/openstack-lease-it/
 
 [openstack]
 OS_USERNAME = admin

@@ -6,6 +6,7 @@ This module manage django HTTP response (HTML rendering or JSONResponse)
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib import auth
+from openstack_lease_it.settings import LOGGER
 
 
 def login(request):
@@ -20,5 +21,17 @@ def login(request):
                                  password=request.POST['password'])
         if user is not None:
             auth.login(request, user)
+            LOGGER.info("User %s is now connected", request.POST['username'])
             return HttpResponseRedirect(redirect_page)
     return render(request, "auth/login.html")
+
+
+def logout(request):
+    """
+    Default page to logout, we redirect to /
+    :param request: web request
+    :return: HTML rendering
+    """
+    LOGGER.info("User %s is now disconnected", request.user.username)
+    auth.logout(request)
+    return HttpResponseRedirect('/')
