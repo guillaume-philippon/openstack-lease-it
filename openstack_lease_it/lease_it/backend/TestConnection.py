@@ -31,14 +31,14 @@ class TestConnection(object):
                 'name': "Joe",
                 'first_name': 'John',
                 'last_name': 'Smith',
-                'email': 'john.smith@example.com'
+                'email': 'john.smith'
             },
             '2': {
                 'id': '2',
                 'name': 'Jane',
                 'first_name': 'Jane',
                 'last_name': 'Doe',
-                'email': 'jane.doe@fake.com'
+                'email': 'jane.doe@example.com'
             },
         }
         return response
@@ -71,13 +71,13 @@ class TestConnection(object):
             },
             '3': {
                 'user_id': '1',
-                'project_id': '1',
+                'project_id': '2',
                 'id': '3',
                 'name': 'user1_project1_close_to',
                 'created_at': parse_datetime('2017-04-29T17:40:26Z').date(),
             },
             '4': {
-                'user_id': '1',
+                'user_id': '2',
                 'project_id': '1',
                 'id': '4',
                 'name': 'user1_project1_renew',
@@ -85,7 +85,7 @@ class TestConnection(object):
             },
             '5': {
                 'user_id': '1',
-                'project_id': '1',
+                'project_id': '2',
                 'id': '5',
                 'name': 'user1_project1_long_lease',
                 'created_at': parse_datetime('2017-05-01T01:00:00Z').date(),

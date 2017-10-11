@@ -31,6 +31,9 @@ DEBUG = ast.literal_eval(GLOBAL_CONFIG['DEBUG'])
 
 ALLOWED_HOSTS = []
 
+# A email as format must match this regular expression
+# If you not understand, please
+EMAIL_REGEXP = r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\.-]+\.[A-Za-z]*$"
 
 # Application definition
 

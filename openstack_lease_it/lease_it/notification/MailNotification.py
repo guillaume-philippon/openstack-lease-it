@@ -4,8 +4,9 @@ Mail notification system
 
 import smtplib
 import ast
+import re
 from email.mime.text import MIMEText
-from openstack_lease_it.settings import GLOBAL_CONFIG
+from openstack_lease_it.settings import GLOBAL_CONFIG, EMAIL_REGEXP
 
 # Default file content
 MAIL_CONTENT = {'delete': """
@@ -84,7 +85,11 @@ class MailNotification(object):  # pylint: disable=too-few-public-methods
                 mail['Subject'] = GLOBAL_CONFIG['NOTIFICATION_SUBJECT']
                 mail['From'] = GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER']
                 try:
-                    mail['To'] = self.users[user]['email']
+                    email = self.users[user]['email']
+                    if not re.match(EMAIL_REGEXP, email) and \
+                                    GLOBAL_CONFIG['NOTIFICATION_DOMAIN'] != "":
+                        email = "{0}@{1}".format(email, GLOBAL_CONFIG['NOTIFICATION_DOMAIN'])
+                    mail['To'] = email
                     if ast.literal_eval(GLOBAL_CONFIG['NOTIFICATION_DEBUG']):
                         recipient = [GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER']]
                     else:

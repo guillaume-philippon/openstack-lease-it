@@ -110,6 +110,10 @@ OPTIONS = {
     'NOTIFICATION_DEBUG': {
         'section': 'notification',
         'option': 'debug'
+    },
+    'NOTIFICATION_DOMAIN': {
+        'section': 'notification',
+        'option': 'default_domain'
     }
 }
 
@@ -158,7 +162,8 @@ def load_config():
         'BACKEND_PLUGIN': 'Openstack',
 
         # notification parameter
-        'NOTIFICATION_DEBUG': 'False'
+        'NOTIFICATION_DEBUG': 'False',
+        'NOTIFICATION_DOMAIN': ''
 
     }
     config = ConfigParser.RawConfigParser()
