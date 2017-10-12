@@ -150,8 +150,6 @@ else:
     )
 
 # Configure logging
-LOGGING_CONFIG = None
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -171,6 +169,11 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'notification.log')
         },
+        'instances': {
+            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'instances.log')
+        },
     },
     'loggers': {
         'django': {
@@ -188,8 +191,14 @@ LOGGING = {
             'level': GLOBAL_CONFIG['LOGLEVEL'],
             'propagate': True,
         },
+        'instances': {
+            'handlers': ['instances'],
+            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'propagate': True,
+        },
     },
 }
 
 LOGGER = logging.getLogger('main')
 LOGGER_NOTIFICATION = logging.getLogger('notification')
+LOGGER_INSTANCES = logging.getLogger('instances')
