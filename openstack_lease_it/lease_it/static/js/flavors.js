@@ -68,37 +68,52 @@ function buildHighCharts(flavor, details) {
         */
         chart: {
             renderTo: flavor_underscore,
-            type: 'solidgauge',
-            height: 150,
-            background: {
-                shape: 'arc'
-            },
+            type: 'gauge',
+            height: 200,
         },
 
         title: null, // No title needed
 
         pane: {
             size: '200%', // As the image will be splited by 2, we double up the size to can all spaces
-            startAngle: -90, // Only half circle
-            endAngle: 90, // Only half circle
-            center: [ '50%', '100%' ], // Fix the center point as by default it s defined for circle
+            startAngle: -45, // Only half circle
+            endAngle: 45, // Only half circle
+            center: [ '50%', '125%' ], // Fix the center point as by default it s defined for circle
             background: null,
         },
 
         yAxis: [{
-            stops: [
-                [0.1, '#DF5353'], // Red if less than 10% available
-                [0.3, '#DDDF0D'], // Orange if less than 30% avaible
-                [0.4, '#55BF3B'] // Green for another cases
-            ],
             min: 0,
             max: details.max, // Scale is based on the maximum flavor we can launch
+            plotBands: [{
+                from: 0,
+                to: details.max/3,
+                color: {
+                    linearGradient: { cx: 0, cy: 0, r: 0.5 },
+                    stops: [
+                       [0, '#FF3333'],
+                       [1, '#55BF3B']
+                    ]
+                },
+                }, {
+                from: details.max/3,
+                to: details.max/1.2,
+                color: {
+                    linearGradient: { cx: 0, cy: 0, r: 0.5 },
+                    stops: [
+                       [0, '#55BF3B'],
+                       [1, '#FFFFFF']
+                    ]
+                },
+                }
+            ],
         }],
         series:[{
             data : [ details.free ],
             dataLabels: { // Just a custom format
                 format: '<div style="text-align:center"><span style="font-size:25px">{y}</span></div>',
                 borderWidth: 0,
+                y: -100,
             },
         }],
     });
