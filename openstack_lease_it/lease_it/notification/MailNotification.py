@@ -6,7 +6,7 @@ import smtplib
 import ast
 import re
 from email.mime.text import MIMEText
-from openstack_lease_it.settings import GLOBAL_CONFIG, EMAIL_REGEXP
+from openstack_lease_it.settings import GLOBAL_CONFIG, EMAIL_REGEXP, LOGGER_NOTIFICATION
 
 # Default file content
 MAIL_CONTENT = {'delete': """
@@ -65,6 +65,7 @@ class MailNotification(object):  # pylint: disable=too-few-public-methods
             user_name = self.users[user]['name']
         except KeyError:
             user_name = 'Unknown User'
+            LOGGER_NOTIFICATION.info("User %s as not be found", user)
         core_text = MAIL_CONTENT[notification_type]
         instances_text = self.format_user_instances(instances)
         return core_text.format(user_name,
@@ -88,16 +89,22 @@ class MailNotification(object):  # pylint: disable=too-few-public-methods
                     email = self.users[user]['email']
                     if not re.match(EMAIL_REGEXP, email) and \
                                     GLOBAL_CONFIG['NOTIFICATION_DOMAIN'] != "":
+                        LOGGER_NOTIFICATION.info("email %s not match a email format"
+                                                 " (name@domain.com). Add @%s",
+                                                 email, GLOBAL_CONFIG['NOTIFICATION_DOMAIN'])
                         email = "{0}@{1}".format(email, GLOBAL_CONFIG['NOTIFICATION_DOMAIN'])
                     mail['To'] = email
                     if ast.literal_eval(GLOBAL_CONFIG['NOTIFICATION_DEBUG']):
+                        LOGGER_NOTIFICATION.info("Only notify administrator instead of %s", email)
                         recipient = [GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER']]
                     else:
                         recipient = [GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER'],
-                                     self.users[user]['email']]
+                                     email]
                 except KeyError:
+                    LOGGER_NOTIFICATION.info("email field of %s as not be found", user)
                     mail['To'] = GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER']
                     recipient = [GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER']]
+                LOGGER_NOTIFICATION.info("Notification %s to %s", notification, ''.join(recipient))
                 self.smtp.sendmail(GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER'],
                                    recipient,
                                    mail.as_string())
