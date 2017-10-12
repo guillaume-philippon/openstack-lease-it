@@ -7,7 +7,6 @@ import ast
 import re
 from email.mime.text import MIMEText
 from openstack_lease_it.settings import GLOBAL_CONFIG, EMAIL_REGEXP, LOGGER_NOTIFICATION
-from openstack_lease_it.settings import LOGGER
 
 # Default file content
 MAIL_CONTENT = {'delete': """
@@ -90,9 +89,9 @@ class MailNotification(object):  # pylint: disable=too-few-public-methods
                     email = self.users[user]['email']
                     if not re.match(EMAIL_REGEXP, email) and \
                                     GLOBAL_CONFIG['NOTIFICATION_DOMAIN'] != "":
-                        LOGGER_NOTIFICATION.info("email %s not match a email format (name@domain.com). "
-                                    "Add @%s",
-                                    email, GLOBAL_CONFIG['NOTIFICATION_DOMAIN'])
+                        LOGGER_NOTIFICATION.info("email %s not match a email format"
+                                                 " (name@domain.com). Add @%s",
+                                                 email, GLOBAL_CONFIG['NOTIFICATION_DOMAIN'])
                         email = "{0}@{1}".format(email, GLOBAL_CONFIG['NOTIFICATION_DOMAIN'])
                     mail['To'] = email
                     if ast.literal_eval(GLOBAL_CONFIG['NOTIFICATION_DEBUG']):
