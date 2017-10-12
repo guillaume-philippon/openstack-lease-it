@@ -154,24 +154,40 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'file': {
+        'django': {
             'level': GLOBAL_CONFIG['LOGLEVEL'],
             'class': 'logging.FileHandler',
-            'filename': GLOBAL_CONFIG['LOGDIR'] + '/main.log',
+            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'django.log')
+        },
+        'main': {
+            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'main.log')
+        },
+        'notification': {
+            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'notification.log')
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['django'],
             'level': GLOBAL_CONFIG['LOGLEVEL'],
             'propagate': True,
         },
         'main': {
-            'handlers': ['file'],
+            'handlers': ['main'],
+            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'propagate': True,
+        },
+        'notificitation': {
+            'handlers': ['notification'],
             'level': GLOBAL_CONFIG['LOGLEVEL'],
             'propagate': True,
         },
     },
 }
 LOGGER = logging.getLogger('main')
-
+LOGGER_NOTIFICATION = logging.getLogger('notification')
+LOGGER.info('test')
