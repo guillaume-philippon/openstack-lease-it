@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from lease_it import backend
-from openstack_lease_it.settings import GLOBAL_CONFIG
+from openstack_lease_it.settings import GLOBAL_CONFIG, LOGGER
 from lease_it.backend import Exceptions as bckExceptions  # pylint: disable=ungrouped-imports
 
 # We load backend specify by configuration file
@@ -87,6 +87,7 @@ def instance(request, instance_id):
     try:
         BACKEND.lease_instance(request, instance_id)
     except bckExceptions.PermissionDenied as error:
+        LOGGER.info("Permission Denied to lease %s", instance_id)
         response = {
             'status': 'error',
             'message': error.message
