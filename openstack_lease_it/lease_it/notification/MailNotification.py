@@ -96,11 +96,11 @@ class MailNotification(object):  # pylint: disable=too-few-public-methods
                         email = "{0}@{1}".format(email, GLOBAL_CONFIG['NOTIFICATION_DOMAIN'])
                     mail['To'] = email
                     if ast.literal_eval(GLOBAL_CONFIG['NOTIFICATION_DEBUG']):
-                        LOGGER.info("Only notify administrator")
+                        LOGGER.info("Only notify administrator instead of %s", email)
                         recipient = [GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER']]
                     else:
                         recipient = [GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER'],
-                                     self.users[user]['email']]
+                                     email]
                 except KeyError:
                     LOGGER.info("email field of %s as not be found", user)
                     mail['To'] = GLOBAL_CONFIG['NOTIFICATION_EMAIL_HEADER']
