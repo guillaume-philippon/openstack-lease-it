@@ -5,16 +5,27 @@ secret_key = "secret"
 debug = True
 
 [openstack]
-OS_USERNAME=admin
-OS_PASSWORD=secret
-OS_TENANT_NAME=admin
-OS_PROJECT_NAME=admin
-OS_AUTH_URL=https://keystone.example.com:5000/v3
-OS_IDENTITY_API_VERSION=3
-OS_CACERT=/etc/tls/cacert.pem
-OS_USER_DOMAIN_NAME=default
-OS_PROJECT_DOMAIN_NAME=default
+OS_USERNAME = admin
+OS_PASSWORD = secret
+OS_TENANT_NAME = admin
+OS_PROJECT_NAME = admin
+OS_AUTH_URL = https://keystone.example.com:5000/v3
+OS_IDENTITY_API_VERSION = 3
+OS_CACERT = /etc/tls/cacert.pem
+OS_USER_DOMAIN_NAME = default
+OS_PROJECT_DOMAIN_NAME = default
 
 [memcached]
-host=127.0.0.1
-port=11211
+host = 127.0.0.1
+port = 11211
+
+[notification]
+debug = False
+ssl = True
+smtp = smtp.example.com
+username = user
+password = secret
+email_header = admin@example.com
+subject=Cloud@VD notification
+link=https://lease-it.lal.in2p3.fr
+default_domain=default.example.com

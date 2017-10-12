@@ -4,15 +4,21 @@ This module manage interaction between application and
 OpenStack cloud infrastructure
 """
 import math
+
+from datetime import date
+from dateutil.relativedelta import relativedelta
+
 from django.core.cache import cache
 from django.utils.dateparse import parse_datetime
+
 from keystoneauth1.identity import v3
 from keystoneauth1 import session, exceptions as ksexceptions
 from keystoneclient.v3 import client as ksclient
 from novaclient import client as nvclient
+
 from openstack_lease_it.settings import GLOBAL_CONFIG
-from lease_it.datastore import InstancesAccess
-from lease_it.Backend.Exceptions import PermissionDenied
+from lease_it.datastore import InstancesAccess, LEASE_DURATION
+from lease_it.backend.Exceptions import PermissionDenied
 
 # Define nova client version as a constant
 NOVA_VERSION = 2
@@ -51,7 +57,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         except:  # pylint: disable=bare-except
             pass
 
-    def _instances(self, request):  # pylint: disable=unused-argument
+    def _instances(self):
         """
         List of instances actually launched
         :return: dict()
@@ -101,6 +107,27 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
             cache.set('flavors', response, FLAVOR_CACHE_TIMEOUT)
         return response
 
+    def _domains(self):
+        """
+        List all domains available
+        :return: dict()
+        """
+        response = cache.get('domains')
+        if not response:
+            response = dict()
+            keystone = ksclient.Client(session=self.session)
+            try:
+                data_domains = keystone.domains.list()
+            except ksexceptions.ConnectFailure:
+                data_domains = list()
+            for domain in data_domains:
+                response[domain.id] = {
+                    'id': domain.id,
+                    'name': domain.name
+                }
+            cache.set('domain', response, USERS_CACHE_TIMEOUT)
+        return response
+
     def _users(self):
         """
         List of users. If not on admin network, we can't retrieve information,
@@ -111,18 +138,24 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         if not response:
             response = dict()
             keystone = ksclient.Client(session=self.session)
-            try:
-                data_users = keystone.users.list()
-            except ksexceptions.ConnectFailure:
-                data_users = list()
-            for user in data_users:
-                response[user.id] = {
-                    'id': user.id,
-                    'first_name': user.firstname,
-                    'last_name': user.lastname,
-                    'email': user.email
-                }
-            cache.set(response, 'users', USERS_CACHE_TIMEOUT)
+            data_domain = self._domains()
+            for domain in data_domain:
+                try:
+                    data_users = keystone.users.list(domain=domain)
+                except ksexceptions.ConnectFailure:
+                    data_users = list(domain)
+                for user in data_users:
+                    try:
+                        user_email = user.email
+                    except AttributeError:
+                        user_email = ""
+                    response[user.id] = {
+                        'id': user.id,
+                        'domain_id': domain,
+                        'name': user.name,
+                        'email': user_email
+                    }
+            cache.set('users', response, USERS_CACHE_TIMEOUT)
         return response
 
     def _projects(self):
@@ -188,7 +221,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         :return: dict()
         """
         response = dict()
-        data_instances = self._instances(request)
+        data_instances = self._instances()
         # We only display instances that are owned by logged user
         for instance in data_instances:
             if data_instances[instance]['user_id'] == request.user.id:
@@ -233,3 +266,36 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         InstancesAccess.save({
             instance_id: data_instances[instance_id]
         })
+
+    def spy_instances(self):
+        """
+        spy_instances is started by instance_spy module and check all running VM + notify user
+        if a VM is close to its lease time
+        :return: dict()
+        """
+        now = date.today()
+        data_instances = InstancesAccess.show(self._instances())
+        response = {
+            'delete': list(),  # List of instance we must delete
+            'notify': list()  # List of instance we must notify user to renew the lease
+        }
+        for instance in data_instances:
+            leased_at = data_instances[instance]['leased_at']
+            lease_end = data_instances[instance]['lease_end']
+            # If it's a new instance, we put lease value as today
+            if leased_at is None:
+                InstancesAccess.save({
+                    instance: data_instances[instance]
+                })
+                leased_at = now
+                lease_end = now + relativedelta(days=+LEASE_DURATION)
+            first_notification_date = leased_at + relativedelta(days=+LEASE_DURATION/3)
+            second_notification_date = leased_at + relativedelta(days=+LEASE_DURATION/6)
+            # If lease as expire we tag it as delete
+            if lease_end < now:
+                response['delete'].append(data_instances[instance])
+            elif first_notification_date == now or \
+                    second_notification_date == now or \
+                    lease_end < now - relativedelta(days=-6):
+                response['notify'].append(data_instances[instance])
+        return response
