@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import ast
-import logging
+import logging.config
 
 from openstack_lease_it.config import load_config
 
@@ -150,6 +150,8 @@ else:
     )
 
 # Configure logging
+LOGGING_CONFIG = None
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -188,6 +190,7 @@ LOGGING = {
         },
     },
 }
+
+logging.config.dictConfig(LOGGING)
 LOGGER = logging.getLogger('main')
 LOGGER_NOTIFICATION = logging.getLogger('notification')
-LOGGER.info('test')
