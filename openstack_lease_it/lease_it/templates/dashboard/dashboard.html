@@ -36,8 +36,8 @@ $(function() {
 <!-- When logged, we add a tab menu to switch from differents view -->
 <div class="nav-content">
     <ul class="tabs tabs-transparent">
-        <li class="tab"><a href="#flavors">Flavors</a></li>
-        <li class="tab"><a href="#instances-dash">Instances</a></li>
+        <li class="tab"><a href="#flavors" onClick='$("#menu").removeClass("disabled")'>Flavors</a></li>
+        <li class="tab" ><a href="#instances-dash" onClick='$("#menu").addClass("disabled")'>Instances</a></li>
     </ul>
 </div>
 {% endblock %}
