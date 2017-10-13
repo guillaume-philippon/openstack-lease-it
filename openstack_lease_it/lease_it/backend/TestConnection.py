@@ -187,6 +187,7 @@ class TestConnection(object):
         InstancesAccess.save({
             instance_id: data_instances[instance_id]
         })
+        return data_instances[instance_id]
 
     @staticmethod
     def spy_instances():

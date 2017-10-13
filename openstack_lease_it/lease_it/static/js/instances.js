@@ -45,5 +45,16 @@ function updateLease(instance) {
             var INSTANCES = data_instances;
             buildInstancesView(INSTANCES, '#instances');
         });
+    }).success(function(data){
+        text = data.instance.name;
+        if (data.status == "success") {
+            color = "teal-text";
+            type = "check";
+        } else {
+            color = "red-text";
+            type = "clear";
+        }
+        Materialize.toast(text + ' <i class="material-icons tiny ' + color + '">' + type + '</i>',
+         1000, 'rounded');
     });
 }
