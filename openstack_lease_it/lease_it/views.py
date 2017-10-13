@@ -84,8 +84,8 @@ def instance(request, instance_id):
         'status': 'success'
     }
     try:
-        instance = BACKEND.lease_instance(request, instance_id)
-        response['instance'] = instance
+        instance_info = BACKEND.lease_instance(request, instance_id)
+        response['instance'] = instance_info
     except bckExceptions.PermissionDenied as error:
         LOGGER.info("Permission Denied to lease %s", instance_id)
         response = {
