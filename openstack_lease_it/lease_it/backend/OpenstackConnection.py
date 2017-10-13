@@ -266,6 +266,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         InstancesAccess.save({
             instance_id: data_instances[instance_id]
         })
+        return data_instances[instance_id]
 
     def spy_instances(self):
         """

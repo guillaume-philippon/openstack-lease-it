@@ -80,12 +80,12 @@ def instance(request, instance_id):
     :param instance_id: retrieve from url
     :return: JsonResponse
     """
-    # By default we concidere a success
     response = {
         'status': 'success'
     }
     try:
-        BACKEND.lease_instance(request, instance_id)
+        instance = BACKEND.lease_instance(request, instance_id)
+        response['instance'] = instance
     except bckExceptions.PermissionDenied as error:
         LOGGER.info("Permission Denied to lease %s", instance_id)
         response = {
