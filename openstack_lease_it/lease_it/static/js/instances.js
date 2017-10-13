@@ -46,7 +46,9 @@ function updateLease(instance) {
             buildInstancesView(INSTANCES, '#instances');
         });
     }).success(function(data){
-        text = data.instance.name;
+        var text = data.instance.name,
+            color,
+            type;
         if (data.status == "success") {
             color = "teal-text";
             type = "check";
