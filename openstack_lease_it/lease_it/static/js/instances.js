@@ -55,6 +55,6 @@ function updateLease(instance) {
             type = "clear";
         }
         Materialize.toast(text + ' <i class="material-icons tiny ' + color + '">' + type + '</i>',
-         600, 'rounded');
+         1000, 'rounded');
     });
 }
