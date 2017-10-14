@@ -19,6 +19,24 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
     will get / save / ... informations in a format expected by views
     """
     @staticmethod
+    def get(instance):
+        """
+        Get or Create instance on model backend
+        :param instance: instance to get
+        :return: Instance model
+        """
+        try:
+            model = Instances.objects.get(id=instance['id'])  # pylint: disable=no-member
+        except ObjectDoesNotExist:
+            LOGGER_INSTANCES.info('Instance %s as never been seen before', instance['id'])
+            model = Instances()
+            model.id = instance['id']
+            model.leased_at = timezone.now()
+            model.heartbeat_at = timezone.now()
+            model.lease_duration = LEASE_DURATION
+        return model
+
+    @staticmethod
     def show(instances):
         """
         Return a list of instances store on database
@@ -50,23 +68,15 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
         return response
 
     @staticmethod
-    def save(instances):
-        """
-        Store all instances or update it
-        :param instances: dict of instances to save
-        :return: void
-        """
-        for instance in instances:
-            # Retrieve current instance data if available
-            try:
-                model = Instances.objects.get(id=instances[instance]['id'])  # pylint: disable=no-member
-            except ObjectDoesNotExist:
-                # If not, then we create a new entry with information from instances
-                model = Instances()
-                model.id = instances[instance]['id']
-            model.leased_at = timezone.now()
-            model.lease_duration = LEASE_DURATION
-            model.heartbeat_at = timezone.now()
-            model.save()
-            LOGGER_INSTANCES.info("instance %s as been updated (leased_at %s, heartbeat_at %s)",
-                                  instance, model.leased_at, model.heartbeat_at)
+    def heartbeat(instance):
+        model = InstancesAccess.get(instance)
+        model.heartbeat_at = timezone.now()
+        model.save()
+        LOGGER_INSTANCES.info('Instance %s as been heartbeated (%s)', model.id, model.heartbeat_at)
+
+    @staticmethod
+    def lease(instance):
+        model = InstancesAccess.get(instance)
+        model.leased_at = timezone.now()
+        model.save()
+        LOGGER_INSTANCES.info('Instance %s as been leased (%s)', model.id, model.heartbeat_at)

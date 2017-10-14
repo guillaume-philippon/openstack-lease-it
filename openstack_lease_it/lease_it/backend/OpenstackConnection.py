@@ -275,9 +275,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         data_instances = cache.get('instances')
         if data_instances[instance_id]['user_id'] != request.user.id:
             raise PermissionDenied(request.user.id, instance_id)
-        InstancesAccess.save({
-            instance_id: data_instances[instance_id]
-        })
+        InstancesAccess.lease(data_instances[instance_id])
         return data_instances[instance_id]
 
     def spy_instances(self):
@@ -293,13 +291,14 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
             'notify': list()  # List of instance we must notify user to renew the lease
         }
         for instance in data_instances:
+            # We mark the VM as showed
+            InstancesAccess.heartbeat(data_instances[instance])
             leased_at = data_instances[instance]['leased_at']
             lease_end = data_instances[instance]['lease_end']
             # If it's a new instance, we put lease value as today
+            # it's not necessary to lease on model as heartbeat should have create and
+            # lease the virtual machine
             if leased_at is None:
-                InstancesAccess.save({
-                    instance: data_instances[instance]
-                })
                 leased_at = now
                 lease_end = now + relativedelta(days=+LEASE_DURATION)
             first_notification_date = leased_at + relativedelta(days=+LEASE_DURATION/3)
