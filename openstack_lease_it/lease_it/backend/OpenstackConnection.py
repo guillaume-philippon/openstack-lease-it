@@ -85,7 +85,19 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         """
         nova = nvclient.Client(NOVA_VERSION, session=self.session)
         hypervisors = nova.hypervisors.list()
-        return hypervisors
+        response = list()
+        for hypervisor in hypervisors:
+            response.append( {
+                'status': hypervisor.status,
+                'state': hypervisor.state,
+                'vcpus': hypervisor.vcpus,
+                'vcpus_used': hypervisor.vcpus_used,
+                'free_ram': hypervisor.free_disk_gb,
+                'memory': hypervisor.memory_mb,
+                'free_disk': hypervisor.free_disk_gb,
+                'local_disk': hypervisor.local_gb
+            })
+        return response
 
     def _flavors(self):
         """
@@ -193,16 +205,16 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
             max_flavor = 0
             for hypervisor in hypervisors:
                 # If hypervisor is disable or down we don't care of it
-                if hypervisor.status == "enabled" and\
-                                hypervisor.state == "up":
+                if hypervisor['status'] == "enabled" and\
+                                hypervisor['state'] == "up":
                     # We round down the number of flavor
-                    free_cpu = math.floor((hypervisor.vcpus - hypervisor.vcpus_used) /
+                    free_cpu = math.floor((hypervisor['vcpus'] - hypervisor['vcpus_used']) /
                                           flavors[flavor]['cpu'])
-                    max_cpu = math.floor(hypervisor.vcpus / flavors[flavor]['cpu'])
-                    free_ram = math.floor(hypervisor.free_ram_mb / flavors[flavor]['ram'])
-                    max_ram = math.floor(hypervisor.memory_mb / flavors[flavor]['ram'])
-                    free_disk = math.floor(hypervisor.free_disk_gb / flavors[flavor]['disk'])
-                    max_disk = math.floor(hypervisor.local_gb / flavors[flavor]['disk'])
+                    max_cpu = math.floor(hypervisor['vcpus'] / flavors[flavor]['cpu'])
+                    free_ram = math.floor(hypervisor['free_ram'] / flavors[flavor]['ram'])
+                    max_ram = math.floor(hypervisor['memory'] / flavors[flavor]['ram'])
+                    free_disk = math.floor(hypervisor['free_disk'] / flavors[flavor]['disk'])
+                    max_disk = math.floor(hypervisor['local_disk'] / flavors[flavor]['disk'])
 
                     # We keep the lowest value of ram / cpu / disk as it s
                     # the weak link of the hypervisor

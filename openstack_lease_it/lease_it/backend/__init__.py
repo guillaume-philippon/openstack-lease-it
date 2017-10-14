@@ -3,3 +3,4 @@
 
 from OpenstackConnection import *
 from TestConnection import *
+from Exceptions import *
