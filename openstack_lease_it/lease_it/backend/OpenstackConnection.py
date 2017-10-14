@@ -87,7 +87,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         hypervisors = nova.hypervisors.list()
         response = list()
         for hypervisor in hypervisors:
-            response.append( {
+            response.append({
                 'status': hypervisor.status,
                 'state': hypervisor.state,
                 'vcpus': hypervisor.vcpus,
