@@ -69,6 +69,13 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
 
     @staticmethod
     def heartbeat(instance):
+        """
+        get a instance and update the heartbeat value. This method is called by
+        instance-spy when it find a instance running. Heartbeat can be use to retrieve
+        old Virtual Machine
+        :param instance: instance to update
+        :return: None
+        """
         model = InstancesAccess.get(instance)
         model.heartbeat_at = timezone.now()
         model.save()
@@ -76,6 +83,11 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
 
     @staticmethod
     def lease(instance):
+        """
+        get a instance and update the leased_at value.
+        :param instance: instance to lease
+        :return: None
+        """
         model = InstancesAccess.get(instance)
         model.leased_at = timezone.now()
         model.save()
