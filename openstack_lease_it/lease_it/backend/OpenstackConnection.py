@@ -92,7 +92,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
                 'state': hypervisor.state,
                 'vcpus': hypervisor.vcpus,
                 'vcpus_used': hypervisor.vcpus_used,
-                'free_ram': hypervisor.free_disk_gb,
+                'free_ram': hypervisor.free_ram_mb,
                 'memory': hypervisor.memory_mb,
                 'free_disk': hypervisor.free_disk_gb,
                 'local_disk': hypervisor.local_gb
