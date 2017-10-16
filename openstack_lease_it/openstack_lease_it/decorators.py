@@ -13,6 +13,14 @@ def superuser_required(view):
     :return: function
     """
     def wrap(request, *args, **kwargs):
+        """
+        Wrapper for view function. It check if user is a superuser. If not, raise a
+        PermissionDenied exception
+        :param request: web request
+        :param args: package view function argument as a list
+        :param kwargs: package view function argument as a dict()
+        :return: return view function return
+        """
         if request.user.is_superuser:
             return view(request, *args, **kwargs)
         else:
