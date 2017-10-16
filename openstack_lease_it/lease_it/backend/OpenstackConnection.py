@@ -226,17 +226,18 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
             flavors[flavor]['max'] = max_flavor
         return flavors
 
-    def instances(self, request):
+    def instances(self, request, admin=False):
         """
         List all instances started on cluster and owned by user
         :param request: Web request, used to retrieve user id
+        :param admin: If admin is True, we return all instances
         :return: dict()
         """
         response = dict()
         data_instances = self._instances()
         # We only display instances that are owned by logged user
         for instance in data_instances:
-            if data_instances[instance]['user_id'] == request.user.id:
+            if data_instances[instance]['user_id'] == request.user.id or admin:
                 response[data_instances[instance]['id']] = data_instances[instance]
         return InstancesAccess.show(response)
 

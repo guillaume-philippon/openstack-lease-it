@@ -46,8 +46,14 @@ def instances(request):  #pylint: disable=unused-argument
     :param request: Web request
     :return: JsonResponse w/ list of instances and details
     """
-    response = dict()
-    data_instances = BACKEND.instances(request)
+    response = list()
+    # By default, we just list user instances, not all instances
+    all_instances = False
+    if request.user.is_superuser and 'admin' in request.GET:
+        # If user is superuser and user are requesting admin view of instances
+        # We ask a full list of instances
+        all_instances = True
+    data_instances = BACKEND.instances(request, all_instances)
     data_users = BACKEND.users()
     data_projects = BACKEND.projects()
     for data_instance in data_instances:
@@ -58,19 +64,19 @@ def instances(request):  #pylint: disable=unused-argument
             project = data_instances[data_instance]['project_id']
 
         try:
-            user = "{first_name} {last_name}".format(
+            user = "{name}".format(
                 **data_users[data_instances[data_instance]['user_id']])
         except KeyError:
             user = data_instances[data_instance]['user_id']
-        response[data_instance] = {
+        response.append({
             'id': data_instances[data_instance]['id'],
             'name': data_instances[data_instance]['name'],
             'created_at': data_instances[data_instance]['created_at'],
             'lease_end': data_instances[data_instance]['lease_end'],
             'project': project,
             'user': user
-        }
-    return JsonResponse(response)
+        })
+    return JsonResponse(response, safe=False)
 
 
 @login_required
