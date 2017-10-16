@@ -5,9 +5,12 @@ View for app specific url
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+
 from lease_it import backend
-from openstack_lease_it.settings import GLOBAL_CONFIG, LOGGER
 from lease_it.backend import Exceptions as bckExceptions  # pylint: disable=ungrouped-imports
+
+from openstack_lease_it.settings import GLOBAL_CONFIG, LOGGER
+from openstack_lease_it.decorators import superuser_required
 
 # We load backend specify by configuration file
 BACKEND_PLUGIN = getattr(backend, "{0}Connection".format(GLOBAL_CONFIG['BACKEND_PLUGIN']))
@@ -95,7 +98,7 @@ def instance(request, instance_id):
     return JsonResponse(response)
 
 
-@login_required
+@superuser_required
 def users(request):  # pylint: disable=unused-argument
     """
     View for users
