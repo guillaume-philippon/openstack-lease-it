@@ -20,9 +20,9 @@ $(function() {
         $( "#progress-bar" ).hide();
     })
 
-    buildInstancesView('instances', 'filtered=True');
+    buildInstancesView('instances', 'filtered=True', false);
 {% if request.user.is_superuser %}
-    buildInstancesView('admin-instances', 'filtered=False');
+    buildInstancesView('admin-instances', 'filtered=False', true);
 {% endif %}
     $(".btn-slide").sideNav();
 });
@@ -101,6 +101,7 @@ $(function() {
                 <table class="striped" id="table-admin-instances" width="100%">
                     <thead>
                         <tr>
+                            <th>User</th>
                             <th>Name</th>
                             <th>Project</th>
                             <th>Started at</th>

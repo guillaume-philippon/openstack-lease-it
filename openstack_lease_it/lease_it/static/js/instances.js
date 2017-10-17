@@ -12,7 +12,16 @@
 /*
     buildInstancesView create a full display of Instance on div_name
 */
-function buildInstancesView(div_name, get_option){
+function buildInstancesView(div_name, get_option, show_user){
+    table_columns = [
+        { data: 'name'},
+        { data: 'project' },
+        { data: 'created_at' },
+        { data: 'lease_end' }
+    ]
+    if (show_user) {
+        table_columns.unshift({data: 'user'})
+    }
     $('#table-' + div_name).DataTable({
         ajax: {
             url: '/instances?' + get_option,
@@ -27,12 +36,7 @@ function buildInstancesView(div_name, get_option){
                 return instances;
             }
         },
-        columns: [
-            { data: 'name' },
-            { data: 'project' },
-            { data: 'created_at' },
-            { data: 'lease_end' }
-        ]
+        columns: table_columns
     });
     $( "#progress-bar-" + div_name ).hide();
 }
