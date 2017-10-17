@@ -268,13 +268,15 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
     def lease_instance(request, instance_id):
         """
         If instance_id is owned by user_id, then update lease information, if not, raise
-        PermissionDenied exception
+        PermissionDenied exception.
+        A Openstack administrator can also update a lease for a user
         :param instance_id: id of instance
         :param request: Web request
         :return: void
         """
         data_instances = cache.get('instances')
-        if data_instances[instance_id]['user_id'] != request.user.id:
+        if data_instances[instance_id]['user_id'] != request.user.id or \
+                request.user.is_superuser:
             raise PermissionDenied(request.user.id, instance_id)
         InstancesAccess.lease(data_instances[instance_id])
         return data_instances[instance_id]
