@@ -44,8 +44,7 @@ function updateLease(instance) {
     return $.getJSON("/instances/" + instance, function(data){
     }).success(function(data){
         var text,
-            color,
-            type;
+            color;
 
         try {
             text = data.instance.name;
@@ -53,18 +52,15 @@ function updateLease(instance) {
             text = data.message;
         }
         if (data.status == "success") {
-            color = "teal-text";
-            type = "check";
+            color = "teal";
         } else {
-            color = "red-text";
-            type = "clear";
+            color = "red";
         }
         $('#table-instances').DataTable().ajax.reload();
         /* If table-admin-instances exist, we also update it. */
         if ( $('#table-admin-instances').length ) {
             $('#table-admin-instances').DataTable().ajax.reload();
         }
-        Materialize.toast(text + ' <i class="material-icons tiny ' + color + '">' + type + '</i>',
-         1000, 'rounded');
+        Materialize.toast(text, 2000, color);
     });
 }
