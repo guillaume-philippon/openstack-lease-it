@@ -48,7 +48,7 @@ function updateLease(instance) {
             type;
 
         try {
-            text = data.instance.div_name;
+            text = data.instance.name;
         } catch(err) {
             text = data.message;
         }

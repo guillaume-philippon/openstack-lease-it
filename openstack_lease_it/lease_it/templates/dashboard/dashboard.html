@@ -20,14 +20,6 @@ $(function() {
         $( "#progress-bar" ).hide();
     })
 
-    <!--/* Load instance part */-->
-    <!--instancesStatus('True').then(function (data_instances){-->
-        <!--&lt;!&ndash;INSTANCES = sortOnParams('name', data_instances, 1);&ndash;&gt;-->
-        <!--INSTANCES = data_instances;-->
-        <!--buildInstancesView(INSTANCES, '#instances');-->
-        <!--$( "#progress-bar-instances" ).hide();-->
-    <!--})-->
-
     buildInstancesView('instances', 'filtered=True');
 {% if request.user.is_superuser %}
     buildInstancesView('admin-instances', 'filtered=False');
