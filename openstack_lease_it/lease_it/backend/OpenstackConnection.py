@@ -275,8 +275,8 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         :return: void
         """
         data_instances = cache.get('instances')
-        if data_instances[instance_id]['user_id'] != request.user.id or \
-                request.user.is_superuser:
+        if data_instances[instance_id]['user_id'] != request.user.id and \
+                not request.user.is_superuser:
             raise PermissionDenied(request.user.id, instance_id)
         InstancesAccess.lease(data_instances[instance_id])
         return data_instances[instance_id]
