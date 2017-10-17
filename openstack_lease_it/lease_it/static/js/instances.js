@@ -60,6 +60,10 @@ function updateLease(instance) {
             type = "clear";
         }
         $('#table-instances').DataTable().ajax.reload();
+        /* If table-admin-instances exist, we also update it. */
+        if ( $('#table-admin-instances').length ) {
+            $('#table-admin-instances').DataTable().ajax.reload();
+        }
         Materialize.toast(text + ' <i class="material-icons tiny ' + color + '">' + type + '</i>',
          1000, 'rounded');
     });
