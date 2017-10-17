@@ -14,7 +14,7 @@
 */
 function buildInstancesView(div_name, get_option, show_user){
     table_columns = [
-        { data: 'name'},
+        { data: 'name' },
         { data: 'project' },
         { data: 'created_at' },
         { data: 'lease_end' }
@@ -36,7 +36,9 @@ function buildInstancesView(div_name, get_option, show_user){
                 return instances;
             }
         },
-        columns: table_columns
+        columns: table_columns,
+        lengthChange: false,
+        pageLength: 25
     });
     $( "#progress-bar-" + div_name ).hide();
 }
