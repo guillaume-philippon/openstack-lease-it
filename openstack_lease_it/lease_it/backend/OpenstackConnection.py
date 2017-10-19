@@ -226,17 +226,18 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
             flavors[flavor]['max'] = max_flavor
         return flavors
 
-    def instances(self, request):
+    def instances(self, request, filtered=False):
         """
         List all instances started on cluster and owned by user
         :param request: Web request, used to retrieve user id
+        :param filtered: True if we only return user_id instances
         :return: dict()
         """
         response = dict()
         data_instances = self._instances()
         # We only display instances that are owned by logged user
         for instance in data_instances:
-            if data_instances[instance]['user_id'] == request.user.id:
+            if data_instances[instance]['user_id'] == request.user.id or not filtered:
                 response[data_instances[instance]['id']] = data_instances[instance]
         return InstancesAccess.show(response)
 
@@ -267,13 +268,15 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
     def lease_instance(request, instance_id):
         """
         If instance_id is owned by user_id, then update lease information, if not, raise
-        PermissionDenied exception
+        PermissionDenied exception.
+        A Openstack administrator can also update a lease for a user
         :param instance_id: id of instance
         :param request: Web request
         :return: void
         """
         data_instances = cache.get('instances')
-        if data_instances[instance_id]['user_id'] != request.user.id:
+        if data_instances[instance_id]['user_id'] != request.user.id and \
+                not request.user.is_superuser:
             raise PermissionDenied(request.user.id, instance_id)
         InstancesAccess.lease(data_instances[instance_id])
         return data_instances[instance_id]

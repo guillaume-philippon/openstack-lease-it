@@ -149,14 +149,14 @@ class TestConnection(OpenstackConnection):
         response = cache.get('users')
         if not response:
             response = {
-                '1': {
-                            'id': 'user-01',
-                            'domain_id': 'domain-01',
-                            'name': 'John Doe',
-                            'email': 'john.doe'
-                        },
-                '2': {
-                    'id': 'user-02',
+                1: {
+                    'id': 1,
+                    'domain_id': 'domain-01',
+                    'name': 'John Doe',
+                    'email': 'john.doe'
+                },
+                2: {
+                    'id': 2,
                     'domain_id': 'domain-id-02',
                     'name': 'Jane Smith',
                     'email': 'jane.smith@full.domain.com'

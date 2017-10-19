@@ -2,6 +2,8 @@
 """
 View for app specific url
 """
+import ast
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -46,10 +48,26 @@ def instances(request):  #pylint: disable=unused-argument
     :param request: Web request
     :return: JsonResponse w/ list of instances and details
     """
-    response = dict()
-    data_instances = BACKEND.instances(request)
+    response = list()
+    # Retrieve filtered parameter on GET. It's used to display all instances or just user instances
+    # In all cases, if user is not superuser, only user instances are displayed
+    if 'filtered' in request.GET:
+        filtered = ast.literal_eval(request.GET['filtered'])
+    else:
+        # By default, we filter based on user_id
+        filtered = True
+    # By default, we just list user instances, not all instances
+    if not request.user.is_superuser:
+        # If user is superuser and user are requesting admin view of instances
+        # We ask a full list of instances
+        filtered = True
+
+    # We retrieve data from backend
+    data_instances = BACKEND.instances(request, filtered)
     data_users = BACKEND.users()
     data_projects = BACKEND.projects()
+
+    # We merge user and project information w/ instances
     for data_instance in data_instances:
         try:
             project = "{name}".format(
@@ -58,19 +76,19 @@ def instances(request):  #pylint: disable=unused-argument
             project = data_instances[data_instance]['project_id']
 
         try:
-            user = "{first_name} {last_name}".format(
+            user = "{name}".format(
                 **data_users[data_instances[data_instance]['user_id']])
         except KeyError:
             user = data_instances[data_instance]['user_id']
-        response[data_instance] = {
+        response.append({
             'id': data_instances[data_instance]['id'],
             'name': data_instances[data_instance]['name'],
             'created_at': data_instances[data_instance]['created_at'],
             'lease_end': data_instances[data_instance]['lease_end'],
             'project': project,
             'user': user
-        }
-    return JsonResponse(response)
+        })
+    return JsonResponse(response, safe=False)
 
 
 @login_required

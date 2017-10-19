@@ -8,32 +8,39 @@
    * Last lease date
    * Lease expiration
 */
-function instancesStatus() {
-    return $.getJSON("/instances", function(data) {
-        return data;
-    });
-}
-
-/**/
-function buildInstanceView(instance, details) {
-    return '<tr>' +
-           '<td>' + details.name + '</td>' +
-           '<td>' + details.project + '</td>' +
-           '<td>' + details.created_at + '</td>' +
-           '<td>' + details.lease_end + '<span class="waves-effect waves-light new badge hoverable"' +
-                                 '      data-badge-caption="new lease" onClick="updateLease(\''+ details.id + '\')"></span>' +
-           '</td>' +
-           '</tr>';
-}
 
 /*
     buildInstancesView create a full display of Instance on div_name
 */
-function buildInstancesView(instances, div_name){
-    $(div_name).html('');
-    $.each(instances, function(instance, details){
-        $(buildInstanceView(instance, details)).appendTo(div_name);
+function buildInstancesView(div_name, get_option, show_user){
+    table_columns = [
+        { data: 'name' },
+        { data: 'project' },
+        { data: 'created_at' },
+        { data: 'lease_end' }
+    ];
+    if (show_user) {
+        table_columns.unshift({data: 'user'});
+    }
+    $('#table-' + div_name).DataTable({
+        ajax: {
+            url: '/instances?' + get_option,
+            dataSrc: function(instances) {
+                /* We add a lease button @ the end of the End Of Life line */
+                for (instance=0; instance < instances.length; instance++) {
+                    instances[instance].lease_end += '<span class="waves-effect waves-light ' +
+                         ' new badge hoverable"' +
+                         ' data-badge-caption="new lease" onClick="updateLease(\''+
+                         instances[instance].id + '\')"></span>';
+                }
+                return instances;
+            }
+        },
+        columns: table_columns,
+        lengthChange: false,
+        pageLength: 25
     });
+    $( "#progress-bar-" + div_name ).hide();
 }
 
 /*
@@ -41,22 +48,25 @@ function buildInstancesView(instances, div_name){
 */
 function updateLease(instance) {
     return $.getJSON("/instances/" + instance, function(data){
-        instancesStatus().then(function (data_instances){
-            var INSTANCES = data_instances;
-            buildInstancesView(INSTANCES, '#instances');
-        });
     }).success(function(data){
-        var text = data.instance.name,
-            color,
-            type;
-        if (data.status == "success") {
-            color = "teal-text";
-            type = "check";
-        } else {
-            color = "red-text";
-            type = "clear";
+        var text,
+            color;
+
+        try {
+            text = data.instance.name;
+        } catch(err) {
+            text = data.message;
         }
-        Materialize.toast(text + ' <i class="material-icons tiny ' + color + '">' + type + '</i>',
-         1000, 'rounded');
+        if (data.status == "success") {
+            color = "teal";
+        } else {
+            color = "red";
+        }
+        $('#table-instances').DataTable().ajax.reload();
+        /* If table-admin-instances exist, we also update it. */
+        if ( $('#table-admin-instances').length ) {
+            $('#table-admin-instances').DataTable().ajax.reload();
+        }
+        Materialize.toast(text, 2000, color);
     });
 }
