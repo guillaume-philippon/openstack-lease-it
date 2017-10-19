@@ -18,9 +18,9 @@ function buildInstancesView(div_name, get_option, show_user){
         { data: 'project' },
         { data: 'created_at' },
         { data: 'lease_end' }
-    ]
+    ];
     if (show_user) {
-        table_columns.unshift({data: 'user'})
+        table_columns.unshift({data: 'user'});
     }
     $('#table-' + div_name).DataTable({
         ajax: {
