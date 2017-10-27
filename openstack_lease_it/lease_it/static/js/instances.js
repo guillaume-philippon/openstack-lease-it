@@ -13,7 +13,7 @@
     buildInstancesView create a full display of Instance on div_name
 */
 function buildInstancesView(div_name, get_option, show_user){
-    table_columns = [
+    var table_columns = [
         { data: 'name' },
         { data: 'project' },
         { data: 'created_at' },
@@ -27,7 +27,7 @@ function buildInstancesView(div_name, get_option, show_user){
             url: '/instances?' + get_option,
             dataSrc: function(instances) {
                 /* We add a lease button @ the end of the End Of Life line */
-                for (instance=0; instance < instances.length; instance++) {
+                for (let instance=0; instance < instances.length; instance++) {
                     instances[instance].lease_end += '<span class="waves-effect waves-light ' +
                          ' new badge hoverable"' +
                          ' data-badge-caption="new lease" onClick="updateLease(\''+
