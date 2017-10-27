@@ -16,7 +16,7 @@ from keystoneauth1 import session, exceptions as ksexceptions
 from keystoneclient.v3 import client as ksclient
 from novaclient import client as nvclient
 
-from openstack_lease_it.settings import GLOBAL_CONFIG
+from openstack_lease_it.settings import GLOBAL_CONFIG, LOGGER_INSTANCES
 from lease_it.datastore import InstancesAccess, LEASE_DURATION
 from lease_it.backend.Exceptions import PermissionDenied
 
@@ -302,10 +302,15 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
             # it's not necessary to lease on model as heartbeat should have create and
             # lease the virtual machine
             if leased_at is None:
-                leased_at = now
                 lease_end = now + relativedelta(days=+LEASE_DURATION)
-            first_notification_date = leased_at + relativedelta(days=+LEASE_DURATION/3)
-            second_notification_date = leased_at + relativedelta(days=+LEASE_DURATION/6)
+            first_notification_date = lease_end - relativedelta(days=+LEASE_DURATION/3)
+            second_notification_date = lease_end - relativedelta(days=+LEASE_DURATION/6)
+            LOGGER_INSTANCES.info(
+                "Instance: %s will be notify %s and %s",
+                data_instances[instance]['id'],
+                first_notification_date,
+                second_notification_date
+            )
             # If lease as expire we tag it as delete
             if lease_end < now:
                 response['delete'].append(data_instances[instance])
