@@ -8,6 +8,10 @@
    * Last lease date
    * Lease expiration
 */
+/* Global variables
+ - MAX_USERNAME_LENGTH: Maximum length of username
+*/
+MAX_USERNAME_LENGTH = 15
 
 /*
     buildInstancesView create a full display of Instance on div_name
@@ -38,7 +42,19 @@ function buildInstancesView(div_name, get_option, show_user){
         },
         columns: table_columns,
         lengthChange: false,
-        pageLength: 25
+        pageLength: 25,
+        columnDefs: [ {
+            targets: 0,
+            render: function ( data, type, row ) {
+                if (show_user) {
+                    return data.length > MAX_USERNAME_LENGTH ?
+                       data.substr( 0, MAX_USERNAME_LENGTH ) +'…' :
+                       data;
+                } else {
+                    return data
+                }
+            }
+        } ]
     });
     $( "#progress-bar-" + div_name ).hide();
 }
