@@ -7,11 +7,14 @@
         <script src="/static/js/instances.js" type="text/javascript"></script>
         <script src="/static/js/dashboard.js" type="text/javascript"></script>
 {% endblock %}
-{% block javascript%}
+{% block javascript %}
 /*
     On web page load
 */
 $(function() {
+
+    /* By default, we are on Flavor tab, we activate menu */
+    $("#menu").removeClass("disabled")
 
     /* Load flavor part */
     flavorsStatus().then(function (data){
@@ -28,29 +31,23 @@ $(function() {
 });
 {% endblock %}
 
-{% block navlogged%}
+{% block navlogged %}
 <!-- When logged, we add a tab menu to switch from differents view -->
 <div class="nav-content">
     <ul class="tabs tabs-transparent">
-        <li class="tab"><a href="#flavors" onClick='$("#menu").removeClass("disabled")'>Flavors</a></li>
-        <li class="tab" ><a href="#instances" onClick='$("#menu").addClass("disabled")'>Instances</a></li>
+        <li class="tab"><a href="#flavors" onClick='menuSelector("flavors", true)'>Flavors</a></li>
+        <li class="tab" ><a href="#instances" onClick='menuSelector("instances", false)'>Instances</a></li>
         {% if request.user.is_superuser %}
-        <li class="tab" ><a href="#admin-instances" onClick='$("#menu").addClass("disabled")'>Admin</a></li>
+        <li class="tab" ><a href="#admin-instances" onClick='menuSelector("admin", true)'>Admin</a></li>
         {% endif %}
     </ul>
 </div>
 {% endblock %}
 
 {% block content %}
-<ul id="slide-out" class="side-nav">
-    <li><a class="subheader">Sorted by</a></li>
-    <li id="name" onClick="refreshFlavorDiv('name', FLAVOR_MIN, FLAVOR_ORDER)"><a href="#!" id="name_desc">Name</a></li>
-    <li id="cpu" onClick="refreshFlavorDiv('cpu', FLAVOR_MIN, FLAVOR_ORDER)"><a href="#!" id="cpu_desc">CPU</a></li>
-    <li id="ram" onClick="refreshFlavorDiv('ram', FLAVOR_MIN, FLAVOR_ORDER)"><a href="#!" id="ram_desc">RAM</a></li>
-    <li id="disk" onClick="refreshFlavorDiv('disk', FLAVOR_MIN, FLAVOR_ORDER)"><a href="#!" id="disk_desc">Disk</a></li>
-    <li id="free" onClick="refreshFlavorDiv('free', FLAVOR_MIN, FLAVOR_ORDER)"><a href="#!" id="free_desc">Free</a></li>
-    <li id="max" onClick="refreshFlavorDiv('max', FLAVOR_MIN, FLAVOR_ORDER)"><a href="#!" id="max_desc">Max</a></li>
-</ul>
+
+{% include "dashboard/menus.html" %}
+
 <div class="row">
     <!-- Flavor per flavor usage -->
     <div id="flavors" class="">

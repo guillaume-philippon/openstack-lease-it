@@ -8,6 +8,10 @@
    * Last lease date
    * Lease expiration
 */
+/* Global variables
+ - MAX_USERNAME_LENGTH: Maximum length of username
+*/
+const MAX_STRING_LENGTH = 30;
 
 /*
     buildInstancesView create a full display of Instance on div_name
@@ -28,17 +32,26 @@ function buildInstancesView(div_name, get_option, show_user){
             dataSrc: function(instances) {
                 /* We add a lease button @ the end of the End Of Life line */
                 for (let instance=0; instance < instances.length; instance++) {
-                    instances[instance].lease_end += '<span class="waves-effect waves-light ' +
-                         ' new badge hoverable"' +
-                         ' data-badge-caption="new lease" onClick="updateLease(\''+
-                         instances[instance].id + '\')"></span>';
+                    instances[instance].lease_end = formatLeaseBtn(instances[instance].lease_end,
+                        instances[instance].id
+                    );
                 }
                 return instances;
             }
         },
         columns: table_columns,
         lengthChange: false,
-        pageLength: 25
+        pageLength: 25,
+        columnDefs: [
+            {
+                targets: [0, 1, 2],
+                render: function ( data, type, row ) {
+                        return formatText(data, MAX_STRING_LENGTH);
+                }
+            }],
+        drawCallback: function(settings, json) {
+            $(".tooltipped").tooltip();
+        },
     });
     $( "#progress-bar-" + div_name ).hide();
 }
@@ -69,4 +82,26 @@ function updateLease(instance) {
         }
         Materialize.toast(text, 2000, color);
     });
+}
+
+/*
+    Format text to be displayed
+*/
+function formatText(text, length) {
+    var response = text;
+    if (response.length > length) {
+        response = '<span class="tooltipped" data-position="top" data-delay="50"' +
+                   'data-tooltip="' + text + '">' + text.substr(0, length) + "… </span>";
+    }
+    return response;
+}
+
+/*
+    Add lease button at the end of the date
+*/
+function formatLeaseBtn(date, instance) {
+    return date += '<span class="waves-effect waves-light ' +
+                   ' new badge hoverable"' +
+                   ' data-badge-caption="new lease" onClick="updateLease(\''+
+                   instance + '\')"></span>';
 }

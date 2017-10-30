@@ -19,8 +19,7 @@ var FLAVOR_PARAMS_DESC = {
     'max': 'Max'
 };
 
-
-
+/* Activate flavor menu */
 function activeFlavorMenu() {
     var sort_css='';
     if (!FLAVOR_ORDER) {
@@ -52,4 +51,19 @@ function refreshFlavorDiv(sort_params, min_value, sort_order) {
     var sorted_data = sortOnParams(FLAVOR_SORT_PARAMS, FLAVORS, FLAVOR_ORDER);
 
     buildFlavorsView(sorted_data, FLAVOR_MIN, FLAVOR_DIV_NAME);
+}
+
+/* Change slide-out menu or disable menu button */
+function menuSelector(tab_name, enable) {
+    if (enable) {
+        // We remove the disable class (if was present)
+        $('#menu').removeClass('disabled');
+        // We put the slide-out version for the current tab
+        $('#menu').attr('data-activates', 'slide-out-'+tab_name);
+        // We reload the slide button effect
+        $(".btn-slide").sideNav();
+    } else {
+        // We disable the menu and don't care about menu action
+        $('#menu').addClass('disabled');
+    }
 }

@@ -1,0 +1,19 @@
+<!-- Slide out for Flavors -->
+<ul id="slide-out-flavors" class="side-nav">
+    <li><a class="subheader">Sorted by</a></li>
+    <li id="name" onClick="refreshFlavorDiv('name', FLAVOR_MIN, FLAVOR_ORDER)"><a href="#!" id="name_desc">Name</a></li>
+    <li id="cpu" onClick="refreshFlavorDiv('cpu', FLAVOR_MIN, FLAVOR_ORDER)"><a href="#!" id="cpu_desc">CPU</a></li>
+    <li id="ram" onClick="refreshFlavorDiv('ram', FLAVOR_MIN, FLAVOR_ORDER)"><a href="#!" id="ram_desc">RAM</a></li>
+    <li id="disk" onClick="refreshFlavorDiv('disk', FLAVOR_MIN, FLAVOR_ORDER)"><a href="#!" id="disk_desc">Disk</a></li>
+    <li id="free" onClick="refreshFlavorDiv('free', FLAVOR_MIN, FLAVOR_ORDER)"><a href="#!" id="free_desc">Free</a></li>
+    <li id="max" onClick="refreshFlavorDiv('max', FLAVOR_MIN, FLAVOR_ORDER)"><a href="#!" id="max_desc">Max</a></li>
+</ul>
+
+{% if request.user.is_superuser %}
+<!-- Slide out for Administration menu -->
+<ul id="slide-out-admin" class="side-nav">
+    <li><a class="subheader">Menu</a></li>
+    <li id="instances-menu-admin" class="active"><a href="#!" id="instances_desc">Instances</a></li>
+    <li id="database-menu-admin"><a href="#!" id="database_desc">Database</a></li>
+</ul>
+{% endif %}
