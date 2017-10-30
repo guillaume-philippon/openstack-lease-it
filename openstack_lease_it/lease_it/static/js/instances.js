@@ -51,7 +51,7 @@ function buildInstancesView(div_name, get_option, show_user){
                     if (response.length > MAX_USERNAME_LENGTH) {
                         response = '<span class="tooltipped" data-position="top"' +
                                    'data-delay="50" data-tooltip="' + data + '">' +
-                        data.substr( 0, MAX_USERNAME_LENGTH ) + "…" + '</span>'
+                                   data.substr( 0, MAX_USERNAME_LENGTH ) + "…" + '</span>'
                     }
                 }
                 return response
