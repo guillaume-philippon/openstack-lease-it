@@ -11,7 +11,7 @@
 /* Global variables
  - MAX_USERNAME_LENGTH: Maximum length of username
 */
-MAX_USERNAME_LENGTH = 2
+MAX_USERNAME_LENGTH = 15
 
 /*
     buildInstancesView create a full display of Instance on div_name
