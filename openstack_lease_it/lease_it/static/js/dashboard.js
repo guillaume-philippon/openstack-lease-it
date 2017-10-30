@@ -67,3 +67,16 @@ function menuSelector(tab_name, enable) {
         $('#menu').addClass('disabled');
     }
 }
+
+/* Swap admin tables */
+function swapAdminTables(type) {
+    var to_hide = 'database';
+    // If we want to display database, so we hide instances
+    if (type == 'database') {
+        to_hide = 'instances';
+    }
+    $('#table-admin-' + type + '_wrapper').show();
+    $('#menu-admin-' + type).addClass('active');
+    $('#table-admin-' + to_hide  + '_wrapper').hide();
+    $('#menu-admin-' + to_hide).removeClass('active');
+}

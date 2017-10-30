@@ -5,6 +5,7 @@
         <script src="/static/js/utils.js" type="text/javascript"></script>
         <script src="/static/js/flavors.js" type="text/javascript"></script>
         <script src="/static/js/instances.js" type="text/javascript"></script>
+        <script src="/static/js/database.js" type="text/javascript"></script>
         <script src="/static/js/dashboard.js" type="text/javascript"></script>
 {% endblock %}
 {% block javascript %}
@@ -25,7 +26,12 @@ $(function() {
 
     buildInstancesView('instances', 'filtered=True', false);
 {% if request.user.is_superuser %}
+    /* We build instances admin tables and database admin table*/
     buildInstancesView('admin-instances', 'filtered=False', true);
+    buildDatabaseView('admin-database');
+    /* We hide database admin table, as dataTable create a div wrapper,
+    we hide the wrapper to avoid the view for pagination / search */
+    $('#table-admin-database_wrapper').hide();
 {% endif %}
     $(".btn-slide").sideNav();
 });
@@ -103,6 +109,16 @@ $(function() {
                             <th>Project</th>
                             <th>Started at</th>
                             <th>End Of Life</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <table class="striped" id="table-admin-database" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Instance id</th>
+                            <th>Last Heartbeat</th>
+                            <th>Last Lease</th>
                         </tr>
                     </thead>
                     <tbody></tbody>

@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 from lease_it import backend
 from lease_it.backend import Exceptions as bckExceptions  # pylint: disable=ungrouped-imports
+from lease_it.datastore.ModelAccess import InstancesAccess
 
 from openstack_lease_it.settings import GLOBAL_CONFIG, LOGGER
 from openstack_lease_it.decorators import superuser_required
@@ -125,3 +126,15 @@ def users(request):  # pylint: disable=unused-argument
     """
     response = BACKEND.users()
     return JsonResponse(response)
+
+
+@superuser_required
+def database(request): # pylint: disable=unused-argument
+    """
+    View for all entries on database, used to delete old instances data
+    :param request: Web request
+    :return: JSonResponse w/ list of database entries
+    """
+    response = InstancesAccess.get_all()
+    # By default, JsonResponse refuse to serialize a list to a Json list. safe=False allow it.
+    return JsonResponse(response, safe=False)

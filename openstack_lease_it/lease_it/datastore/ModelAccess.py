@@ -37,6 +37,23 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
         return model
 
     @staticmethod
+    def get_all():
+        """
+        Return all data on database
+        :return: dict of data
+        """
+        response = list()
+        model = Instances.objects.all()  # pylint: disable=no-member
+        for instance in model:
+            response.append({
+                'instance_id': instance.id,
+                'leased_at': instance.leased_at,
+                'heartbeat_at': instance.heartbeat_at
+            })
+        return response
+
+
+    @staticmethod
     def show(instances):
         """
         Return a list of instances store on database
