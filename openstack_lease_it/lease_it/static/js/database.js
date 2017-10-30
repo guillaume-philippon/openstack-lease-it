@@ -23,9 +23,11 @@ function buildDatabaseView(div_name) {
                 targets: [0],
                 render: function ( data, type, row ) {
                     var now = new Date()
-                    var lease_end_date = new Date(row.lease_end)
-                    if (lease_end_date < now) {
-                        return '<i class="material-icons red-text">delete_forever</i>' +
+                    var heartbeat_date = new Date(row.lease_end)
+                    // If a VM as not been seen since 1 week, we can delete it
+                    // 7 * 25 * 60 * 60 * 1000 = 604800000
+                    if (heartbeat_date < now - 604800000) {
+                        return '<i class="material-icons red-text">delete_forever</i> ' +
                             formatText(data, MAX_STRING_LENGTH);
                     } else {
                         return formatText(data, MAX_STRING_LENGTH);
