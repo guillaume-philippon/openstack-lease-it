@@ -11,7 +11,7 @@
 /* Global variables
  - MAX_USERNAME_LENGTH: Maximum length of username
 */
-MAX_USERNAME_LENGTH = 15
+const MAX_USERNAME_LENGTH = 15;
 
 /*
     buildInstancesView create a full display of Instance on div_name
@@ -51,10 +51,10 @@ function buildInstancesView(div_name, get_option, show_user){
                     if (response.length > MAX_USERNAME_LENGTH) {
                         response = '<span class="tooltipped" data-position="top"' +
                                    'data-delay="50" data-tooltip="' + data + '">' +
-                                   data.substr( 0, MAX_USERNAME_LENGTH ) + "…" + '</span>'
+                                   data.substr( 0, MAX_USERNAME_LENGTH ) + "…" + '</span>';
                     }
                 }
-                return response
+                return response;
             }
         } ],
         drawCallback: function(settings, json) {

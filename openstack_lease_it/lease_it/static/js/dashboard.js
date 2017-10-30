@@ -57,13 +57,13 @@ function refreshFlavorDiv(sort_params, min_value, sort_order) {
 function menuSelector(tab_name, enable) {
     if (enable) {
         // We remove the disable class (if was present)
-        $('#menu').removeClass('disabled')
+        $('#menu').removeClass('disabled');
         // We put the slide-out version for the current tab
-        $('#menu').attr('data-activates', 'slide-out-'+tab_name)
+        $('#menu').attr('data-activates', 'slide-out-'+tab_name);
         // We reload the slide button effect
         $(".btn-slide").sideNav();
     } else {
         // We disable the menu and don't care about menu action
-        $('#menu').addClass('disabled')
+        $('#menu').addClass('disabled');
     }
 }
