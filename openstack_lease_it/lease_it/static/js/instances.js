@@ -11,7 +11,7 @@
 /* Global variables
  - MAX_USERNAME_LENGTH: Maximum length of username
 */
-const MAX_USERNAME_LENGTH = 15;
+const MAX_STRING_LENGTH = 30;
 
 /*
     buildInstancesView create a full display of Instance on div_name
@@ -43,20 +43,12 @@ function buildInstancesView(div_name, get_option, show_user){
         columns: table_columns,
         lengthChange: false,
         pageLength: 25,
-        columnDefs: [ {
-            targets: 0,
-            render: function ( data, type, row ) {
-                response = data;
-                if (show_user) {
-                    if (response.length > MAX_USERNAME_LENGTH) {
-                        response = '<span class="tooltipped" data-position="top"' +
-                                   'data-delay="50" data-tooltip="' + data + '">' +
-                                   data.substr( 0, MAX_USERNAME_LENGTH ) + "…" + '</span>';
-                    }
+        columnDefs: [{
+                targets: [0, 1, 2],
+                render: function ( data, type, row ) {
+                        return formatText(data, MAX_STRING_LENGTH);
                 }
-                return response;
-            }
-        } ],
+            }],
         drawCallback: function(settings, json) {
             $(".tooltipped").tooltip();
         },
@@ -90,4 +82,16 @@ function updateLease(instance) {
         }
         Materialize.toast(text, 2000, color);
     });
+}
+
+/*
+    Format text to be displayed
+*/
+function formatText(text, length) {
+    var response = text;
+    if (response.length > length) {
+        response = '<span class="tooltipped" data-position="top" data-delay="50"' +
+                   'data-tooltip="' + text + '">' + text.substr(0, length) + "… </span>";
+    }
+    return response;
 }
