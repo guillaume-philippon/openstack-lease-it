@@ -4,8 +4,9 @@
 function buildDatabaseView(div_name) {
     var table_columns = [
         { data: 'instance_id' },
+        { data: 'heartbeat_at' },
         { data: 'leased_at' },
-        { data: 'heartbeat_at' }
+        { data: 'lease_end' }
     ];
     $('#table-' + div_name).DataTable({
         ajax: {

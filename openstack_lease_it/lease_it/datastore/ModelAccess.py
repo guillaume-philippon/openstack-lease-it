@@ -48,7 +48,8 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
             response.append({
                 'instance_id': instance.id,
                 'leased_at': instance.leased_at,
-                'heartbeat_at': instance.heartbeat_at
+                'heartbeat_at': instance.heartbeat_at,
+                'lease_end': instance.leased_at + relativedelta(days=+instance.lease_duration)
             })
         return response
 
