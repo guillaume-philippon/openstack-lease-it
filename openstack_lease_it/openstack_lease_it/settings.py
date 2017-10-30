@@ -153,26 +153,35 @@ else:
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(asctime)s: %(message)s'
+        },
+    },
     'handlers': {
         'django': {
             'level': GLOBAL_CONFIG['LOGLEVEL'],
             'class': 'logging.FileHandler',
-            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'django.log')
+            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'django.log'),
+            'formatter': 'simple'
         },
         'main': {
             'level': GLOBAL_CONFIG['LOGLEVEL'],
             'class': 'logging.FileHandler',
-            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'main.log')
+            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'main.log'),
+            'formatter': 'simple'
         },
         'notification': {
             'level': GLOBAL_CONFIG['LOGLEVEL'],
             'class': 'logging.FileHandler',
-            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'notification.log')
+            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'notification.log'),
+            'formatter': 'simple'
         },
         'instances': {
             'level': GLOBAL_CONFIG['LOGLEVEL'],
             'class': 'logging.FileHandler',
-            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'instances.log')
+            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'instances.log'),
+            'formatter': 'simple'
         },
     },
     'loggers': {
