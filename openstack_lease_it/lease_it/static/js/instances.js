@@ -11,7 +11,7 @@
 /* Global variables
  - MAX_USERNAME_LENGTH: Maximum length of username
 */
-MAX_USERNAME_LENGTH = 15
+MAX_USERNAME_LENGTH = 2
 
 /*
     buildInstancesView create a full display of Instance on div_name
@@ -57,9 +57,9 @@ function buildInstancesView(div_name, get_option, show_user){
                 return response
             }
         } ],
-        initComplete: function(settings, json) {
+        drawCallback: function(settings, json) {
             $(".tooltipped").tooltip();
-        }
+        },
     });
     $( "#progress-bar-" + div_name ).hide();
 }
