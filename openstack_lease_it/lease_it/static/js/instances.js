@@ -46,15 +46,20 @@ function buildInstancesView(div_name, get_option, show_user){
         columnDefs: [ {
             targets: 0,
             render: function ( data, type, row ) {
+                response = data;
                 if (show_user) {
-                    return data.length > MAX_USERNAME_LENGTH ?
-                       data.substr( 0, MAX_USERNAME_LENGTH ) +'…' :
-                       data;
-                } else {
-                    return data
+                    if (response.length > MAX_USERNAME_LENGTH) {
+                        response = '<span class="tooltipped" data-position="top"' +
+                                   'data-delay="50" data-tooltip="' + data + '">' +
+                        data.substr( 0, MAX_USERNAME_LENGTH ) + "…" + '</span>'
+                    }
                 }
+                return response
             }
-        } ]
+        } ],
+        initComplete: function(settings, json) {
+            $(".tooltipped").tooltip();
+        }
     });
     $( "#progress-bar-" + div_name ).hide();
 }
