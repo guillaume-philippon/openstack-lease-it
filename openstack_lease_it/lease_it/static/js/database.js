@@ -46,12 +46,12 @@ function buildDatabaseView(div_name) {
     buildDatabaseRowMenu build a menu for each row of Database Table
 */
 function buildDatabaseRowMenu(data) {
-    menu = '<a class="btn-floating waves-effect waves-light tiny" onClick="swapDatabaseRowMenu(\'' + data + '\')">' +
-           '<i class="material-icons" id="database-icon-' + data + '">chevron_right</i></a> ' +
-           '<span hidden id="database-delete-' + data + '">' +
-           '<a class="btn-floating waves-effect waves-light red lighten-2"' +
-           'onClick="deleteDatabase(\'' + data + '\')">' +
-           '<i class="material-icons">delete</i></a></span> ';
+    var menu = '<a class="btn-floating waves-effect waves-light tiny" onClick="swapDatabaseRowMenu(\'' + data + '\')">' +
+               '<i class="material-icons" id="database-icon-' + data + '">chevron_right</i></a> ' +
+               '<span hidden id="database-delete-' + data + '">' +
+               '<a class="btn-floating waves-effect waves-light red lighten-2"' +
+               'onClick="deleteDatabase(\'' + data + '\')">' +
+               '<i class="material-icons">delete</i></a></span> ';
     return menu;
 }
 
