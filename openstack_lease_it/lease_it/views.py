@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from lease_it import backend
 from lease_it.backend import Exceptions as bckExceptions  # pylint: disable=ungrouped-imports
 from lease_it.datastore.ModelAccess import InstancesAccess
+from lease_it.datastore.Exceptions import StillRunning
 
 from openstack_lease_it.settings import GLOBAL_CONFIG, LOGGER
 from openstack_lease_it.decorators import superuser_required
@@ -129,7 +130,7 @@ def users(request):  # pylint: disable=unused-argument
 
 
 @superuser_required
-def database(request): # pylint: disable=unused-argument
+def databases(request): # pylint: disable=unused-argument
     """
     View for all entries on database, used to delete old instances data
     :param request: Web request
@@ -138,3 +139,25 @@ def database(request): # pylint: disable=unused-argument
     response = InstancesAccess.get_all()
     # By default, JsonResponse refuse to serialize a list to a Json list. safe=False allow it.
     return JsonResponse(response, safe=False)
+
+
+@superuser_required
+def database(request, instance_id): # pylint: disable=unused-argument
+    """
+    This view is used to delete instance from database
+    :param request: Web request
+    :param instance_id: instance id
+    :return: JSonResponse w/ status of deletion
+    """
+    response = {
+        'status': 'success',
+        'instance': {'id': instance_id}
+    }
+    try:
+        InstancesAccess.delete(instance_id)
+    except StillRunning as error:
+        response = {
+            'status': 'failed',
+            'message': error.message
+        }
+    return JsonResponse(response)

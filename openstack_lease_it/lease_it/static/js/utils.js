@@ -29,3 +29,35 @@ function sortOnParams(params, dict, isReverse) {
     }
     return tempDict;
 }
+
+/*
+    Notify user by a toast message and reload dataTables
+*/
+function notify(data) {
+    var text = 'Default message',
+        color;
+    var datatables = [
+        '#table-instances',
+        '#table-admin-instances',
+        '#table-admin-database'
+    ];
+    try {
+        text = data.instance.name;
+        if (typeof text === "undefined") {
+            text = data.instance.id;
+        }
+    } catch(err) {
+        text = data.message;
+    }
+    if (data.status == "success") {
+        color = "teal";
+    } else {
+        color = "red";
+    }
+    for (let datatable=0; datatable < datatables.length; datatable++) {
+        if ($(datatables[datatable]).length) {
+            $(datatables[datatable]).DataTable().ajax.reload();
+        }
+    }
+    Materialize.toast(text, 2000, color);
+}

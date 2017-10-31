@@ -4,13 +4,20 @@ ModelAccess module is a interface between Django model and view
 """
 
 from dateutil.relativedelta import relativedelta
+
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
+
 from lease_it.models import Instances
+
+from lease_it.datastore.Exceptions import StillRunning
+
 from openstack_lease_it.settings import LOGGER_INSTANCES
 
 # Default lease duration in day
 LEASE_DURATION = 90
+# Number of day we keep instance in database
+HEARTBEAT_TIMEOUT = 7
 
 
 class InstancesAccess(object):  # pylint: disable=too-few-public-methods
@@ -52,7 +59,6 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
                 'lease_end': instance.leased_at + relativedelta(days=+instance.lease_duration)
             })
         return response
-
 
     @staticmethod
     def show(instances):
@@ -110,3 +116,19 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
         model.leased_at = timezone.now()
         model.save()
         LOGGER_INSTANCES.info('Instance %s as been leased (%s)', model.id, model.heartbeat_at)
+
+    @staticmethod
+    def delete(instance_id):
+        """
+        Remove instance entry on database. If the VM is still running, the VM will be recreated
+        on next spy instance running
+        :param instance_id: instance to delete
+        :return: None
+        """
+        try:
+            model = Instances.objects.get(id=instance_id)  # pylint: disable=no-member
+            if model.heartbeat_at + relativedelta(days=+HEARTBEAT_TIMEOUT) > timezone.now().date():
+                raise StillRunning(model.id, model.heartbeat_at)
+            model.delete()
+        except ObjectDoesNotExist:
+            LOGGER_INSTANCES.info('Instance %s does not exist', instance_id)

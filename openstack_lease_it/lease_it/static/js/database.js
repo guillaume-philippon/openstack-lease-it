@@ -1,3 +1,6 @@
+// 7 * 25 * 60 * 60 * 1000 = 604800000
+const HEARTBEAT_TIMEOUT = 604800000;
+
 /*
     buildDatabaseView create a full display of Da on div_name
 */
@@ -25,8 +28,7 @@ function buildDatabaseView(div_name) {
                     var now = new Date();
                     var heartbeat_date = new Date(row.heartbeat_at);
                     // If a VM as not been seen since 1 week, we can delete it
-                    // 7 * 25 * 60 * 60 * 1000 = 604800000
-                    if (heartbeat_date < now - 604800000) {
+                    if (heartbeat_date < now - HEARTBEAT_TIMEOUT) {
                         return buildDatabaseRowMenu(data) +
                                formatText(data, MAX_STRING_LENGTH);
                     } else {
@@ -68,7 +70,9 @@ function swapDatabaseRowMenu(button) {
 /*
     deleteDatabase delete entry in database
 */
-function deleteDatabase(entry) {
-    console.log('Entry: ' + entry + ' as been deleted');
-    swapDatabaseRowMenu(entry);
+function deleteDatabase(instance) {
+    return $.getJSON("/database/" + instance, function(data){
+    }).success(function(data){
+        notify(data);
+    });
 }
