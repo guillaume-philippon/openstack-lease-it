@@ -6,6 +6,9 @@ of API
 """
 from django.utils.dateparse import parse_datetime
 from django.core.cache import cache
+from django.utils import timezone
+
+from dateutil.relativedelta import relativedelta
 
 from lease_it.backend.OpenstackConnection import OpenstackConnection, INSTANCES_CACHE_TIMEOUT,\
     PROJECTS_CACHE_TIMEOUT, USERS_CACHE_TIMEOUT, FLAVOR_CACHE_TIMEOUT
@@ -34,35 +37,35 @@ class TestConnection(OpenstackConnection):
                         'project_id': 'project-01',
                         'id': 'instance-01',
                         'name': 'instance-name-01',
-                        'created_at': parse_datetime('2017-04-29T17:40:26Z').date()
+                        'created_at': timezone.now().date() + relativedelta(days=-300)
                     },
                 'instance-02': {
                     'user_id': 1,
                     'project_id': 'project-01',
                     'id': 'instance-02',
                     'name': 'instance-name-02',
-                    'created_at': parse_datetime('2017-10-29T17:40:26Z').date()
+                    'created_at': timezone.now().date() + relativedelta(days=-30)
                 },
                 'instance-03': {
                     'user_id': 2,
                     'project_id': 'project-01',
                     'id': 'instance-03',
                     'name': 'instance-name-03',
-                    'created_at': parse_datetime('2016-04-29T17:40:26Z').date()
+                    'created_at': timezone.now().date() + relativedelta(days=-30)
                 },
                 'instance-04': {
                     'user_id': 2,
                     'project_id': 'project-01',
                     'id': 'instance-04',
                     'name': 'instance-name-04',
-                    'created_at': parse_datetime('2017-10-29T17:40:26Z').date()
+                    'created_at': timezone.now().date() + relativedelta(days=-30)
                 },
                 'instance-05': {
                     'user_id': 1,
                     'project_id': 'project-01',
                     'id': 'instance-05',
                     'name': 'instance-name-05',
-                    'created_at': parse_datetime('2017-04-29T17:40:26Z').date()
+                    'created_at': timezone.now().date() + relativedelta(days=-30)
                 },
             }
             cache.set('instances', response, INSTANCES_CACHE_TIMEOUT)
@@ -152,13 +155,13 @@ class TestConnection(OpenstackConnection):
                 1: {
                     'id': 1,
                     'domain_id': 'domain-01',
-                    'name': 'John Doe',
+                    'name': 'John.Doe',
                     'email': 'john.doe'
                 },
                 2: {
                     'id': 2,
                     'domain_id': 'domain-id-02',
-                    'name': 'Jane Smith',
+                    'name': 'Jane.Smith is have a very long #name',
                     'email': 'jane.smith@full.domain.com'
                 },
             }
