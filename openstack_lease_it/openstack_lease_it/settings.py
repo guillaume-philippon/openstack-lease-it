@@ -15,18 +15,18 @@ import os
 import ast
 import logging
 
-from openstack_lease_it.config import load_config
+from openstack_lease_it.config import GLOBAL_CONFIG, load_config
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Load configuration from configuration file
-GLOBAL_CONFIG = load_config()
+# Load configuration
+load_config()
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = GLOBAL_CONFIG['SECRET_KEY']
+SECRET_KEY = GLOBAL_CONFIG['DJANGO_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = ast.literal_eval(GLOBAL_CONFIG['DEBUG'])
+DEBUG = ast.literal_eval(GLOBAL_CONFIG['DJANGO_DEBUG'])
 
 # ALLOWED_HOSTS secure django app access
 ALLOWED_HOSTS = []
@@ -160,49 +160,49 @@ LOGGING = {
     },
     'handlers': {
         'django': {
-            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'level': GLOBAL_CONFIG['DJANGO_LOGLEVEL'],
             'class': 'logging.FileHandler',
-            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'django.log'),
+            'filename': os.path.join(GLOBAL_CONFIG['DJANGO_LOGDIR'], 'django.log'),
             'formatter': 'simple'
         },
         'main': {
-            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'level': GLOBAL_CONFIG['DJANGO_LOGLEVEL'],
             'class': 'logging.FileHandler',
-            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'main.log'),
+            'filename': os.path.join(GLOBAL_CONFIG['DJANGO_LOGDIR'], 'main.log'),
             'formatter': 'simple'
         },
         'notification': {
-            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'level': GLOBAL_CONFIG['DJANGO_LOGLEVEL'],
             'class': 'logging.FileHandler',
-            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'notification.log'),
+            'filename': os.path.join(GLOBAL_CONFIG['DJANGO_LOGDIR'], 'notification.log'),
             'formatter': 'simple'
         },
         'instances': {
-            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'level': GLOBAL_CONFIG['DJANGO_LOGLEVEL'],
             'class': 'logging.FileHandler',
-            'filename': os.path.join(GLOBAL_CONFIG['LOGDIR'], 'instances.log'),
+            'filename': os.path.join(GLOBAL_CONFIG['DJANGO_LOGDIR'], 'instances.log'),
             'formatter': 'simple'
         },
     },
     'loggers': {
         'django': {
             'handlers': ['django'],
-            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'level': GLOBAL_CONFIG['DJANGO_LOGLEVEL'],
             'propagate': True,
         },
         'main': {
             'handlers': ['main'],
-            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'level': GLOBAL_CONFIG['DJANGO_LOGLEVEL'],
             'propagate': True,
         },
         'notification': {
             'handlers': ['notification'],
-            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'level': GLOBAL_CONFIG['DJANGO_LOGLEVEL'],
             'propagate': True,
         },
         'instances': {
             'handlers': ['instances'],
-            'level': GLOBAL_CONFIG['LOGLEVEL'],
+            'level': GLOBAL_CONFIG['DJANGO_LOGLEVEL'],
             'propagate': True,
         },
     },
