@@ -62,25 +62,7 @@ function buildInstancesView(div_name, get_option, show_user){
 function updateLease(instance) {
     return $.getJSON("/instances/" + instance, function(data){
     }).success(function(data){
-        var text,
-            color;
-
-        try {
-            text = data.instance.name;
-        } catch(err) {
-            text = data.message;
-        }
-        if (data.status == "success") {
-            color = "teal";
-        } else {
-            color = "red";
-        }
-        $('#table-instances').DataTable().ajax.reload();
-        /* If table-admin-instances exist, we also update it. */
-        if ( $('#table-admin-instances').length ) {
-            $('#table-admin-instances').DataTable().ajax.reload();
-        }
-        Materialize.toast(text, 2000, color);
+        notify(data);
     });
 }
 

@@ -22,9 +22,12 @@ urlpatterns = [  # pylint: disable=invalid-name
     url(r'^flavors', 'lease_it.views.flavors', name='flavors'),
 
     # Instances view
-    url(r'^instances$', 'lease_it.views.instances', name='instances'),
+    url(r'^instances[/]?$', 'lease_it.views.instances', name='instances'),
     url(r'^instances/(?P<instance_id>[\w-]+)$', 'lease_it.views.instance', name='instance'),
 
+    # Database view
+    url(r'^database[/]?$', 'lease_it.views.databases', name='databases'),
+    url(r'^database/(?P<instance_id>[\w-]+)$', 'lease_it.views.database', name='database'),
 
     # Users view
     url(r'^users', 'lease_it.views.users', name='users')
