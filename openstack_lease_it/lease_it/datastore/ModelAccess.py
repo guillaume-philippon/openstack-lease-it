@@ -29,6 +29,7 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
     def get(instance):
         """
         Get or Create instance on model backend
+
         :param instance: instance to get
         :return: Instance model
         """
@@ -47,6 +48,7 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
     def get_all():
         """
         Return all data on database
+
         :return: dict of data
         """
         response = list()
@@ -64,6 +66,7 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
     def show(instances):
         """
         Return a list of instances store on database
+
         :return: dict of instances
         """
         response = dict()
@@ -97,6 +100,7 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
         get a instance and update the heartbeat value. This method is called by
         instance-spy when it find a instance running. Heartbeat can be use to retrieve
         old Virtual Machine
+
         :param instance: instance to update
         :return: None
         """
@@ -109,6 +113,7 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
     def lease(instance):
         """
         get a instance and update the leased_at value.
+
         :param instance: instance to lease
         :return: None
         """
@@ -122,6 +127,7 @@ class InstancesAccess(object):  # pylint: disable=too-few-public-methods
         """
         Remove instance entry on database. If the VM is still running, the VM will be recreated
         on next spy instance running
+
         :param instance_id: instance to delete
         :return: None
         """

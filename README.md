@@ -5,6 +5,8 @@ OpenStack lease-it add some useful feature to monitor a OpenStack instances
  * Add a **lease** feature to OpenStack that force user to renew a lease to keep instance
   running. If a lease expire, the instance is killed
 
+To have a full documentation see [read the doc](http://openstack-lease-it.readthedocs.io/en/latest/).
+
 ## Installation
 #### Installation dependencies (CentOS 7.x)
 ```shell

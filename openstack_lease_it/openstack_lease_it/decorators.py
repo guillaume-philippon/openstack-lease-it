@@ -9,6 +9,7 @@ def superuser_required(view):
     """
     If superuser access is required for a specific view, we use
     @superuser_required decorator
+
     :param view: As parameter, we have the view function
     :return: function
     """
