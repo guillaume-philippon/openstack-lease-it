@@ -25,11 +25,11 @@ box# pip install -r requirements.txt
 #### Configuration file and test
 ```shell
 box# mkdir -p /etc/openstack-lease-it
-box# cp openstack_lease_it/lease-it.cfg.example /etc/openstack-lease-it/config.ini
+box# cp openstack_lease_it/config/lease-it.cfg.example /etc/openstack-lease-it/config.ini
 ```
-Modify `/etc/openstack-lease-it/config.ini to match your configuration. You must also need to 
-disabled selinux to allow apache to read /etc/openstack-lease-it/config.ini or configure it to allow
- that.
+Modify `/etc/openstack-lease-it/config.ini` to match your configuration. You must also need to 
+disabled selinux to allow apache to read `/etc/openstack-lease-it/config.ini` or configure it to
+allow that.
 
 You must modify `/opt/openstack-lease-it/openstack_lease_it/openstack_lease_it/settings.py` to change
 ```ini
@@ -46,29 +46,13 @@ box# chown -R apache:apache .
 ```
 
 #### Configure Apache
-We put apache config on `/etc/httpd/conf.d/lease-it.conf`
-```apache
-WSGIScriptAlias / /opt/openstack-lease-it/openstack_lease_it/openstack_lease_it/wsgi.py
-#WSGIPythonHome /path/to/venv
-WSGIPythonPath /opt/openstack-lease-it/openstack_lease_it
-
-Alias /static/ /opt/openstack-lease-it/openstack_lease_it/lease_it/static/ 
-Alias /media/ /opt/openstack-lease-it/openstack_lease_it/lease_it/media/
-
-<Directory /opt/openstack-lease-it/openstack_lease_it/openstack_lease_it/>
-  <Files wsgi.py>
-    Require all granted
-  </Files>
-</Directory>
-
-<Directory /opt/openstack-lease-it/openstack_lease_it/lease_it/static/>
-  Require all granted
-</Directory>
-
-<Directory /opt/openstack-lease-it/openstack_lease_it/lease_it/media/>
-  Require all granted
-</Directory>
+We copy apache config to `/etc/httpd/conf.d/lease-it.conf`
+```shell
+box# mkdir -p /etc/openstack-lease-it
+box# cp openstack_lease_it/config/http-lease-it.conf /etc/httpd/conf.d/lease-it.conf
 ```
+You should modify it to match your configuration but if you follow the current guide, there are no
+modification to do.
 
 After apache configuration you must restart httpd service with the following command
 ```shell
@@ -85,8 +69,8 @@ box# chown -R apache:apache /var/log/openstack-lease-it
 To monitor instances and notify user when a instance is close to expire, we use a crontab. To do
 so, put the cron script to cron directory
 ```shell
-box# cp openstack_lease_it/instance-spy.cron /etc/cron.weekly/
-box# chmod +x /etc/cron.weekly/instance-spy.cron
+box# cp openstack_lease_it/config/instance-spy.cron /etc/cron.weekly/
+box# chmod +x /etc/cron.daily/instance-spy.cron
 ```
 
 Make sure that the PYTHONPATH on script is in the right place. This script should also be modified 
