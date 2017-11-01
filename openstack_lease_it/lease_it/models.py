@@ -1,13 +1,14 @@
 # pylint: skip-file
 """
 model for django database. Use for 2 differents cases:
-* Cache some data to avoid useless overload on OpenStack infrastructure
-   - instances informations
-   - user informations
-   - ...
-* Store data that is not available on OpenStack
-   - lease time
-   - ...
+
+    * Cache some data to avoid useless overload on OpenStack infrastructure
+       - instances informations
+       - user informations
+       - ...
+    * Store data that is not available on OpenStack
+       - lease time
+       - ...
 """
 from django.db import models
 

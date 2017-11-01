@@ -185,9 +185,10 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
     def flavors(self):
         """
         Return a list of flavor and a detail about
-        * Their properties (CPU / Disk / RAM)
-        * The actual Cloud state (number of VM we can start, maximum
-        VM we can start if empty)
+
+            - Their properties (CPU / Disk / RAM)
+            - The actual Cloud state (number of VM we can start, maximum VM we can start if empty)
+
         :return: dict()
         """
         flavors = self._flavors()
@@ -229,6 +230,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
     def instances(self, request, filtered=False):
         """
         List all instances started on cluster and owned by user
+
         :param request: Web request, used to retrieve user id
         :param filtered: True if we only return user_id instances
         :return: dict()
@@ -245,11 +247,17 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         """
         Return a list of users w/ attributes
         id, first_name, last_name and email
+
         :return: dict of users
         """
         return self._users()
 
-    def projects(self):  # pylint: disable=missing-docstring, no-self-use
+    def projects(self):
+        """
+        Return a list of project w/ there id and name
+
+        :return: dict()
+        """
         # We retrieve information from memcached
         response = cache.get('projects')
         if not response:  # If not on memcached, we ask OpenStack
@@ -270,6 +278,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         If instance_id is owned by user_id, then update lease information, if not, raise
         PermissionDenied exception.
         A Openstack administrator can also update a lease for a user
+
         :param instance_id: id of instance
         :param request: Web request
         :return: void
@@ -285,6 +294,7 @@ class OpenstackConnection(object):  # pylint: disable=too-few-public-methods
         """
         spy_instances is started by instance_spy module and check all running VM + notify user
         if a VM is close to its lease time
+
         :return: dict()
         """
         now = date.today()

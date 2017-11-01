@@ -25,6 +25,7 @@ BACKEND = BACKEND_PLUGIN()  # pylint: disable=not-callable
 def dashboard(request):
     """
     The default dashboard
+
     :param request: Web request
     :return: HTML Rendering
     """
@@ -35,6 +36,7 @@ def dashboard(request):
 def flavors(request):  # pylint: disable=unused-argument
     """
     View for flavors request
+
     :param request: Web request
     :return: JsonResponse w/ list of flavor and details values
     """
@@ -47,6 +49,7 @@ def flavors(request):  # pylint: disable=unused-argument
 def instances(request):  #pylint: disable=unused-argument
     """
     View for instances list
+
     :param request: Web request
     :return: JsonResponse w/ list of instances and details
     """
@@ -99,6 +102,7 @@ def instance(request, instance_id):
     This is view used to for a new lease on a specific instance (http://url/instances/instance_id)
     a PermissionDenied exception is raised decided by backend. Mainly if instance is not owned by
     user but see Backend comment.
+
     :param request: Web request
     :param instance_id: retrieve from url
     :return: JsonResponse
@@ -122,6 +126,7 @@ def instance(request, instance_id):
 def users(request):  # pylint: disable=unused-argument
     """
     View for users
+
     :param request: Web request
     :return: JsonResponse w/ list of users and details
     """
@@ -133,6 +138,7 @@ def users(request):  # pylint: disable=unused-argument
 def databases(request): # pylint: disable=unused-argument
     """
     View for all entries on database, used to delete old instances data
+
     :param request: Web request
     :return: JSonResponse w/ list of database entries
     """
@@ -145,6 +151,7 @@ def databases(request): # pylint: disable=unused-argument
 def database(request, instance_id): # pylint: disable=unused-argument
     """
     This view is used to delete instance from database
+
     :param request: Web request
     :param instance_id: instance id
     :return: JSonResponse w/ status of deletion

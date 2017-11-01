@@ -20,6 +20,7 @@ BACKEND = BACKEND_PLUGIN()  # pylint: disable=not-callable
 def instance_spy():
     """
     Function used to run the script
+
     :return: void
     """
     instances = BACKEND.spy_instances()
@@ -36,6 +37,7 @@ def instance_spy():
 def admin_cli():
     """
     Admin Command Line Interface
+
     :return: void
     """
     return True
