@@ -6,9 +6,12 @@ This module manage configuration file.
 import ConfigParser
 import os
 
+# Default configuration directory
+BASE_CONFIG_DIR = '/etc/openstack-lease-it'
+
 # List possible configuration file, last item has highest priority
 CONFIG_FILES = (
-    '/etc/openstack-lease-it/config.ini',
+    BASE_CONFIG_DIR + '/config.ini',
     os.path.expanduser('~') + '/.lease-it.ini',
 )
 
@@ -36,7 +39,9 @@ GLOBAL_CONFIG = {
 
     # notification parameter
     'NOTIFICATION_DEBUG': 'False',
-    'NOTIFICATION_DOMAIN': ''
+    'NOTIFICATION_DOMAIN': '',
+    'NOTIFICATION_DELETE_CONTENT': BASE_CONFIG_DIR + '/delete-notification.txt',
+    'NOTIFICATION_LEASE_CONTENT': BASE_CONFIG_DIR + '/lease-notification.txt'
 }
 
 # Default options for section [section]
@@ -80,7 +85,9 @@ NOTIFICATION_OPTIONS = {
     'NOTIFICATION_SUBJECT': 'subject',
     'NOTIFICATION_LINK': 'link',
     'NOTIFICATION_DEBUG': 'debug',
-    'NOTIFICATION_DOMAIN': 'default_domain'
+    'NOTIFICATION_DOMAIN': 'default_domain',
+    'NOTIFICATION_DELETE_CONTENT': 'delete_content',
+    'NOTIFICATION_LEASE_CONTENT': 'lease_content'
 }
 
 # List all section available and  options associated

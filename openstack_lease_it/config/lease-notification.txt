@@ -1,0 +1,8 @@
+Hi {username},
+
+Some of your Virtual Machine on Cloud are close to expire, please update the lease date on
+{link} :
+{instances}
+
+--
+OpenStack Team
