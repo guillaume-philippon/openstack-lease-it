@@ -20,9 +20,11 @@ class MailNotification(object):  # pylint: disable=too-few-public-methods
         self.smtp = smtplib.SMTP_SSL(GLOBAL_CONFIG['NOTIFICATION_SMTP'])
         self.smtp.login(GLOBAL_CONFIG['NOTIFICATION_USERNAME'],
                         GLOBAL_CONFIG['NOTIFICATION_PASSWORD'])
+        delete_content = open(GLOBAL_CONFIG['NOTIFICATION_DELETE_CONTENT'], 'r')
+        lease_content = open(GLOBAL_CONFIG['NOTIFICATION_LEASE_CONTENT'], 'r')
         self.notification = {
-            'delete': open(GLOBAL_CONFIG['NOTIFICATION_DELETE_CONTENT'], 'r'),
-            'notify': open(GLOBAL_CONFIG['NOTIFICATION_LEASE_CONTENT'], 'r')
+            'delete': delete_content.read(),
+            'notify': lease_content.read()
         }
 
     @staticmethod
@@ -50,7 +52,7 @@ class MailNotification(object):  # pylint: disable=too-few-public-methods
         except KeyError:
             user_name = 'Unknown User'
             LOGGER_NOTIFICATION.info("User %s as not be found", user)
-        core_text = self.notification[notification_type].read()
+        core_text = self.notification[notification_type]
         instances_text = self.format_user_instances(instances)
         return core_text.format(username=user_name,
                                 link=GLOBAL_CONFIG['NOTIFICATION_LINK'],
