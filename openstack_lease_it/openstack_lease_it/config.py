@@ -25,11 +25,14 @@ GLOBAL_CONFIG = {
     'DJANGO_DEBUG': 'False',
     'DJANGO_LOGDIR': '/var/log/openstack-lease-it/',
     'DJANGO_LOGLEVEL': 'INFO',
+    'DJANGO_SECRET_KEY': 'Must_be_defined',  # Must be defined to allow sphinx to run
 
     # OpenStack parameters
     'OS_USERNAME': 'admin',
     'OS_TENANT_NAME': 'admin',
+    'OS_PASSWORD': 'admin_password',  # Must be defined to allow sphinx to run
     'OS_PROJECT_NAME': 'admin',
+    'OS_AUTH_URL': 'https://keystone.example.com',  # Must be defined to allow sphinx to run
     'OS_IDENTITY_API_VERSION': '3',
     'OS_USER_DOMAIN_NAME': 'default',
     'OS_PROJECT_DOMAIN_NAME': 'default',
