@@ -25,7 +25,7 @@ box# pip install -r requirements.txt
 #### Configuration file and test
 ```shell
 box# mkdir -p /etc/openstack-lease-it
-box# cp openstack_lease_it/config/lease-it.cfg.example /etc/openstack-lease-it/config.ini
+box# cp openstack_lease_it/config/* /etc/openstack-lease-it
 ```
 Modify `/etc/openstack-lease-it/config.ini` to match your configuration. You must also need to 
 disabled selinux to allow apache to read `/etc/openstack-lease-it/config.ini` or configure it to
