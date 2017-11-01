@@ -48,7 +48,6 @@ box# chown -R apache:apache .
 #### Configure Apache
 We copy apache config to `/etc/httpd/conf.d/lease-it.conf`
 ```shell
-box# mkdir -p /etc/openstack-lease-it
 box# cp openstack_lease_it/config/http-lease-it.conf /etc/httpd/conf.d/lease-it.conf
 ```
 You should modify it to match your configuration but if you follow the current guide, there are no
@@ -69,7 +68,7 @@ box# chown -R apache:apache /var/log/openstack-lease-it
 To monitor instances and notify user when a instance is close to expire, we use a crontab. To do
 so, put the cron script to cron directory
 ```shell
-box# cp openstack_lease_it/config/instance-spy.cron /etc/cron.weekly/
+box# cp openstack_lease_it/config/instance-spy.cron /etc/cron.daily/
 box# chmod +x /etc/cron.daily/instance-spy.cron
 ```
 
