@@ -8,26 +8,6 @@ import re
 from email.mime.text import MIMEText
 from openstack_lease_it.settings import GLOBAL_CONFIG, EMAIL_REGEXP, LOGGER_NOTIFICATION
 
-# Default file content
-MAIL_CONTENT = {'delete': """
-Hi {0},
-
-Some of your Virtual Machine on Cloud will been removed due to expire lease time, you can update
-the lease on {1} :
-{2}
-
---
-OpenStack team
-""",
-                'notify': """
-Hi {0},
-
-Some of your Virtual Machine on Cloud are close to expire, please update the lease date on 
-{1} :
-{2}
-"""}
-
-
 class MailNotification(object):  # pylint: disable=too-few-public-methods
     """
     A class to abstract e-mail notification
@@ -40,6 +20,10 @@ class MailNotification(object):  # pylint: disable=too-few-public-methods
         self.smtp = smtplib.SMTP_SSL(GLOBAL_CONFIG['NOTIFICATION_SMTP'])
         self.smtp.login(GLOBAL_CONFIG['NOTIFICATION_USERNAME'],
                         GLOBAL_CONFIG['NOTIFICATION_PASSWORD'])
+        self.notification = {
+            'delete': open(GLOBAL_CONFIG['NOTIFICATION_DELETE_CONTENT'], 'r'),
+            'notify': open(GLOBAL_CONFIG['NOTIFICATION_LEASE_CONTENT'], 'r')
+        }
 
     @staticmethod
     def format_user_instances(user):
@@ -66,11 +50,11 @@ class MailNotification(object):  # pylint: disable=too-few-public-methods
         except KeyError:
             user_name = 'Unknown User'
             LOGGER_NOTIFICATION.info("User %s as not be found", user)
-        core_text = MAIL_CONTENT[notification_type]
+        core_text = self.notification[notification_type].read()
         instances_text = self.format_user_instances(instances)
-        return core_text.format(user_name,
-                                GLOBAL_CONFIG['NOTIFICATION_LINK'],
-                                instances_text)
+        return core_text.format(username=user_name,
+                                link=GLOBAL_CONFIG['NOTIFICATION_LINK'],
+                                instances=instances_text)
 
     def send(self, notifications):
         """

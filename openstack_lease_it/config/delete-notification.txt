@@ -1,4 +1,4 @@
-Hi {name},
+Hi {username},
 
 Some of your Virtual Machine on Cloud will been removed due to expire lease time, you can update
 the lease on {link} :
