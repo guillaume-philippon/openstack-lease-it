@@ -18,7 +18,7 @@
 #
 import os
 import sys
-sys.path.append('../openstack_lease_it')
+sys.path.insert(0, os.path.abspath('../../openstack_lease_it'))
 os.environ["DJANGO_SETTINGS_MODULE"] = "openstack_lease_it.settings"
 
 # -- General configuration ------------------------------------------------
