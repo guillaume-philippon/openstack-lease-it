@@ -1,6 +1,8 @@
 #!/usr/local/bin/python2.7
 """
-View for app specific url
+Views module manage interface between user and openstack-lease-it.
+
+lease_it.views provide interaction based on REST good practice.
 """
 import ast
 

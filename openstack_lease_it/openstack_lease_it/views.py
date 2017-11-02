@@ -1,7 +1,10 @@
 #!/usr/local/bin/python2.7
 # -*- encoding: utf-8 -*-
 """
-This module manage django HTTP response (HTML rendering or JSONResponse)
+View module manage interaction between user and openstack-lease-it. It provide HTTP interface based
+on REST good practice.
+
+openstack_lease_it.view only provide core view
 """
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -12,6 +15,7 @@ from openstack_lease_it.settings import LOGGER
 def login(request):
     """
     Default login view when we not use openstack_auth module for authentication
+
     :param request: web request
     :return: HTML rendering
     """
@@ -29,6 +33,7 @@ def login(request):
 def logout(request):
     """
     Default page to logout, we redirect to /
+
     :param request: web request
     :return: HTML rendering
     """

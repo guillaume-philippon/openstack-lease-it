@@ -3,6 +3,7 @@
 This module define a list of homemade decorators
 """
 from django.core.exceptions import PermissionDenied
+from functools import wraps
 
 
 def superuser_required(view):
@@ -13,10 +14,12 @@ def superuser_required(view):
     :param view: As parameter, we have the view function
     :return: function
     """
+    @wraps(view)
     def wrap(request, *args, **kwargs):
         """
         Wrapper for view function. It check if user is a superuser. If not, raise a
         PermissionDenied exception
+
         :param request: web request
         :param args: package view function argument as a list
         :param kwargs: package view function argument as a dict()
