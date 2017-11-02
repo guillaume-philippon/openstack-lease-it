@@ -12,3 +12,8 @@ openstack_lease_it.decorators
 -----------------------------
 .. automodule:: openstack_lease_it.decorators
     :members:
+
+openstack_lease_it.views
+------------------------
+.. automodule:: openstack_lease_it.views
+    :members:

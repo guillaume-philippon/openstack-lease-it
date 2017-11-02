@@ -1,6 +1,8 @@
 #!/usr/local/bin/python2.7
 """
-View for app specific url
+Views module manage interface between user and openstack-lease-it.
+
+lease_it.views provide interaction based on REST good practice.
 """
 import ast
 
@@ -135,7 +137,7 @@ def users(request):  # pylint: disable=unused-argument
 
 
 @superuser_required
-def databases(request): # pylint: disable=unused-argument
+def databases(request):  # pylint: disable=unused-argument
     """
     View for all entries on database, used to delete old instances data
 
@@ -148,7 +150,7 @@ def databases(request): # pylint: disable=unused-argument
 
 
 @superuser_required
-def database(request, instance_id): # pylint: disable=unused-argument
+def database(request, instance_id):  # pylint: disable=unused-argument
     """
     This view is used to delete instance from database
 
