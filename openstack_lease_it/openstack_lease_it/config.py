@@ -4,16 +4,16 @@ This module manage configuration file.
     - /etc/openstack-lease-it/config.ini
     - $HOME/.lease-it.ini
 
-This module also provide **GLOBAL_CONFIG** variable used to share configuration across module / django
-apps.
+This module also provide **GLOBAL_CONFIG** variable used to share configuration across module /
+django apps.
 """
 import ConfigParser
 import os
 
 BASE_CONFIG_DIR = '/etc/openstack-lease-it'
 """
-To avoid some typo mistake, we use **BASE_CONFIG_DIR** to define the base directory for configuration
-files
+To avoid some typo mistake, we use **BASE_CONFIG_DIR** to define the base directory for
+configuration files
 """
 
 CONFIG_FILES = (
@@ -137,9 +137,12 @@ NOTIFICATION_OPTIONS = {
     - **NOTIFICATION_SUBJECT**: subject of the mail (file option: *subject*)
     - **NOTIFICATION_LINK**: url of lease-it server (file option: *link*)
     - **NOTIFICATION_DEBUG**: enable/disable user notification (file option: *debug*)
-    - **NOTIFICATION_DOMAIN**: default domain if email field not match email regexp (file option: *default_domain*)
-    - **NOTIFICATION_DELETE_CONTENT**: filename for mail content template (file option: *delete_content*)
-    - **NOTIFICATION_LEASE_CONTENT**: filename for mail content template (file option: *lease_content*)
+    - **NOTIFICATION_DOMAIN**: default domain if email field not match email regexp
+      (file option: *default_domain*)
+    - **NOTIFICATION_DELETE_CONTENT**: filename for mail content template
+      (file option: *delete_content*)
+    - **NOTIFICATION_LEASE_CONTENT**: filename for mail content template
+      (file option: *lease_content*)
 
 """
 
@@ -157,7 +160,7 @@ SECTIONS = {
     - **memcached**: section [memcached]
     - **plugins**: section [plugins]
     - **notification**: section [notification]
-    
+
 """
 
 
