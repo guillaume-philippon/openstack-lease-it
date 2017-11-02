@@ -137,7 +137,7 @@ def users(request):  # pylint: disable=unused-argument
 
 
 @superuser_required
-def databases(request): # pylint: disable=unused-argument
+def databases(request):  # pylint: disable=unused-argument
     """
     View for all entries on database, used to delete old instances data
 
@@ -150,7 +150,7 @@ def databases(request): # pylint: disable=unused-argument
 
 
 @superuser_required
-def database(request, instance_id): # pylint: disable=unused-argument
+def database(request, instance_id):  # pylint: disable=unused-argument
     """
     This view is used to delete instance from database
 
