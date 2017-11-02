@@ -3,13 +3,17 @@ This module manage configuration file.
 
     - /etc/openstack-lease-it/config.ini
     - $HOME/.lease-it.ini
+
+This module also provide **GLOBAL_CONFIG** variable used to share configuration across module / django
+apps.
 """
 import ConfigParser
 import os
 
 BASE_CONFIG_DIR = '/etc/openstack-lease-it'
 """
-Configuration directory
+To avoid some typo mistake, we use **BASE_CONFIG_DIR** to define the base directory for configuration
+files
 """
 
 CONFIG_FILES = (
@@ -17,7 +21,7 @@ CONFIG_FILES = (
     os.path.expanduser('~') + '/.lease-it.ini',
 )
 """
-Configuration files, the last one have highest priority
+The list of configuration file we will parse to load openstack-lease-it configuration
 """
 
 GLOBAL_CONFIG = {
@@ -51,7 +55,8 @@ GLOBAL_CONFIG = {
     'NOTIFICATION_LEASE_CONTENT': BASE_CONFIG_DIR + '/lease-notification.txt'
 }
 """
-global variable used to share configuration across modules
+We use the global variable GLOBAL_CONFIG to share openstack-lease-it configuration to all user. Some
+value have default value.
 """
 
 DJANGO_OPTIONS = {
@@ -61,14 +66,18 @@ DJANGO_OPTIONS = {
     'DJANGO_LOGLEVEL': 'log_level'
 }
 """
-options for section [django]
+    - **DJANGO_SECRET_KEY**: The secret key used by django (file option: *secret_key*)
+    - **DJANGO_DEBUG**: The DEBUG value for django (file option: *debug*)
+    - **DJANGO_LOGDIR**: Directory where log file will be write (file option: *log_dir*)
+    - **DJANGO_LOGLEVEL**: The log level used for django (file option: *log_level*)
+
 """
 
 PLUGINS_OPTIONS = {
     'BACKEND_PLUGIN': 'backend'
 }
 """
-options for section [plugins]
+    - **BACKEND_PLUGIN**: Backend we will use (file option: *backend*)
 """
 
 OPENSTACK_OPTIONS = {
@@ -83,16 +92,28 @@ OPENSTACK_OPTIONS = {
     'OS_USER_DOMAIN_NAME': 'OS_USER_DOMAIN_NAME'
 }
 """
-options for section [openstack]
+    - **OS_USERNAME**: Openstack admin username (file option: *OS_USERNAME*)
+    - **OS_PASSWORD**: Openstack admin password (file option: *OS_PASSWORD*)
+    - **OS_TENANT_NAME**: Openstack admin project name (file option: *OS_TENANT_NAME*)
+    - **OS_PROJECT_NAME**: Openstack admin project name (file option: *OS_PROJECT_NAME*)
+    - **OS_AUTH_URL**: Cloud keystone URL (file option: *OS_AUTH_URL*)
+    - **OS_CACERT**: CA certificate filename (file option: *OS_CACERT*)
+    - **OS_IDENTITY_API_VERSION**: Keystone version (file option: *OS_IDENTITY_API_VERSION*)
+    - **OS_PROJECT_DOMAIN_NAME**: project domain name (file option: *OS_PROJECT_DOMAIN_NAME*)
+    - **OS_USER_DOMAIN_NAME**: user domain name (file option: *OS_USER_DOMAIN_NAME*)
+
 """
 
-# Default options for section [memcached]
 MEMCACHED_OPTIONS = {
     'MEMCACHED_HOST': 'host',
     'MEMCACHED_PORT': 'port'
 }
+"""
+    - **MEMCACHED_HOST**: hostname of memcached server (file option: *host*)
+    - **MEMCACHED_PORT**: port of memcached server (file option: *port*)
 
-# Default options for section [notification]
+"""
+
 NOTIFICATION_OPTIONS = {
     'NOTIFICATION_SSL': 'ssl',
     'NOTIFICATION_SMTP': 'smtp',
@@ -106,6 +127,21 @@ NOTIFICATION_OPTIONS = {
     'NOTIFICATION_DELETE_CONTENT': 'delete_content',
     'NOTIFICATION_LEASE_CONTENT': 'lease_content'
 }
+"""
+
+    - **NOTIFICATION_SSL**: enable / disable ssl for smtp connection (file option: *ssl*)
+    - **NOTIFICATION_SMTP**: hostname of smtp server (file option: *smtp*)
+    - **NOTIFICATION_USERNAME**: username for smtp connection (file option: *username*)
+    - **NOTIFICATION_PASSWORD**: password for smtp connection (file option: *password*)
+    - **NOTIFICATION_EMAIL_HEADER**: email sender (file option: *email_header*)
+    - **NOTIFICATION_SUBJECT**: subject of the mail (file option: *subject*)
+    - **NOTIFICATION_LINK**: url of lease-it server (file option: *link*)
+    - **NOTIFICATION_DEBUG**: enable/disable user notification (file option: *debug*)
+    - **NOTIFICATION_DOMAIN**: default domain if email field not match email regexp (file option: *default_domain*)
+    - **NOTIFICATION_DELETE_CONTENT**: filename for mail content template (file option: *delete_content*)
+    - **NOTIFICATION_LEASE_CONTENT**: filename for mail content template (file option: *lease_content*)
+
+"""
 
 SECTIONS = {
     'django': DJANGO_OPTIONS,
@@ -115,8 +151,15 @@ SECTIONS = {
     'notification': NOTIFICATION_OPTIONS
 }
 """
-List of all section that will be compute and options associated w/ those sections
+
+    - **django**: section [django]
+    - **openstack**: section [openstack]
+    - **memcached**: section [memcached]
+    - **plugins**: section [plugins]
+    - **notification**: section [notification]
+    
 """
+
 
 def load_config_option(config, section):
     """
