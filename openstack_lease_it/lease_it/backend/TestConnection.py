@@ -1,8 +1,17 @@
 # -*- coding: utf-8 -*-
 # pylint: skip-file
 """
-TestConnection is a module of Fake backend used to help developpement
-of API
+TestConnection is a fake backend to return some fake value for testing. It will return value in the
+same format that OpenstackConnection must do.
+
+TestConnection inherits from OpenstackConnection and overwrite the private methods
+
+    - _instances()
+    - _flavors()
+    - _hypervisors()
+    - _domains()
+    - _users()
+    - _projects()
 """
 from django.utils.dateparse import parse_datetime
 from django.core.cache import cache
@@ -24,6 +33,7 @@ class TestConnection(OpenstackConnection):
         """
         Return some fake value for _instances. OpenstackConnection return
         the same kind of values
+
         :return: dict()
         """
         response = cache.get('instances')
@@ -71,7 +81,8 @@ class TestConnection(OpenstackConnection):
     def _flavors(self):
         """
         Return some fake value for _instances. OpenstackConnection return
-        the same kind of values
+        the same kind of value.
+
         :return: dict()
         """
         response = cache.get('flavors')
@@ -97,6 +108,7 @@ class TestConnection(OpenstackConnection):
         """
         Return some fake value for _instances. OpenstackConnection return
         the same kind of values
+
         :return: dict()
         """
         return [{
@@ -123,6 +135,7 @@ class TestConnection(OpenstackConnection):
         """
         Return some fake value for _instances. OpenstackConnection return
         the same kind of values
+
         :return: dict()
         """
         response = cache.get('domains')
@@ -144,6 +157,7 @@ class TestConnection(OpenstackConnection):
         """
         Return some fake value for _instances. OpenstackConnection return
         the same kind of values
+
         :return: dict()
         """
         response = cache.get('users')
@@ -169,6 +183,7 @@ class TestConnection(OpenstackConnection):
         """
         Return some fake value for _instances. OpenstackConnection return
         the same kind of values
+
         :return: dict()
         """
         return dict()

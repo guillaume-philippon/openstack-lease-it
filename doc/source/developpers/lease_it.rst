@@ -3,56 +3,61 @@ lease_it apps
 
 .. automodule:: lease_it
 
-Backend
--------
+lease_it.backend
+----------------
 
-Exceptions
-##########
+lease_it.backendExceptions
+##########################
 
 .. automodule:: lease_it.backend.Exceptions
     :members:
 
-OpenstackConnection
-###################
+lease_it.backend.OpenstackConnection
+####################################
 
 .. automodule:: lease_it.backend.OpenstackConnection
     :members:
 
-Client
-------
+lease_it.backend.TestConnection
+###############################
+
+.. automodule:: lease_it.backend.TestConnection
+
+lease_it.client
+---------------
 
 .. automodule:: lease_it.client.run
     :members:
 
-Datastore
----------
+lease_it.datastore
+------------------
 
-Exceptions
-##########
+lease_it.datastore.Exceptions
+#############################
 
 .. automodule:: lease_it.datastore.Exceptions
     :members:
 
-ModelAccess
-###########
+lease_it.datastore.ModelAccess
+##############################
 
 .. automodule:: lease_it.datastore.ModelAccess
     :members:
 
-Notification
-------------
+lease_it.notification
+---------------------
 
 .. automodule:: lease_it.notification.MailNotification
     :members:
 
-Models
-------
+lease_it.models
+---------------
 
 .. automodule:: lease_it.models
     :members:
 
-Views
------
+lease_it.views
+--------------
 
 .. automodule:: lease_it.views
     :members:
