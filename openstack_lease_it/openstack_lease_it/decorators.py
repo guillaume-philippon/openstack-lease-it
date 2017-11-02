@@ -2,8 +2,8 @@
 """
 This module define a list of homemade decorators
 """
-from django.core.exceptions import PermissionDenied
 from functools import wraps
+from django.core.exceptions import PermissionDenied
 
 
 def superuser_required(view):
