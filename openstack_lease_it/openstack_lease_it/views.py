@@ -27,7 +27,8 @@ def login(request):
             auth.login(request, user)
             LOGGER.info("User %s is now connected", request.POST['username'])
             return HttpResponseRedirect(redirect_page)
-    return render(request, "auth/login.html")
+    # return render(request, "auth/login.html")
+    return HttpResponseRedirect('/static/angular/home.html')
 
 
 def logout(request):

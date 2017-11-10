@@ -1,0 +1,23 @@
+<nav class="nav-extended">
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo">OpenStack Lease It!</a>
+        <ul id="nav-mobile" class="right">
+            <li  ng-show="is_authenticated"><a href="#"
+                   data-activates="slide-out-flavors"
+                   class="btn-slide btn-floating disabled"
+                   id="menu"><i class="material-icons">menu</i></a></li>
+            <li ng-show="is_authenticated"><a href="#/logout"
+                   class="btn-floating">
+                <i class="material-icons">power_settings_new</i></a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="nav-content" ng-if="is_authenticated">
+        <ul tabs class="tabs tabs-transparent"  reload="allTabContentLoaded">
+            <li class="tab" class="active"><a href="#flavors" >Flavors</a></li>
+            <li class="tab" ><a href="#instances">Instances</a></li>
+            <li class="tab" ><a href="#admin">Admin</a></li>
+        </ul>
+    </div>
+</nav>

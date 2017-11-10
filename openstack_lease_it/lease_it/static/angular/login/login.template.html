@@ -1,0 +1,20 @@
+<div class="col s10 offset-s1">
+  <div class="card z-depth-5">
+    <div class="card-content">
+        <label for="domain" class="sr-only">Domain</label>
+        <input type="text" id="domain" class="form-control" placeholder="Domain"
+               autofocus ng-model="domain" name="domain">
+
+        <label for="username" class="sr-only">Username</label>
+        <input type="text" id="username" class="form-control" placeholder="Username"
+               required ng-model="username" name="username">
+
+        <label for="password" class="sr-only">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Password"
+               required ng-model="password" name="password">
+
+        <button href="#" class="btn btn-lg btn-primary btn-block"
+                ng-click="$ctrl.login()" type="submit">Sign on</button>
+    </div>
+  </div>
+</div>
