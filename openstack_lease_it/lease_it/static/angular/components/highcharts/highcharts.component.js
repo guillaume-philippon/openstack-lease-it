@@ -3,10 +3,9 @@ angular.module('leaseItHighcharts').
         bindings: {
             details: '<'
         },
-        template: '<p>{{ $ctrl.details }}</p>',
-        controller: function($scope, $filter){
+        templateUrl: 'components/highcharts/highcharts.template.html',
+        controller: function($scope, $filter, $element, $timeout){
             /* We create a default configuration where missed
-                - chart.renderTo
                 - yAxis[0].max = 100
                 - yAxis[0].plotBands[0].to = 30
                 - yAxis[0].plotBands[1].from = 30
@@ -16,7 +15,8 @@ angular.module('leaseItHighcharts').
             var options = {
                 chart: {
                     type: 'gauge',
-                    height: 180,
+                    height: 200,
+                    width: 270,
                 },
 
                 title: null, // No title needed
@@ -67,27 +67,25 @@ angular.module('leaseItHighcharts').
 
                 loading: false
             };
-            ctrl = this.details;
 
             /* constructor */
             this.$onInit = function () {
-                this.options = this.details
-                console.log(this.details)
                 initCharts(this.details)
             }
 
 
             function initCharts (details) {
-                console.log(details)
                 /* load charts specific config. */
                 options.yAxis[0].max = details.max
                 options.yAxis[0].plotBands[0].to = details.max/3;
                 options.yAxis[0].plotBands[1].from = details.max/3;
                 options.yAxis[0].plotBands[1].to = details.max/1.2;
-
+                /* load series */
                 options.series[0].data = [ details.free ]
 
-                Highcharts.chart($filter('leaseItDotRemove')(details.name), options)
+                chart = new Highcharts.chart($element[0], options)
+                chart.reflow();
+
             }
 
         }

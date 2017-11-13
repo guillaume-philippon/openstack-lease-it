@@ -1,31 +1,29 @@
-<div ng-repeat="(flavor, attribute) in $ctrl.flavors">
-    <!--<div class="col s12 m6 l4 xl3" data-name="{{ attribute.name | leaseItDotRemove }}"-->
-         <!--data-cpu="{{ attribute.cpu }}" data-ram="{{ attribute.ram }}"-->
-         <!--data-disk="{{ attribute.disk }}" data-free="{{ attribute.free }}"-->
-         <!--data-max="{{ attribute.max }}">-->
+<div ng-repeat="attribute in $ctrl.flavors | orderBy:'name'">
+    <div class="col"  style="height: 300px; width: 300px">
         <div class="card hoverable">
             <div class="card-image activator">
-                <!--<div class="activator">-->
-                    <!--<highchart id="{{ attribute.name | leaseItDotRemove }}"-->
-                               <!--config="attribute.charts">-->
-
-                    <!--</highchart>-->
-                <lease-it-highcharts details="attribute"></lease-it-highcharts>
+                <div class="activator">
+                    <lease-it-highcharts details="attribute"></lease-it-highcharts>
                 </div>
-            <!--</div>-->
+            </div>
             <div class="card-content">
-                <span class="card-title activator">{{ attribute.name }}</span>
+                <span class="card-title activator">{{ attribute.name }}
+                    <i class="material-icons right">more_vert</i>
+                </span>
             </div>
             <div class="card-reveal">
                 <span class="card-title">{{ attribute.name }}
-                    <i class="material-icons right">more_vert</i>
+                    <i class="material-icons right">close</i>
                 </span>
                 <ul class="collection">
-                    <li class="collection-item"><div><span class="badge">{{ attribute.cpu }}</span>CPU</div></li>
-                    <li class="collection-item"><div><span class="badge">{{ attribute.ram }}</span>RAM</div></li>
-                    <li class="collection-item"><div><span class="badge">{{ attribute.disk }}</span>DISK</div></li>
+                    <li class="collection-item"><div>
+                        <span class="badge">{{ attribute.cpu }}</span> CPU</div></li>
+                    <li class="collection-item"><div>
+                        <span class="badge">{{ attribute.ram }}</span> RAM</div></li>
+                    <li class="collection-item"><div>
+                        <span class="badge">{{ attribute.disk }}</span> Disk</div></li>
                 </ul>
             </div>
         </div>
-    <!--</div>-->
+    </div>
 </div>
